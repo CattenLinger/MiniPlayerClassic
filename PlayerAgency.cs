@@ -5,6 +5,7 @@ using System.Text;
 using Un4seen.Bass;
 using System.Windows.Forms;
 
+
 namespace MiniPlayerClassic
 {
     public class PlayerAgency
@@ -34,6 +35,11 @@ namespace MiniPlayerClassic
         //progresses
         public PlayerAgency(int device,int rate)//Player object initialization
         {
+         /* If you want to close the splash of Bass.Net you need to regist at 
+         *  www.un4seen.com and input the registration code.
+         */
+         //BassNet.Registration("your_email","your_code");
+            
             ErrorCode = 1;
             PlayState = Player_Stoped;
             int int1, int2;

@@ -35,4 +35,10 @@ Icon
 .Spotlight-V100
 .Trashes
 
+# ==========================
+# IDE
+# ==========================
+
+# Debug folder and Bin folder
 bin
+obj

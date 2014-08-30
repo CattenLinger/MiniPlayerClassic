@@ -11,4 +11,3 @@ D:\Personal Files\Work Files\MiniPlayerClassic\MiniPlayerClassic\obj\Debug\MiniP
 D:\Personal Files\Work Files\MiniPlayerClassic\MiniPlayerClassic\obj\Debug\zh-Hans\MiniPlayerClassic.resources.dll
 D:\Personal Files\Work Files\MiniPlayerClassic\MiniPlayerClassic\obj\Debug\MiniPlayerClassic.exe
 D:\Personal Files\Work Files\MiniPlayerClassic\MiniPlayerClassic\obj\Debug\MiniPlayerClassic.pdb
-D:\Personal Files\Work Files\MiniPlayerClassic\MiniPlayerClassic\obj\Debug\MiniPlayerClassic.csprojResolveAssemblyReference.cache
