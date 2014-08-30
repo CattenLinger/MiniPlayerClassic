@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace MiniPlayerClassic
 {
-    class PlayerAgency
+    public class PlayerAgency
     {
         //const
         const int default_device = -1;
@@ -34,36 +34,48 @@ namespace MiniPlayerClassic
         //progresses
         public PlayerAgency(int device,int rate)//Player object initialization
         {
-            ErrorCode = 0;
+            ErrorCode = 1;
             PlayState = Player_Stoped;
+            int int1, int2;
 
-            BassInfo = new BASS_INFO();
             if ((device == 0) || (rate == 0)) //use 0 in the construction progress will use defaule device and rate
             {
-                device = default_device;
-                rate = default_rate;
+                int1 = default_device;
+                int2 = default_rate;
             }
-            if (Bass.BASS_Init(device, rate, BASSInit.BASS_DEVICE_LATENCY, IntPtr.Zero))
+            else
             {
-                ErrorCode = 1;
+                int1 = device;
+                int2 = rate;
+            }
+            
+            if ( Bass.BASS_Init(int1, int2, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) )
+            {
+                ErrorCode = 0;
+                BassInfo = new BASS_INFO();
             }
         }
-        public string AgencyInfo()
+        public string AgencyTextInfo()
         {
             Bass.BASS_GetInfo(BassInfo);
             string info = BassInfo.ToString();
             return info;
         }
+        public int AgencyCodeInfo()
+        {
+            Bass.BASS_GetInfo(BassInfo);
+            return 1;
+        }
         public void LoadFile(string Filename) //File load
         {
             if (theStream != 0) { Bass.BASS_StreamFree(theStream); }//free the stream if it not empty.
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) { ErrorCode = 2; }
+            if (theStream == 0) { ErrorCode = error_fileopen; }
             FilePath = Filename;
         }
         public void Play()//Play Stream 
         {
-            if (theStream == 0) 
+            if (PlayState == Player_Stoped) 
             { 
                 LoadFile(FilePath);
                 if (ErrorCode == error_fileopen) { return; }
@@ -86,7 +98,6 @@ namespace MiniPlayerClassic
         }
         public void Stop()//Stop Stream, then clean the stream and free the file
         {
-            if (theStream == 0) { return; }
             if (PlayState != 0) { Bass.BASS_ChannelStop(theStream); }
             Bass.BASS_StreamFree(theStream);
             PlayState = Player_Stoped;
