@@ -74,39 +74,37 @@ namespace MiniPlayerClassic
         }
         public void LoadFile(string Filename) //File load
         {
-            if (theStream != 0) { Bass.BASS_StreamFree(theStream); }//free the stream if it not empty.
+            Bass.BASS_StreamFree(theStream);//free the stream 
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) { ErrorCode = error_fileopen; }
+            if (theStream == 0) { ErrorCode = error_fileopen; } else { ErrorCode = 0; }
             FilePath = Filename;
         }
-        public void Play()//Play Stream 
+        public void Play()//Play Stream
         {
             if (PlayState == Player_Stoped) 
             { 
                 LoadFile(FilePath);
                 if (ErrorCode == error_fileopen) { return; }
-                Bass.BASS_ChannelPlay(theStream, false);
-                PlayState = Player_Playing;
             }
-            else
+            if (Bass.BASS_ChannelPlay(theStream, false)) 
             { 
-                Bass.BASS_ChannelPlay(theStream, false);
                 PlayState = Player_Playing;
+                ErrorCode = 0;
             }
         }
         public void Pause()//Pause Stream
         {
-            if (theStream != 0) 
+            if (Bass.BASS_ChannelPause(theStream)) 
             { 
-                Bass.BASS_ChannelPause(theStream);
                 PlayState = Player_Paused;
             }
         }
         public void Stop()//Stop Stream, then clean the stream and free the file
         {
-            if (PlayState != 0) { Bass.BASS_ChannelStop(theStream); }
-            Bass.BASS_StreamFree(theStream);
-            PlayState = Player_Stoped;
+            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream))
+            {
+                PlayState = Player_Stoped;
+            }
         }
     }
 }

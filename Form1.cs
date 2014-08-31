@@ -24,15 +24,24 @@ namespace MiniPlayerClassic
 
         private void MainFrom_Load(object sender, EventArgs e)
         {
-        
+        /* If you want to close the splash of Bass.Net you need to regist at 
+         * www.un4seen.com and input the registration code.
+         * (At the initialization of PlayerAgency too.
+         */ 
+        //BassNet.Registration("your_email","your_code");
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void label2_Click(object sender, EventArgs e)
         {
-            Agency1.Pause();
+            label2.Text = "ErrorCode: " + Agency1.ErrorCode.ToString();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            Agency1.Stop();
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg1 = new OpenFileDialog();
             dlg1.ShowDialog();
@@ -42,19 +51,24 @@ namespace MiniPlayerClassic
             MessageBox.Show(Agency1.AgencyTextInfo());
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            Agency1.Pause();
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
         {
             Agency1.Play();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void toolStripSplitButton2_ButtonClick(object sender, EventArgs e)
         {
-            Agency1.Stop();
+
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void 删除所选ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            label2.Text = "ErrorCode: " + Agency1.ErrorCode.ToString();
+
         }
     }
 }
