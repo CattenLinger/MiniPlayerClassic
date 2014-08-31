@@ -24,13 +24,13 @@ namespace MiniPlayerClassic
         //const end
 
         //values
-        public String FilePath = "";//File Path
-        public int ErrorCode = 1;//Any matter comeout while initialization will recored here.
-        public int PlayState = Player_Stoped;
+        public String FilePath = ""; //File Path
+        public int ErrorCode = 1; //Any matter comeout while initialization will recored here.
+        public int PlayState = Player_Stoped; //Recored playing state
         public float Volume = 1;
         //public values end
         private BASS_INFO BassInfo;
-        private int theStream = 0;
+        private int theStream = 0;//The File Stream
         //private values end
         //end values
         
@@ -57,19 +57,19 @@ namespace MiniPlayerClassic
                 int2 = rate;
             }
             
-            if ( Bass.BASS_Init(int1, int2, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) )
+            if ( Bass.BASS_Init(int1, int2, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) ) //Bass initialization
             {
                 ErrorCode = 0;
                 BassInfo = new BASS_INFO();
             }
         }
-        public string AgencyTextInfo()
+        public string AgencyTextInfo() //Get Bass info in text
         {
             Bass.BASS_GetInfo(BassInfo);
             string info = BassInfo.ToString();
             return info;
         }
-        public int AgencyCodeInfo()
+        public int AgencyCodeInfo() //Get BassInfo object's info
         {
             Bass.BASS_GetInfo(BassInfo);
             return 1;
@@ -78,7 +78,16 @@ namespace MiniPlayerClassic
         {
             Bass.BASS_StreamFree(theStream);//free the stream 
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) { ErrorCode = error_fileopen; } else { ErrorCode = 0; }
+            if (theStream == 0) 
+            { 
+                ErrorCode = error_fileopen; 
+            } 
+            else 
+            { 
+                ErrorCode = 0;
+                if (!(Bass.BASS_ChannelSetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, Volume)))
+                { ErrorCode = error_volume; }
+            }
             FilePath = Filename;
         }
         public void Play()//Play Stream
@@ -105,8 +114,9 @@ namespace MiniPlayerClassic
         }
         public void SetVolume(float vol) //Set Channel's Volume
         {
+            Volume = vol;
             if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol))
-            { Volume = vol; ErrorCode = 0; } else { ErrorCode = error_volume; }
+            { ErrorCode = 0; } else { ErrorCode = error_volume; }
         }
         public float GetValue()//Get Channel's Vloume
         { 
@@ -121,7 +131,6 @@ namespace MiniPlayerClassic
                 ErrorCode = error_volume; 
                 return 0; 
             }
-
         }
     }
 }

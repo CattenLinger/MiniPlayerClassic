@@ -40,5 +40,5 @@ Icon
 # ==========================
 
 # Debug folder and Bin folder
-bin/
-obj/Debug
+bin
+obj

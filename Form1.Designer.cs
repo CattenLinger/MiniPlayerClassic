@@ -32,16 +32,26 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tbtnAdd = new System.Windows.Forms.ToolStripButton();
+            this.tbtnRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnList = new System.Windows.Forms.ToolStripSplitButton();
+            this.tmSaveList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tmNewList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmDelList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnPlayMode = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,20 +60,10 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.tmSaveList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tmNewList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmDelList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbtnAdd = new System.Windows.Forms.ToolStripButton();
-            this.tbtnRemove = new System.Windows.Forms.ToolStripButton();
-            this.button1 = new System.Windows.Forms.Button();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -89,6 +89,21 @@
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // trackBar1
+            // 
+            resources.ApplyResources(this.trackBar1, "trackBar1");
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar1.Value = 3;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // button1
+            // 
+            resources.ApplyResources(this.button1, "button1");
+            this.button1.ImageList = this.imageList1;
+            this.button1.Name = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -132,6 +147,12 @@
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
+            // listView1
+            // 
+            resources.ApplyResources(this.listView1, "listView1");
+            this.listView1.Name = "listView1";
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
@@ -147,11 +168,18 @@
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
             // 
-            // listView1
+            // tbtnAdd
             // 
-            resources.ApplyResources(this.listView1, "listView1");
-            this.listView1.Name = "listView1";
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
+            this.tbtnAdd.Name = "tbtnAdd";
+            this.tbtnAdd.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // tbtnRemove
+            // 
+            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
+            this.tbtnRemove.Name = "tbtnRemove";
             // 
             // toolStripSeparator1
             // 
@@ -170,6 +198,36 @@
             this.tmCloseList});
             resources.ApplyResources(this.tbtnList, "tbtnList");
             this.tbtnList.Name = "tbtnList";
+            // 
+            // tmSaveList
+            // 
+            this.tmSaveList.Name = "tmSaveList";
+            resources.ApplyResources(this.tmSaveList, "tmSaveList");
+            // 
+            // tmSaveAs
+            // 
+            this.tmSaveAs.Name = "tmSaveAs";
+            resources.ApplyResources(this.tmSaveAs, "tmSaveAs");
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
+            // 
+            // tmNewList
+            // 
+            this.tmNewList.Name = "tmNewList";
+            resources.ApplyResources(this.tmNewList, "tmNewList");
+            // 
+            // tmDelList
+            // 
+            this.tmDelList.Name = "tmDelList";
+            resources.ApplyResources(this.tmDelList, "tmDelList");
+            // 
+            // tmCloseList
+            // 
+            this.tmCloseList.Name = "tmCloseList";
+            resources.ApplyResources(this.tmCloseList, "tmCloseList");
             // 
             // tbtnPlayMode
             // 
@@ -218,64 +276,6 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
-            // tmSaveList
-            // 
-            this.tmSaveList.Name = "tmSaveList";
-            resources.ApplyResources(this.tmSaveList, "tmSaveList");
-            // 
-            // tmSaveAs
-            // 
-            this.tmSaveAs.Name = "tmSaveAs";
-            resources.ApplyResources(this.tmSaveAs, "tmSaveAs");
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
-            // 
-            // tmNewList
-            // 
-            this.tmNewList.Name = "tmNewList";
-            resources.ApplyResources(this.tmNewList, "tmNewList");
-            // 
-            // tmDelList
-            // 
-            this.tmDelList.Name = "tmDelList";
-            resources.ApplyResources(this.tmDelList, "tmDelList");
-            // 
-            // tmCloseList
-            // 
-            this.tmCloseList.Name = "tmCloseList";
-            resources.ApplyResources(this.tmCloseList, "tmCloseList");
-            // 
-            // tbtnAdd
-            // 
-            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
-            this.tbtnAdd.Name = "tbtnAdd";
-            this.tbtnAdd.Click += new System.EventHandler(this.btnOpen_Click);
-            // 
-            // tbtnRemove
-            // 
-            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
-            this.tbtnRemove.Name = "tbtnRemove";
-            // 
-            // button1
-            // 
-            resources.ApplyResources(this.button1, "button1");
-            this.button1.ImageList = this.imageList1;
-            this.button1.Name = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // trackBar1
-            // 
-            resources.ApplyResources(this.trackBar1, "trackBar1");
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar1.Value = 3;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-            // 
             // MainFrom
             // 
             resources.ApplyResources(this, "$this");
@@ -288,11 +288,11 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
 
         }
