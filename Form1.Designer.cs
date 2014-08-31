@@ -58,9 +58,12 @@
             this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnAdd = new System.Windows.Forms.ToolStripButton();
             this.tbtnRemove = new System.Windows.Forms.ToolStripButton();
+            this.button1 = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -73,9 +76,12 @@
             this.imageList1.Images.SetKeyName(3, "plus.png");
             this.imageList1.Images.SetKeyName(4, "rewind_button.png");
             this.imageList1.Images.SetKeyName(5, "stop_alt.png");
+            this.imageList1.Images.SetKeyName(6, "up_alt.png");
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.trackBar1);
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnPause);
@@ -255,6 +261,21 @@
             resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
             this.tbtnRemove.Name = "tbtnRemove";
             // 
+            // button1
+            // 
+            resources.ApplyResources(this.button1, "button1");
+            this.button1.ImageList = this.imageList1;
+            this.button1.Name = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // trackBar1
+            // 
+            resources.ApplyResources(this.trackBar1, "trackBar1");
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar1.Value = 3;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // MainFrom
             // 
             resources.ApplyResources(this, "$this");
@@ -271,6 +292,7 @@
             this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -305,6 +327,8 @@
         private System.Windows.Forms.ToolStripMenuItem tmCloseList;
         private System.Windows.Forms.ToolStripButton tbtnAdd;
         private System.Windows.Forms.ToolStripButton tbtnRemove;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Button button1;
 
     }
 }

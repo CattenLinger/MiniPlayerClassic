@@ -61,14 +61,9 @@ namespace MiniPlayerClassic
             Agency1.Play();
         }
 
-        private void toolStripSplitButton2_ButtonClick(object sender, EventArgs e)
+        private void trackBar1_Scroll(object sender, EventArgs e)
         {
-
-        }
-
-        private void 删除所选ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+            Agency1.SetVolume(trackBar1.Value / trackBar1.Maximum);
         }
     }
 }

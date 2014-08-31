@@ -16,6 +16,7 @@ namespace MiniPlayerClassic
 
         const int error_initerror = 1;
         const int error_fileopen = 2;
+        const int error_volume = 3;
 
         const int Player_Playing = 1;
         const int Player_Paused = 2;
@@ -23,12 +24,13 @@ namespace MiniPlayerClassic
         //const end
 
         //values
-        public String FilePath;//File Path
-        public int ErrorCode;//Any matter comeout while initialization will recored here.
-        public int PlayState;
+        public String FilePath = "";//File Path
+        public int ErrorCode = 1;//Any matter comeout while initialization will recored here.
+        public int PlayState = Player_Stoped;
+        public float Volume = 1;
         //public values end
         private BASS_INFO BassInfo;
-        private int theStream;
+        private int theStream = 0;
         //private values end
         //end values
         
@@ -40,8 +42,8 @@ namespace MiniPlayerClassic
          */
          //BassNet.Registration("your_email","your_code");
             
-            ErrorCode = 1;
-            PlayState = Player_Stoped;
+            //ErrorCode = 1;
+            //PlayState = Player_Stoped;
             int int1, int2;
 
             if ((device == 0) || (rate == 0)) //use 0 in the construction progress will use defaule device and rate
@@ -105,6 +107,10 @@ namespace MiniPlayerClassic
             {
                 PlayState = Player_Stoped;
             }
+        }
+        public void SetVolume(float vol) 
+        {
+            if (Bass.BASS_SetVolume(vol)) { Volume = vol; } else  { ErrorCode = error_volume; }
         }
     }
 }
