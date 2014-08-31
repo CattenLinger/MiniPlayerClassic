@@ -96,21 +96,32 @@ namespace MiniPlayerClassic
         }
         public void Pause()//Pause Stream
         {
-            if (Bass.BASS_ChannelPause(theStream)) 
-            { 
-                PlayState = Player_Paused;
-            }
+            if (Bass.BASS_ChannelPause(theStream)) { PlayState = Player_Paused; }
         }
         public void Stop()//Stop Stream, then clean the stream and free the file
         {
             if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream))
-            {
-                PlayState = Player_Stoped;
-            }
+            { PlayState = Player_Stoped; }
         }
-        public void SetVolume(float vol) 
+        public void SetVolume(float vol) //Set Channel's Volume
         {
-            if (Bass.BASS_SetVolume(vol)) { Volume = vol; } else  { ErrorCode = error_volume; }
+            if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol))
+            { Volume = vol; ErrorCode = 0; } else { ErrorCode = error_volume; }
+        }
+        public float GetValue()//Get Channel's Vloume
+        { 
+            float vol = 0;
+            if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL,ref vol))
+            {
+                ErrorCode = 0;
+                return vol; 
+            } 
+            else 
+            { 
+                ErrorCode = error_volume; 
+                return 0; 
+            }
+
         }
     }
 }

@@ -29,11 +29,12 @@ namespace MiniPlayerClassic
          * (At the initialization of PlayerAgency too.
          */ 
         //BassNet.Registration("your_email","your_code");
+            
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-            label2.Text = "ErrorCode: " + Agency1.ErrorCode.ToString();
+            label2.Text = "ErrorCode: " + Agency1.ErrorCode.ToString() + " Vol: " + Agency1.GetValue().ToString();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -63,7 +64,7 @@ namespace MiniPlayerClassic
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            Agency1.SetVolume(trackBar1.Value / trackBar1.Maximum);
+            Agency1.SetVolume((float)trackBar1.Value / (float)trackBar1.Maximum);
         }
     }
 }
