@@ -27,6 +27,7 @@ namespace MiniPlayerClassic
         //public values end
         private BASS_INFO BassInfo;
         private int theStream = 0;//The File Stream
+        private Timer tmrChecker;
         //private values end
         #endregion
 
@@ -35,9 +36,34 @@ namespace MiniPlayerClassic
         /* If you want to close the splash of Bass.Net you need to regist at 
         *  www.un4seen.com and input the registration code.
         */
-        public void BassReg()
+        private void BassReg()
         {
             //BassNet.Registration("your_email","your_code");
+        }
+
+        //Object initialization
+        private void init()
+        {
+            //timer
+            tmrChecker = new Timer();
+            tmrChecker.Interval = 100;
+            tmrChecker.Tick += tmrChecker_Tick;
+            tmrChecker.Enabled = true;
+        }
+
+        //timer for check informations
+        private void tmrChecker_Tick(object sender, EventArgs e)
+        {
+            if (ErrorCode != 0) { return; }
+
+            switch (Bass.BASS_ChannelIsActive(theStream))
+            {
+                case BASSActive.BASS_ACTIVE_PLAYING: PlayState = Player_Playing; break;
+                case BASSActive.BASS_ACTIVE_PAUSED: PlayState = Player_Paused; break;
+                case BASSActive.BASS_ACTIVE_STOPPED: PlayState = Player_Stoped; break;
+                case BASSActive.BASS_ACTIVE_STALLED: PlayState = -1; break;
+            }
+            //throw new NotImplementedException();
         }
 
         //Input no pamaraters will use default configuration
@@ -49,6 +75,7 @@ namespace MiniPlayerClassic
                 BassInfo = new BASS_INFO();
                 ErrorCode = 0;
             }
+            init();
         }
 
         //Use custom configuration
@@ -61,6 +88,7 @@ namespace MiniPlayerClassic
                 BassInfo = new BASS_INFO();
                 ErrorCode = 0;
             }
+            init();
         }
 
         //Get Bass info in text
@@ -83,8 +111,7 @@ namespace MiniPlayerClassic
         {
             Bass.BASS_StreamFree(theStream); //free the stream
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0)
-            { return false; } else { SetVolume(Volume); }
+            if (theStream == 0) { return false; } else { SetVolume(Volume); }
             FilePath = Filename;
             return true;
         }
@@ -92,16 +119,8 @@ namespace MiniPlayerClassic
         //Play Stream
         public Boolean Play()
         {
-            if (PlayState == Player_Stoped) 
-            { 
-                LoadFile(FilePath);
-            }
-            if (Bass.BASS_ChannelPlay(theStream, false)) 
-            { 
-                PlayState = Player_Playing;
-                return true;
-            }
-            else { return false; }
+            if (PlayState == Player_Stoped) { LoadFile(FilePath); }
+            if (Bass.BASS_ChannelPlay(theStream, false)) { return true; } else { return false; }
         }
 
         //Pause Stream
@@ -114,8 +133,7 @@ namespace MiniPlayerClassic
         //Stop Stream, then clean the stream and free the file
         public Boolean Stop()
         {
-            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream))
-            { PlayState = Player_Stoped; return true; }
+            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) { return true; }
             return false;
         }
 
@@ -123,8 +141,7 @@ namespace MiniPlayerClassic
         public Boolean SetVolume(float vol) 
         {
             Volume = vol;
-            if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol))
-            { return true; }
+            if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol)) { return true; }
             return false;
         }
 
@@ -133,13 +150,7 @@ namespace MiniPlayerClassic
         { 
             float vol = 0;
             if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL,ref vol))
-            {
-                return vol; 
-            } 
-            else 
-            { 
-                return 0; 
-            }
+            { return vol; }  else  { return 0; }
         }
 
         //Get Channel's Level
@@ -164,7 +175,7 @@ namespace MiniPlayerClassic
         {
             long temp;
             temp = Bass.BASS_ChannelGetPosition(theStream);
-            if (temp == -1) {  return 0; }
+            if (temp == -1) { return -1; }
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
 
@@ -173,7 +184,7 @@ namespace MiniPlayerClassic
         {
             long temp;
             temp = Bass.BASS_ChannelGetLength(theStream);
-            if (temp == -1) { return 0; }
+            if (temp == -1) { return -1; }
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
     }

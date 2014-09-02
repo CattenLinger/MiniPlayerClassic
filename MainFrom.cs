@@ -47,14 +47,9 @@ namespace MiniPlayerClassic
             trackBar2.Maximum = (int)(Agency1.GetLength() * 1000);
         }
 
-        private void btnPause_Click(object sender, EventArgs e)
-        {
-            Agency1.Pause();
-        }
-
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            Agency1.Play();
+            if (Agency1.PlayState != 1) { Agency1.Play(); } else { Agency1.Pause(); }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -75,7 +70,14 @@ namespace MiniPlayerClassic
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            trackBar2.Value = (int)(Agency1.GetPosition() * 1000);
+            double temp;
+
+            if (Agency1.PlayState != 1)
+            { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
+
+            temp = Agency1.GetPosition();
+            if (temp == -1) { return; }
+            trackBar2.Value = (int)(temp * 1000);
         }
 
         private void label1_DoubleClick(object sender, EventArgs e)

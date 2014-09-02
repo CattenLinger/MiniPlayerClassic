@@ -33,9 +33,9 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnPause = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -59,13 +59,13 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.classicBar1 = new MiniPlayerClassic.ClassicBar();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -82,11 +82,11 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.trackBar2);
+            this.panel1.Controls.Add(this.classicBar1);
             this.panel1.Controls.Add(this.trackBar1);
+            this.panel1.Controls.Add(this.trackBar2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.btnPause);
             this.panel1.Controls.Add(this.btnPlay);
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
@@ -100,6 +100,14 @@
             this.trackBar1.Value = 3;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
+            // trackBar2
+            // 
+            resources.ApplyResources(this.trackBar2, "trackBar2");
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar2_MouseUp);
+            // 
             // button1
             // 
             resources.ApplyResources(this.button1, "button1");
@@ -112,14 +120,6 @@
             resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
             this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
-            // 
-            // btnPause
-            // 
-            resources.ApplyResources(this.btnPause, "btnPause");
-            this.btnPause.ImageList = this.imageList1;
-            this.btnPause.Name = "btnPause";
-            this.btnPause.UseVisualStyleBackColor = true;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // btnPlay
             // 
@@ -273,19 +273,25 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
-            // trackBar2
-            // 
-            resources.ApplyResources(this.trackBar2, "trackBar2");
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
-            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar2_MouseUp);
-            // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // classicBar1
+            // 
+            this.classicBar1.Label1 = "";
+            this.classicBar1.Label2 = "";
+            this.classicBar1.Label3 = "";
+            resources.ApplyResources(this.classicBar1, "classicBar1");
+            this.classicBar1.MaxValue = 10;
+            this.classicBar1.Name = "classicBar1";
+            this.classicBar1.Separator = false;
+            this.classicBar1.Style = MiniPlayerClassic.ClassicBar.BarStyles.middle_single;
+            this.classicBar1.TextColor = System.Drawing.Color.Black;
+            this.classicBar1.TextStyle = MiniPlayerClassic.ClassicBar.TextStyles.Fixed;
+            this.classicBar1.Value = 0;
             // 
             // MainFrom
             // 
@@ -300,11 +306,11 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -314,7 +320,6 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Panel panel2;
@@ -338,10 +343,11 @@
         private System.Windows.Forms.ToolStripMenuItem tmCloseList;
         private System.Windows.Forms.ToolStripButton tbtnAdd;
         private System.Windows.Forms.ToolStripButton tbtnRemove;
-        private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private ClassicBar classicBar1;
 
     }
 }
