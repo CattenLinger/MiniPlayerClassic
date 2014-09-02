@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Un4seen.Bass;
 
 namespace MiniPlayerClassic
 {
@@ -19,7 +18,7 @@ namespace MiniPlayerClassic
         {
             InitializeComponent();
 
-            Agency1 = new PlayerAgency(0, 0);
+            Agency1 = new PlayerAgency();
         }
 
         private void MainFrom_Load(object sender, EventArgs e)
@@ -30,11 +29,6 @@ namespace MiniPlayerClassic
          */ 
         //BassNet.Registration("your_email","your_code");
             
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            label2.Text = "ErrorCode: " + Agency1.ErrorCode.ToString() + " Vol: " + Agency1.GetValue().ToString();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -49,7 +43,8 @@ namespace MiniPlayerClassic
             FilePath = dlg1.FileName;
             Agency1.LoadFile(FilePath);
             label1.Text = FilePath;
-            MessageBox.Show(Agency1.AgencyTextInfo());
+            
+            trackBar2.Maximum = (int)(Agency1.GetLength() * 1000);
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -65,6 +60,27 @@ namespace MiniPlayerClassic
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             Agency1.SetVolume((float)trackBar1.Value / (float)trackBar1.Maximum);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+        }
+
+        private void trackBar2_MouseUp(object sender, MouseEventArgs e)
+        {
+            Agency1.SetPosition((double)trackBar2.Value / 1000);
+            timer1.Enabled = true;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            trackBar2.Value = (int)(Agency1.GetPosition() * 1000);
+        }
+
+        private void label1_DoubleClick(object sender, EventArgs e)
+        {
+            MessageBox.Show(Agency1.AgencyTextInfo());
         }
     }
 }

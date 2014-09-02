@@ -10,20 +10,16 @@ namespace MiniPlayerClassic
 {
     public class PlayerAgency
     {
-        //const
+        #region const
         const int default_device = -1;
         const int default_rate = 44100;
-
-        const int error_initerror = 1;
-        const int error_fileopen = 2;
-        const int error_volume = 3;
 
         const int Player_Playing = 1;
         const int Player_Paused = 2;
         const int Player_Stoped = 0;
-        //const end
+        #endregion
 
-        //values
+        #region values
         public String FilePath = ""; //File Path
         public int ErrorCode = 1; //Any matter comeout while initialization will recored here.
         public int PlayState = Player_Stoped; //Recored playing state
@@ -32,105 +28,153 @@ namespace MiniPlayerClassic
         private BASS_INFO BassInfo;
         private int theStream = 0;//The File Stream
         //private values end
-        //end values
-        
-        //progresses
-        public PlayerAgency(int device,int rate)//Player object initialization
-        {
-         /* If you want to close the splash of Bass.Net you need to regist at 
-         *  www.un4seen.com and input the registration code.
-         */
-         //BassNet.Registration("your_email","your_code");
-            
-            //ErrorCode = 1;
-            //PlayState = Player_Stoped;
-            int int1, int2;
+        #endregion
 
-            if ((device == 0) || (rate == 0)) //use 0 in the construction progress will use defaule device and rate
+        //progresses
+
+        /* If you want to close the splash of Bass.Net you need to regist at 
+        *  www.un4seen.com and input the registration code.
+        */
+        public void BassReg()
+        {
+            //BassNet.Registration("your_email","your_code");
+        }
+
+        //Input no pamaraters will use default configuration
+        public PlayerAgency() 
+        {
+            BassReg();
+            if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, IntPtr.Zero))
             {
-                int1 = default_device;
-                int2 = default_rate;
-            }
-            else
-            {
-                int1 = device;
-                int2 = rate;
-            }
-            
-            if ( Bass.BASS_Init(int1, int2, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) ) //Bass initialization
-            {
-                ErrorCode = 0;
                 BassInfo = new BASS_INFO();
+                ErrorCode = 0;
             }
         }
-        public string AgencyTextInfo() //Get Bass info in text
+
+        //Use custom configuration
+        public PlayerAgency(int device,int rate)
+        {
+            BassReg();
+            
+            if ( Bass.BASS_Init(device,rate, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) ) //Bass initialization
+            {
+                BassInfo = new BASS_INFO();
+                ErrorCode = 0;
+            }
+        }
+
+        //Get Bass info in text
+        public string AgencyTextInfo() 
         {
             Bass.BASS_GetInfo(BassInfo);
             string info = BassInfo.ToString();
             return info;
         }
-        public int AgencyCodeInfo() //Get BassInfo object's info
+
+        //Get BassInfo object's info
+        public BASS_INFO AgencyInfo() 
         {
             Bass.BASS_GetInfo(BassInfo);
-            return 1;
+            return BassInfo;
         }
-        public void LoadFile(string Filename) //File load
+
+        //File load
+        public Boolean LoadFile(string Filename) 
         {
-            Bass.BASS_StreamFree(theStream);//free the stream 
+            Bass.BASS_StreamFree(theStream); //free the stream
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) 
-            { 
-                ErrorCode = error_fileopen; 
-            } 
-            else 
-            { 
-                ErrorCode = 0;
-                if (!(Bass.BASS_ChannelSetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, Volume)))
-                { ErrorCode = error_volume; }
-            }
+            if (theStream == 0)
+            { return false; } else { SetVolume(Volume); }
             FilePath = Filename;
+            return true;
         }
-        public void Play()//Play Stream
+
+        //Play Stream
+        public Boolean Play()
         {
             if (PlayState == Player_Stoped) 
             { 
                 LoadFile(FilePath);
-                if (ErrorCode == error_fileopen) { return; }
             }
             if (Bass.BASS_ChannelPlay(theStream, false)) 
             { 
                 PlayState = Player_Playing;
-                ErrorCode = 0;
+                return true;
             }
+            else { return false; }
         }
-        public void Pause()//Pause Stream
+
+        //Pause Stream
+        public Boolean Pause()
         {
-            if (Bass.BASS_ChannelPause(theStream)) { PlayState = Player_Paused; }
+            if (Bass.BASS_ChannelPause(theStream)) { PlayState = Player_Paused; return true; }
+            return false;
         }
-        public void Stop()//Stop Stream, then clean the stream and free the file
+
+        //Stop Stream, then clean the stream and free the file
+        public Boolean Stop()
         {
             if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream))
-            { PlayState = Player_Stoped; }
+            { PlayState = Player_Stoped; return true; }
+            return false;
         }
-        public void SetVolume(float vol) //Set Channel's Volume
+
+        //Set Channel's Volume
+        public Boolean SetVolume(float vol) 
         {
             Volume = vol;
             if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol))
-            { ErrorCode = 0; } else { ErrorCode = error_volume; }
+            { return true; }
+            return false;
         }
-        public float GetValue()//Get Channel's Vloume
+
+        //Get Channel's Vloume
+        public float GetValue()
         { 
             float vol = 0;
             if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL,ref vol))
             {
-                ErrorCode = 0;
                 return vol; 
             } 
             else 
             { 
-                ErrorCode = error_volume; 
                 return 0; 
             }
+        }
+
+        //Get Channel's Level
+        public Boolean GetLevel(ref int Left, ref int Right)
+        {
+            Int32 temp = Bass.BASS_ChannelGetLevel(theStream);
+            if (temp == -1) { return false; }
+            Left = Utils.LowWord32(temp);
+            Right = Utils.HighWord32(temp);
+            return true;
+        }
+
+        //Set Channel's Position
+        public Boolean SetPosition(double seconds)
+        {
+            if (Bass.BASS_ChannelSetPosition(theStream, seconds)) { return true;}
+            return false;
+        }
+
+        //Get Channle's Position
+        public double GetPosition()
+        {
+            long temp;
+            temp = Bass.BASS_ChannelGetPosition(theStream);
+            if (temp == -1) {  return 0; }
+            return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
+        }
+
+        //Get the Channel's length
+        public double GetLength()
+        {
+            long temp;
+            temp = Bass.BASS_ChannelGetLength(theStream);
+            if (temp == -1) { return 0; }
+            return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
     }
 }
