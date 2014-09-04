@@ -7,21 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace MiniPlayerClassic
 {
     public partial class MainFrom : Form
     {
         public Player Agency1;
         public c_ProgressBar cProgressBar;
-        public string FilePath;
+        public string LabelText;
 
         //init
         public MainFrom()
         {
             InitializeComponent();
-
+            LabelText = "暂无播放任务";
             Agency1 = new Player();
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height);
+            cProgressBar.pb_text = LabelText;
         }
         //init
         private void MainFrom_Load(object sender, EventArgs e)
@@ -43,12 +45,11 @@ namespace MiniPlayerClassic
         {
             OpenFileDialog dlg1 = new OpenFileDialog();
             dlg1.ShowDialog();
-            FilePath = dlg1.FileName;
-            Agency1.LoadFile(FilePath);
-            label1.Text = FilePath;
-            
-            trackBar2.Maximum = (int)(Agency1.GetLength() * 1000);
+            Agency1.LoadFile(dlg1.FileName);
+            LabelText = System.IO.Path.GetFileName(dlg1.FileName);
+
             cProgressBar.pb_maxvalue = (int)(Agency1.GetLength() * 1000);
+            cProgressBar.pb_text = LabelText;
         }
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
@@ -63,18 +64,12 @@ namespace MiniPlayerClassic
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            tmrEvents.Enabled = false;
+
         }
 
         private void trackBar2_MouseUp(object sender, MouseEventArgs e)
         {
-            Agency1.SetPosition((double)trackBar2.Value / 1000);
-            tmrEvents.Enabled = true;
-        }
 
-        private void label1_DoubleClick(object sender, EventArgs e)
-        {
-            MessageBox.Show(Agency1.AgencyTextInfo());
         }
 
         //Events Checker
@@ -88,23 +83,28 @@ namespace MiniPlayerClassic
 
             temp = Agency1.GetPosition();
             if (temp == -1) { return; }
-            trackBar2.Value = (int)(temp * 1000);
+
             cProgressBar.pb_value = (int)(temp * 1000);
         }
 
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e)
         {
-
+            tmrEvents.Enabled = false;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            { cProgressBar.pb_value = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width)); }
         }
 
         private void pb_Progress_MouseMove(object sender, MouseEventArgs e)
         {
-
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            { cProgressBar.pb_value = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width)); }
         }
 
         private void pb_Progress_MouseUp(object sender, MouseEventArgs e)
         {
-
+            tmrEvents.Enabled = true;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            { Agency1.SetPosition((double)cProgressBar.pb_value / 1000); }
         }
 
 

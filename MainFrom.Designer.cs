@@ -34,9 +34,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pb_Progress = new System.Windows.Forms.PictureBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -65,7 +63,6 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -86,9 +83,7 @@
             // 
             this.panel1.Controls.Add(this.pb_Progress);
             this.panel1.Controls.Add(this.trackBar1);
-            this.panel1.Controls.Add(this.trackBar2);
             this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnPlay);
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
@@ -111,26 +106,12 @@
             this.trackBar1.Value = 3;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
-            // trackBar2
-            // 
-            resources.ApplyResources(this.trackBar2, "trackBar2");
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
-            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar2_MouseUp);
-            // 
             // button1
             // 
             resources.ApplyResources(this.button1, "button1");
             this.button1.ImageList = this.imageList1;
             this.button1.Name = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
-            this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
             // btnPlay
             // 
@@ -310,7 +291,6 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -323,7 +303,6 @@
 
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Panel panel2;
@@ -348,7 +327,6 @@
         private System.Windows.Forms.ToolStripButton tbtnAdd;
         private System.Windows.Forms.ToolStripButton tbtnRemove;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.Timer tmrEvents;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.PictureBox pb_Progress;
