@@ -11,14 +11,14 @@ namespace MiniPlayerClassic
 {
     public partial class MainFrom : Form
     {
-        public PlayerAgency Agency1;
+        public Player Agency1;
         public string FilePath;
 
         public MainFrom()
         {
             InitializeComponent();
 
-            Agency1 = new PlayerAgency();
+            Agency1 = new Player();
         }
 
         private void MainFrom_Load(object sender, EventArgs e)
@@ -30,12 +30,12 @@ namespace MiniPlayerClassic
         //BassNet.Registration("your_email","your_code");
             
         }
-
+        //Stop Button
         private void btnStop_Click(object sender, EventArgs e)
         {
             Agency1.Stop();
         }
-
+        
         private void btnOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg1 = new OpenFileDialog();
@@ -46,7 +46,7 @@ namespace MiniPlayerClassic
             
             trackBar2.Maximum = (int)(Agency1.GetLength() * 1000);
         }
-
+        //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (Agency1.PlayState != 1) { Agency1.Play(); } else { Agency1.Pause(); }
@@ -59,30 +59,31 @@ namespace MiniPlayerClassic
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            timer1.Enabled = false;
+            tmrEvents.Enabled = false;
         }
 
         private void trackBar2_MouseUp(object sender, MouseEventArgs e)
         {
             Agency1.SetPosition((double)trackBar2.Value / 1000);
-            timer1.Enabled = true;
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            double temp;
-
-            if (Agency1.PlayState != 1)
-            { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
-
-            temp = Agency1.GetPosition();
-            if (temp == -1) { return; }
-            trackBar2.Value = (int)(temp * 1000);
+            tmrEvents.Enabled = true;
         }
 
         private void label1_DoubleClick(object sender, EventArgs e)
         {
             MessageBox.Show(Agency1.AgencyTextInfo());
+        }
+
+        private void tmrEvents_Tick(object sender, EventArgs e)
+        {
+            double temp;
+
+            if (Agency1.PlayState != 1)
+            { btnPlay.ImageIndex = 2; }
+            else { btnPlay.ImageIndex = 1; }
+
+            temp = Agency1.GetPosition();
+            if (temp == -1) { return; }
+            trackBar2.Value = (int)(temp * 1000);
         }
     }
 }

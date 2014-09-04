@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pb_Progress = new System.Windows.Forms.PictureBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
@@ -59,9 +60,10 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.classicBar1 = new MiniPlayerClassic.ClassicBar();
+            this.tmrEvents = new System.Windows.Forms.Timer(this.components);
+            this.tmrBars = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panel2.SuspendLayout();
@@ -82,7 +84,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.classicBar1);
+            this.panel1.Controls.Add(this.pb_Progress);
             this.panel1.Controls.Add(this.trackBar1);
             this.panel1.Controls.Add(this.trackBar2);
             this.panel1.Controls.Add(this.button1);
@@ -91,6 +93,12 @@
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // pb_Progress
+            // 
+            resources.ApplyResources(this.pb_Progress, "pb_Progress");
+            this.pb_Progress.Name = "pb_Progress";
+            this.pb_Progress.TabStop = false;
             // 
             // trackBar1
             // 
@@ -273,25 +281,15 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
-            // timer1
+            // tmrEvents
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 10;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.tmrEvents.Enabled = true;
+            this.tmrEvents.Interval = 10;
+            this.tmrEvents.Tick += new System.EventHandler(this.tmrEvents_Tick);
             // 
-            // classicBar1
+            // tmrBars
             // 
-            this.classicBar1.Label1 = "";
-            this.classicBar1.Label2 = "";
-            this.classicBar1.Label3 = "";
-            resources.ApplyResources(this.classicBar1, "classicBar1");
-            this.classicBar1.MaxValue = 10;
-            this.classicBar1.Name = "classicBar1";
-            this.classicBar1.Separator = false;
-            this.classicBar1.Style = MiniPlayerClassic.ClassicBar.BarStyles.middle_single;
-            this.classicBar1.TextColor = System.Drawing.Color.Black;
-            this.classicBar1.TextStyle = MiniPlayerClassic.ClassicBar.TextStyles.Fixed;
-            this.classicBar1.Value = 0;
+            this.tmrBars.Interval = 20;
             // 
             // MainFrom
             // 
@@ -305,6 +303,7 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.panel2.ResumeLayout(false);
@@ -345,9 +344,10 @@
         private System.Windows.Forms.ToolStripButton tbtnRemove;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TrackBar trackBar2;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer tmrEvents;
         private System.Windows.Forms.TrackBar trackBar1;
-        private ClassicBar classicBar1;
+        private System.Windows.Forms.PictureBox pb_Progress;
+        private System.Windows.Forms.Timer tmrBars;
 
     }
 }

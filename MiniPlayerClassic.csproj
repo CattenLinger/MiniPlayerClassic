@@ -67,24 +67,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassicBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ClassicBar.Designer.cs">
-      <DependentUpon>ClassicBar.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainFrom.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainFrom.Designer.cs">
       <DependentUpon>MainFrom.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlayerAgency.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ClassicBar.resx">
-      <DependentUpon>ClassicBar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainFrom.resx">
       <DependentUpon>MainFrom.cs</DependentUpon>
     </EmbeddedResource>

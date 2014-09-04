@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace MiniPlayerClassic
 {
-    public class PlayerAgency
+    public class Player
     {
         #region const
         const int default_device = -1;
@@ -67,7 +67,7 @@ namespace MiniPlayerClassic
         }
 
         //Input no pamaraters will use default configuration
-        public PlayerAgency() 
+        public Player() 
         {
             BassReg();
             if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, IntPtr.Zero))
@@ -79,7 +79,7 @@ namespace MiniPlayerClassic
         }
 
         //Use custom configuration
-        public PlayerAgency(int device,int rate)
+        public Player(int device,int rate)
         {
             BassReg();
             
