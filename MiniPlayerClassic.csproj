@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="c_ProgressBar.cs" />
     <Compile Include="MainFrom.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -99,6 +99,9 @@
             resources.ApplyResources(this.pb_Progress, "pb_Progress");
             this.pb_Progress.Name = "pb_Progress";
             this.pb_Progress.TabStop = false;
+            this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
+            this.pb_Progress.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseMove);
+            this.pb_Progress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseUp);
             // 
             // trackBar1
             // 
@@ -289,7 +292,9 @@
             // 
             // tmrBars
             // 
-            this.tmrBars.Interval = 20;
+            this.tmrBars.Enabled = true;
+            this.tmrBars.Interval = 40;
+            this.tmrBars.Tick += new System.EventHandler(this.tmrBars_Tick);
             // 
             // MainFrom
             // 

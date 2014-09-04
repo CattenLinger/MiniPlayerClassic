@@ -12,15 +12,18 @@ namespace MiniPlayerClassic
     public partial class MainFrom : Form
     {
         public Player Agency1;
+        public c_ProgressBar cProgressBar;
         public string FilePath;
 
+        //init
         public MainFrom()
         {
             InitializeComponent();
 
             Agency1 = new Player();
+            cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height);
         }
-
+        //init
         private void MainFrom_Load(object sender, EventArgs e)
         {
         /* If you want to close the splash of Bass.Net you need to regist at 
@@ -45,6 +48,7 @@ namespace MiniPlayerClassic
             label1.Text = FilePath;
             
             trackBar2.Maximum = (int)(Agency1.GetLength() * 1000);
+            cProgressBar.pb_maxvalue = (int)(Agency1.GetLength() * 1000);
         }
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
@@ -73,6 +77,7 @@ namespace MiniPlayerClassic
             MessageBox.Show(Agency1.AgencyTextInfo());
         }
 
+        //Events Checker
         private void tmrEvents_Tick(object sender, EventArgs e)
         {
             double temp;
@@ -84,6 +89,28 @@ namespace MiniPlayerClassic
             temp = Agency1.GetPosition();
             if (temp == -1) { return; }
             trackBar2.Value = (int)(temp * 1000);
+            cProgressBar.pb_value = (int)(temp * 1000);
+        }
+
+        private void pb_Progress_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pb_Progress_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pb_Progress_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+
+        private void tmrBars_Tick(object sender, EventArgs e)
+        {
+            cProgressBar.DrawBar(pb_Progress.CreateGraphics());
         }
     }
 }
