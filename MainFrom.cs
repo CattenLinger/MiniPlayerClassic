@@ -14,16 +14,32 @@ namespace MiniPlayerClassic
     {
         public Player Agency1;
         public c_ProgressBar cProgressBar;
+        public c_VolumeBar cVolumeBar;
+
         public string LabelText;
+        private Graphics pb_g_enter;
+        private Graphics pb_g_enter2;
 
         //init
         public MainFrom()
         {
             InitializeComponent();
+
             LabelText = "暂无播放任务";
+            pb_g_enter = pb_Progress.CreateGraphics();
+            pb_g_enter2 = pb_Volume.CreateGraphics();
+
             Agency1 = new Player();
+
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height);
             cProgressBar.pb_text = LabelText;
+            cProgressBar.pb_maxvalue = 10;
+            cProgressBar.pb_value = 0;
+
+            cVolumeBar = new c_VolumeBar(pb_Volume.Width,pb_Volume.Height);
+            cVolumeBar.pb_text = "音量";
+            cVolumeBar.pb_maxvalue = 100;
+            cVolumeBar.pb_value = 100;
         }
         //init
         private void MainFrom_Load(object sender, EventArgs e)
@@ -56,61 +72,108 @@ namespace MiniPlayerClassic
         {
             if (Agency1.PlayState != 1) { Agency1.Play(); } else { Agency1.Pause(); }
         }
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            Agency1.SetVolume((float)trackBar1.Value / (float)trackBar1.Maximum);
-        }
-
-        private void trackBar2_Scroll(object sender, EventArgs e)
-        {
-
-        }
-
-        private void trackBar2_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
-
         //Events Checker
         private void tmrEvents_Tick(object sender, EventArgs e)
         {
-            double temp;
 
             if (Agency1.PlayState != 1)
             { btnPlay.ImageIndex = 2; }
             else { btnPlay.ImageIndex = 1; }
-
-            temp = Agency1.GetPosition();
-            if (temp == -1) { return; }
-
-            cProgressBar.pb_value = (int)(temp * 1000);
+     
         }
 
+        #region About Drawing the ProgressBar
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e)
         {
-            tmrEvents.Enabled = false;
+            tmrPGBar.Enabled = false;
+            int temp;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            { cProgressBar.pb_value = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width)); }
+            {
+                temp = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width));
+                cProgressBar.pb_value = temp;
+                cProgressBar.pb_text2 = Agency1.trans_Time
+                    (cProgressBar.pb_value, Player.t_formate.full_minute) +
+                    "|" + Agency1.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute);
+                cProgressBar.DrawBar(pb_g_enter);
+            }
         }
 
         private void pb_Progress_MouseMove(object sender, MouseEventArgs e)
         {
+            int temp;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            { cProgressBar.pb_value = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width)); }
+            {
+                temp = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width));
+                cProgressBar.pb_value = temp;
+                cProgressBar.pb_text2 = Agency1.trans_Time
+                    (cProgressBar.pb_value, Player.t_formate.full_minute) + 
+                    "|" + Agency1.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute);
+                cProgressBar.DrawBar(pb_g_enter);
+            }
         }
 
         private void pb_Progress_MouseUp(object sender, MouseEventArgs e)
         {
-            tmrEvents.Enabled = true;
+            tmrPGBar.Enabled = true;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             { Agency1.SetPosition((double)cProgressBar.pb_value / 1000); }
         }
+        #endregion
 
-
-        private void tmrBars_Tick(object sender, EventArgs e)
+        #region Bar's Timer
+        private void tmrPGBars_Tick(object sender, EventArgs e)
         {
-            cProgressBar.DrawBar(pb_Progress.CreateGraphics());
+            double temp;
+            temp = Agency1.GetPosition();
+            if (temp == -1) { temp = 0; }
+            cProgressBar.pb_value = (int)(temp * 1000);
+            cProgressBar.DrawBar(pb_g_enter);
+            cProgressBar.pb_text2 = Agency1.trans_Time
+                (cProgressBar.pb_value, Player.t_formate.full_minute) +
+                "|" + Agency1.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute);
         }
+
+        private void tmrVBar_Tick(object sender, EventArgs e)
+        {
+            cVolumeBar.DrawBar(pb_g_enter2);
+            int left = 0, right = 0;
+            Agency1.GetLevel(ref left,ref right);
+            cVolumeBar.tellitlevel(left,right);
+        }
+
+        #endregion
+        #region VolumeBar
+        private void pb_Volume_MouseDown(object sender, MouseEventArgs e)
+        {
+            //tmrVBar.Enabled = false;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X/(float)pb_Volume.Width));
+                Agency1.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                cVolumeBar.DrawBar(pb_g_enter2);
+            }
+        }
+
+        private void pb_Volume_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
+                Agency1.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                cVolumeBar.DrawBar(pb_g_enter2);
+            }
+        }
+
+        private void pb_Volume_MouseUp(object sender, MouseEventArgs e)
+        {
+            //tmrVBar.Enabled = true;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
+                Agency1.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                cVolumeBar.DrawBar(pb_g_enter2);
+            }
+        }
+        #endregion
     }
 }

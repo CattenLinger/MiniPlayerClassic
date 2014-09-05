@@ -17,6 +17,22 @@ namespace MiniPlayerClassic
         const int Player_Playing = 1;
         const int Player_Paused = 2;
         const int Player_Stoped = 0;
+
+        public enum t_formate
+        {
+            full_day = 0,
+            full_hour = 1,
+            full_minute = 2,
+            simple_second = 3,
+
+            day = 4,
+            hour = 5,
+            minute = 6,
+            second = 7,
+            ms = 8
+
+        }
+
         #endregion
 
         #region values
@@ -154,13 +170,12 @@ namespace MiniPlayerClassic
         }
 
         //Get Channel's Level
-        public Boolean GetLevel(ref int Left, ref int Right)
+        public void GetLevel(ref int Left,ref int Right)
         {
             Int32 temp = Bass.BASS_ChannelGetLevel(theStream);
-            if (temp == -1) { return false; }
+            if (temp == -1) { Left = 0; Right = 0; return; }
             Left = Utils.LowWord32(temp);
             Right = Utils.HighWord32(temp);
-            return true;
         }
 
         //Set Channel's Position
@@ -186,6 +201,88 @@ namespace MiniPlayerClassic
             temp = Bass.BASS_ChannelGetLength(theStream);
             if (temp == -1) { return -1; }
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
+        }
+
+        //trans mm to formated time in string 
+        public string trans_Time(Int64 ms)
+        {
+            return trans_Time(ms, t_formate.full_day,true);
+        }
+
+        public string trans_Time(Int64 ms, t_formate formate)
+        {
+            return trans_Time(ms, formate, true);
+        }
+
+        public string trans_Time(Int64 ms, t_formate formate,bool full)
+        {
+            const int msPerSec = 1000;
+            const int sPerMinute = 60;
+            const int sPerHour = 60 * 60;
+
+            string temp1 = "";
+            Int32 second, minute = 0;
+            int hour,day = 0;
+            byte tmp_second, tmp_minute, tmp_hour, tmp_day = 0;
+            int tmp_ms;
+            
+            second = (Int32)(ms / msPerSec);
+            minute = second / sPerMinute;
+            hour = second / sPerHour;
+            day = (int)(second / (sPerHour * 24));
+
+            tmp_ms = (int)(ms % 1000);if (ms >= 1000){ ms = 0;}
+            tmp_second = (byte)(second % 60); if (tmp_second >= 60) { tmp_second = 0; }
+            tmp_minute = (byte)(minute % 60); if (tmp_minute >= 60) { tmp_minute = 0; }
+            tmp_hour = (byte)(hour % 24); if (tmp_hour >= 24) { tmp_hour = 0; }
+            tmp_day = (byte)(day);
+
+            if (formate == t_formate.full_day)
+            {
+                temp1 = tmp_day.ToString() + ":";
+                if ((tmp_hour < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_hour.ToString() + ":";
+                if ((tmp_minute < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_minute.ToString() + ":";
+                if ((tmp_second < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_second.ToString();
+            }
+
+            if (formate == t_formate.full_hour)
+            {
+                temp1 += tmp_hour.ToString() + ":";
+                if ((tmp_minute < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_minute.ToString() + ":";
+                if ((tmp_second < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_second.ToString();
+            }
+
+            if (formate == t_formate.full_minute)
+            {
+                temp1 += tmp_minute.ToString() + ":";
+                if ((tmp_second < 10) && full) { temp1 += "0"; }
+                temp1 += tmp_second.ToString();
+            }
+
+            if (formate == t_formate.simple_second)
+            {
+                if ((second < 10) && full) { temp1 = "0"; }
+                temp1 += minute.ToString();
+                if (ms < 1000) { temp1 += "0"; }
+                else if (ms < 100) { temp1 += "00"; }
+                else if (ms < 10) { temp1 += "000"; }
+                temp1 += "." + tmp_ms.ToString();
+            }
+
+            switch (formate)
+            {
+                case t_formate.day: return tmp_day.ToString();
+                case t_formate.hour: return tmp_hour.ToString();
+                case t_formate.minute: return tmp_minute.ToString();
+                case t_formate.second: return tmp_second.ToString();
+                case t_formate.ms: return (tmp_ms).ToString();
+            }
+            return temp1;
         }
     }
 }
