@@ -203,6 +203,22 @@ namespace MiniPlayerClassic
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
 
+        public void getData(byte[] data) 
+        {
+            if (data.Length < 512) { return; }
+            if (PlayState == Player_Playing)
+            { Bass.BASS_ChannelGetData(theStream, data, 128); }
+            else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
+        }
+
+        public void getData(Single[] data)
+        {
+            if (data.Length < 512) { return; }
+            if (PlayState == Player_Playing)
+            { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
+            else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
+        }
+
         //trans mm to formated time in string 
         public string trans_Time(Int64 ms)
         {
@@ -284,5 +300,6 @@ namespace MiniPlayerClassic
             }
             return temp1;
         }
+
     }
 }

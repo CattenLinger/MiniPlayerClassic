@@ -32,22 +32,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.pb_Volume = new System.Windows.Forms.PictureBox();
             this.pb_Progress = new System.Windows.Forms.PictureBox();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tbtnAdd = new System.Windows.Forms.ToolStripButton();
-            this.tbtnRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnList = new System.Windows.Forms.ToolStripSplitButton();
             this.tmSaveList = new System.Windows.Forms.ToolStripMenuItem();
             this.tmSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.tmNewList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmDelList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnPlayMode = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,15 +57,21 @@
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
             this.tmrEvents = new System.Windows.Forms.Timer(this.components);
             this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.pb_Volume = new System.Windows.Forms.PictureBox();
             this.tmrVBar = new System.Windows.Forms.Timer(this.components);
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.btnNext = new System.Windows.Forms.Button();
+            this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
+            this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbtnRemove = new System.Windows.Forms.ToolStripSplitButton();
+            this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmDelList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tmOpenList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmDeleteItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -91,6 +96,29 @@
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // btnNext
+            // 
+            resources.ApplyResources(this.btnNext, "btnNext");
+            this.btnNext.ImageList = this.imageList1;
+            this.btnNext.Name = "btnNext";
+            this.btnNext.UseVisualStyleBackColor = true;
+            // 
+            // btnPrev
+            // 
+            resources.ApplyResources(this.btnPrev, "btnPrev");
+            this.btnPrev.ImageList = this.imageList1;
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            // 
+            // pb_Volume
+            // 
+            resources.ApplyResources(this.pb_Volume, "pb_Volume");
+            this.pb_Volume.Name = "pb_Volume";
+            this.pb_Volume.TabStop = false;
+            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
+            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
+            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
             // 
             // pb_Progress
             // 
@@ -145,19 +173,6 @@
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
             // 
-            // tbtnAdd
-            // 
-            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
-            this.tbtnAdd.Name = "tbtnAdd";
-            this.tbtnAdd.Click += new System.EventHandler(this.btnOpen_Click);
-            // 
-            // tbtnRemove
-            // 
-            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
-            this.tbtnRemove.Name = "tbtnRemove";
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -170,9 +185,7 @@
             this.tmSaveList,
             this.tmSaveAs,
             this.toolStripMenuItem5,
-            this.tmNewList,
-            this.tmDelList,
-            this.tmCloseList});
+            this.tmNewList});
             resources.ApplyResources(this.tbtnList, "tbtnList");
             this.tbtnList.Name = "tbtnList";
             // 
@@ -195,16 +208,6 @@
             // 
             this.tmNewList.Name = "tmNewList";
             resources.ApplyResources(this.tmNewList, "tmNewList");
-            // 
-            // tmDelList
-            // 
-            this.tmDelList.Name = "tmDelList";
-            resources.ApplyResources(this.tmDelList, "tmDelList");
-            // 
-            // tmCloseList
-            // 
-            this.tmCloseList.Name = "tmCloseList";
-            resources.ApplyResources(this.tmCloseList, "tmCloseList");
             // 
             // tbtnPlayMode
             // 
@@ -264,34 +267,68 @@
             this.tmrPGBar.Interval = 17;
             this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
             // 
-            // pb_Volume
-            // 
-            resources.ApplyResources(this.pb_Volume, "pb_Volume");
-            this.pb_Volume.Name = "pb_Volume";
-            this.pb_Volume.TabStop = false;
-            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
-            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
-            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
-            // 
             // tmrVBar
             // 
             this.tmrVBar.Enabled = true;
             this.tmrVBar.Interval = 17;
             this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
             // 
-            // btnPrev
+            // tbtnAdd
             // 
-            resources.ApplyResources(this.btnPrev, "btnPrev");
-            this.btnPrev.ImageList = this.imageList1;
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.UseVisualStyleBackColor = true;
+            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmOpenFile,
+            this.toolStripSeparator4,
+            this.tmOpenList});
+            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
+            this.tbtnAdd.Name = "tbtnAdd";
+            this.tbtnAdd.Click += new System.EventHandler(this.btnOpen_Click);
             // 
-            // btnNext
+            // tmOpenFile
             // 
-            resources.ApplyResources(this.btnNext, "btnNext");
-            this.btnNext.ImageList = this.imageList1;
-            this.btnNext.Name = "btnNext";
-            this.btnNext.UseVisualStyleBackColor = true;
+            this.tmOpenFile.Name = "tmOpenFile";
+            resources.ApplyResources(this.tmOpenFile, "tmOpenFile");
+            // 
+            // tbtnRemove
+            // 
+            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbtnRemove.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmDeleteItem,
+            this.toolStripMenuItem6,
+            this.tmCloseList,
+            this.tmDelList});
+            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
+            this.tbtnRemove.Name = "tbtnRemove";
+            // 
+            // tmCloseList
+            // 
+            this.tmCloseList.Name = "tmCloseList";
+            resources.ApplyResources(this.tmCloseList, "tmCloseList");
+            // 
+            // tmDelList
+            // 
+            this.tmDelList.Name = "tmDelList";
+            resources.ApplyResources(this.tmDelList, "tmDelList");
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            // 
+            // tmOpenList
+            // 
+            this.tmOpenList.Name = "tmOpenList";
+            resources.ApplyResources(this.tmOpenList, "tmOpenList");
+            // 
+            // tmDeleteItem
+            // 
+            this.tmDeleteItem.Name = "tmDeleteItem";
+            resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
             // 
             // MainFrom
             // 
@@ -304,12 +341,12 @@
             this.Name = "MainFrom";
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -337,10 +374,6 @@
         private System.Windows.Forms.ToolStripMenuItem tmSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem tmNewList;
-        private System.Windows.Forms.ToolStripMenuItem tmDelList;
-        private System.Windows.Forms.ToolStripMenuItem tmCloseList;
-        private System.Windows.Forms.ToolStripButton tbtnAdd;
-        private System.Windows.Forms.ToolStripButton tbtnRemove;
         private System.Windows.Forms.Timer tmrEvents;
         private System.Windows.Forms.PictureBox pb_Progress;
         private System.Windows.Forms.Timer tmrPGBar;
@@ -348,6 +381,15 @@
         private System.Windows.Forms.Timer tmrVBar;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.ToolStripSplitButton tbtnAdd;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenList;
+        private System.Windows.Forms.ToolStripSplitButton tbtnRemove;
+        private System.Windows.Forms.ToolStripMenuItem tmDeleteItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem tmCloseList;
+        private System.Windows.Forms.ToolStripMenuItem tmDelList;
 
     }
 }

@@ -11,7 +11,10 @@ namespace MiniPlayerClassic
     {
         //const
         const int s_font = 10;
-        const int pick_fall_step = 3;
+        const float fft_data_zoom = 16f;
+        const int fft_fall_step = 4;
+        const int peak_fall_step = 2;
+        const int level_fall_step = 4;
 
         //Canvas
         private Bitmap buffer;
@@ -21,6 +24,7 @@ namespace MiniPlayerClassic
         public Graphics bitmap_enter;
         //pens
         private Pen p_frame;
+        public Pen p_fft;
         //brushs
         SolidBrush b_back;
         SolidBrush b_fore;
@@ -33,15 +37,17 @@ namespace MiniPlayerClassic
         Rectangle rect_fore;
         //values
         public string pb_text;//text on the bar
-
         public int pb_value;//Progress Bar's value
         public int pb_maxvalue;//Progress Bar's max value
-        private int x_label = 0;
+        public Single[] fft_data = new Single[512];
 
+        private int x_label = 0;
         private int level_left = 0;//level
         private int level_right = 0;
-        int temp_left = 0;
-        int temp_right = 0;
+        private int temp_left = 0;
+        private int temp_right = 0;
+        private short[] temp_fft = new short[256];
+        private short[] temp_peak = new short[256];
         //sizes
         public int height, width;
         private int pb_f_long = 0;
@@ -58,6 +64,7 @@ namespace MiniPlayerClassic
             bitmap_enter = Graphics.FromImage(buffer);
             //pens
             p_frame = new Pen(Color.Black, 1);
+            p_fft = new Pen(Color.Green, 1);
             //brush
             b_back = new SolidBrush(Color.WhiteSmoke);
             b_fore = new SolidBrush(Color.LightBlue);
@@ -102,8 +109,8 @@ namespace MiniPlayerClassic
             //level
             if (temp_left < level_left) { temp_left = level_left; }
             if (temp_right < level_right) { temp_right = level_right; }
-            if (temp_left > level_left) { temp_left -= pick_fall_step; }
-            if (temp_right > level_right) { temp_right -= pick_fall_step; }
+            if (temp_left > level_left) { temp_left -= level_fall_step; }
+            if (temp_right > level_right) { temp_right -= level_fall_step; }
             //thumb text
             byte temp1 = (byte)(info_text.Width - thumb_text_offset);
             if (pb_f_long < temp1) { x_label = 0; }
@@ -115,6 +122,7 @@ namespace MiniPlayerClassic
             //Fill colors
             bitmap_enter.FillRectangle(b_back, rect_pb);
             //level
+            height++;
             b_level.Color = Color.LightGray;
             bitmap_enter.FillRectangle(b_level, 0, 0, temp_left, height / 2);
             bitmap_enter.FillRectangle(b_level, 0, height / 2, temp_right, height / 2);
@@ -126,8 +134,25 @@ namespace MiniPlayerClassic
             b_level.Color = Color.Lime;
             bitmap_enter.FillRectangle(b_level, 0, 0, t_t_l_left, height / 2);
             bitmap_enter.FillRectangle(b_level, 0, height / 2, t_t_l_right, height / 2);
+            //FFT
+            for (int i = 0; i <= 128; i++)
+            {
+                short di = Math.Abs((short)((float)height * fft_data[i * 2] * fft_data_zoom));
+                if (di > height) { di = (byte)height; }
+                if (di < 1) { di = 1; }
+                if (di > temp_fft[i]) { temp_fft[i] = di; }
+                if (temp_peak[i] < di) { temp_peak[i] = di; }
+                if (di <= temp_fft[i]) { temp_fft[i] -= fft_fall_step; }
+                if (temp_peak[i] > di) { temp_peak[i] -= peak_fall_step; }
+            }
+            for (int i = 0; i <= 100; i++)
+            {
+                bitmap_enter.DrawLine(p_fft, i * 2, height - 1, i * 2, height - 1 - temp_fft[i]);
+                bitmap_enter.FillRectangle(new SolidBrush(p_fft.Color), i * 2, height - 1 - temp_peak[i], 1, 1);
+            }
+            height--;
             //label
-            bitmap_enter.DrawString(pb_text,font_label,b_text,point_label);
+            bitmap_enter.DrawString(pb_text, font_label, b_text, point_label);
             
             //Draw the Frame
             bitmap_enter.DrawRectangle(p_frame, rect_fore);
