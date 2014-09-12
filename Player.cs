@@ -8,6 +8,13 @@ using System.Windows.Forms;
 
 namespace MiniPlayerClassic
 {
+    public class PlayerStateMessage : EventArgs
+    {
+        private int msg;
+        public int Message { get { return msg; } set { msg = value; } }
+        public PlayerStateMessage(int message) { msg = message; }
+    }
+
     public class Player
     {
         #region const
@@ -47,6 +54,7 @@ namespace MiniPlayerClassic
         //private values end
         #endregion
 
+        public event EventHandler<PlayerStateMessage> call_StateChange;
         //progresses
 
         /* If you want to close the splash of Bass.Net you need to regist at 
@@ -66,6 +74,13 @@ namespace MiniPlayerClassic
             tmrChecker.Tick += tmrChecker_Tick;
             tmrChecker.Enabled = true;
         }
+        
+        //State change event
+        protected virtual void on_call_StateChanger(PlayerStateMessage e)
+        {
+            EventHandler<PlayerStateMessage> handler = call_StateChange;
+            if (handler != null) { handler(this, e); }
+        }
 
         //timer for check informations
         private void tmrChecker_Tick(object sender, EventArgs e)
@@ -74,10 +89,34 @@ namespace MiniPlayerClassic
 
             switch (Bass.BASS_ChannelIsActive(theStream))
             {
-                case BASSActive.BASS_ACTIVE_PLAYING: PlayState = Player_Playing; break;
-                case BASSActive.BASS_ACTIVE_PAUSED: PlayState = Player_Paused; break;
-                case BASSActive.BASS_ACTIVE_STOPPED: PlayState = Player_Stoped; break;
-                case BASSActive.BASS_ACTIVE_STALLED: PlayState = -1; break;
+                case BASSActive.BASS_ACTIVE_PLAYING:
+                    if (PlayState != Player_Playing)
+                    {
+                        PlayState = Player_Playing;
+                        call_StateChange(this, new PlayerStateMessage(Player_Playing));
+                    }
+                    break;
+                case BASSActive.BASS_ACTIVE_PAUSED: 
+                    if (PlayState != Player_Paused )
+                    {
+                        PlayState = Player_Paused;
+                        call_StateChange(this, new PlayerStateMessage(Player_Paused));
+                    }
+                    break;
+                case BASSActive.BASS_ACTIVE_STOPPED: 
+                    if (PlayState != Player_Stoped)
+                    {
+                        PlayState = Player_Stoped;
+                        call_StateChange(this, new PlayerStateMessage(Player_Stoped));
+                    }
+                    break;
+                case BASSActive.BASS_ACTIVE_STALLED: 
+                    if (PlayState != -1)
+                    {
+                        PlayState = -1;
+                        call_StateChange(this, new PlayerStateMessage(-1));
+                    }
+                    break;
             }
             //throw new NotImplementedException();
         }
@@ -142,7 +181,7 @@ namespace MiniPlayerClassic
         //Pause Stream
         public Boolean Pause()
         {
-            if (Bass.BASS_ChannelPause(theStream)) { PlayState = Player_Paused; return true; }
+            if (Bass.BASS_ChannelPause(theStream)) { return true; }
             return false;
         }
 

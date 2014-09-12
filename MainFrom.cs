@@ -30,6 +30,7 @@ namespace MiniPlayerClassic
             pb_g_enter2 = pb_Volume.CreateGraphics();
 
             MainPlayer = new Player();
+            MainPlayer.call_StateChange += MainPlayer_call_StateChange;
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height);
             cProgressBar.pb_text = LabelText;
@@ -73,12 +74,16 @@ namespace MiniPlayerClassic
             if (MainPlayer.PlayState != 1) { MainPlayer.Play(); } else { MainPlayer.Pause(); }
         }
         //Events Checker
-        private void tmrEvents_Tick(object sender, EventArgs e)
+        void MainPlayer_call_StateChange(object sender, PlayerStateMessage e)
         {
-
-            if (MainPlayer.PlayState != 1)
+            if (e.Message != 1)
             { btnPlay.ImageIndex = 2; }
             else { btnPlay.ImageIndex = 1; }
+            //throw new NotImplementedException();
+        }
+
+        private void tmrEvents_Tick(object sender, EventArgs e)
+        {
      
         }
 
