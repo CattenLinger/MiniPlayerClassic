@@ -14,8 +14,8 @@ MiniPlayer 就像它的名字那样，提供一个简单的音频文件播放方
 
 主要结构：
 
--界面层(Normal MS-Style UI)
--中间层(Player)
--解码器(Bass24)
+- 界面层(Normal MS-Style UI)
+- 中间层(Player)
+- 解码器(Bass24)
 
 
