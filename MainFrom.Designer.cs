@@ -64,7 +64,6 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.tmrEvents = new System.Windows.Forms.Timer(this.components);
             this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
             this.tmrVBar = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
@@ -157,6 +156,7 @@
             resources.ApplyResources(this.listView1, "listView1");
             this.listView1.Name = "listView1";
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.List;
             // 
             // toolStrip1
             // 
@@ -182,7 +182,7 @@
             this.tmOpenList});
             resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
             this.tbtnAdd.Name = "tbtnAdd";
-            this.tbtnAdd.Click += new System.EventHandler(this.btnOpen_Click);
+            this.tbtnAdd.ButtonClick += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // tmOpenFile
             // 
@@ -313,10 +313,6 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
-            // tmrEvents
-            // 
-            this.tmrEvents.Tick += new System.EventHandler(this.tmrEvents_Tick);
-            // 
             // tmrPGBar
             // 
             this.tmrPGBar.Enabled = true;
@@ -373,7 +369,6 @@
         private System.Windows.Forms.ToolStripMenuItem tmSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem tmNewList;
-        private System.Windows.Forms.Timer tmrEvents;
         private System.Windows.Forms.PictureBox pb_Progress;
         private System.Windows.Forms.Timer tmrPGBar;
         private System.Windows.Forms.PictureBox pb_Volume;

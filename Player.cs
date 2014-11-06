@@ -25,6 +25,8 @@ namespace MiniPlayerClassic
         const int Player_Paused = 2;
         const int Player_Stoped = 0;
 
+        const int File_StateChange = 10;
+
         public enum t_formate
         {
             full_day = 0,
@@ -147,7 +149,7 @@ namespace MiniPlayerClassic
         }
 
         //Get Bass info in text
-        public string AgencyTextInfo() 
+        public string PlayerTextInfo() 
         {
             Bass.BASS_GetInfo(BassInfo);
             string info = BassInfo.ToString();
@@ -155,7 +157,7 @@ namespace MiniPlayerClassic
         }
 
         //Get BassInfo object's info
-        public BASS_INFO AgencyInfo() 
+        public BASS_INFO PlayerInfo() 
         {
             Bass.BASS_GetInfo(BassInfo);
             return BassInfo;
@@ -168,6 +170,7 @@ namespace MiniPlayerClassic
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
             if (theStream == 0) { return false; } else { SetVolume(Volume); }
             FilePath = Filename;
+            call_StateChange(this, new PlayerStateMessage(File_StateChange));
             return true;
         }
 

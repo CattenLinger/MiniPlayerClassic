@@ -5,6 +5,8 @@ using System.Text;
 
 namespace MiniPlayerClassic
 {
+
+    #region PlayList Item Define
     public class PlayListItem
     {
         public string FileAddress;
@@ -25,6 +27,11 @@ namespace MiniPlayerClassic
             FileAddress = file;
             Infomations = info;
         }
+        public PlayListItem(uint index)
+        {
+            FileAddress = "";
+            Infomations = "";
+        }
 
         public void refresh_info()
         {
@@ -39,24 +46,53 @@ namespace MiniPlayerClassic
             }
         }
     }
+    #endregion
 
     public class PlayList
     {
-        private LinkedList<PlayListItem> list;
+        public LinkedList<PlayListItem> list;
+        private PlayListItem item;
+        private LinkedListNode<PlayListItem> marked;
 
+        private int i;
+        //private LinkedListNode<PlayListItem> item;
         public PlayList()
         { 
             list = new LinkedList<PlayListItem>();
         }
 
-        public void Add(string FileName, string Infomations)
+        public void Add(PlayListItem item)
         {
-            
+            list.AddLast(item);
         }
 
-        public void Remove(int index)
+        public bool Remove(int index)
         {
-            
+            if (index > list.Count - 1 || index < 0) { return false; }
+            marked = list.First;
+            for (i = 0; i < list.Count - 1; i++)
+            {
+                if (i == index) { list.Remove(marked); break; }
+                marked = marked.Next;
+            }
+            return true;
+        }
+
+        public bool Insert(int index, PlayListItem item) 
+        {
+            if (index > list.Count - 1 || index < 0) { return false; }
+            marked = list.First;
+            for (i = 0; i < list.Count; i++)
+            {
+                if (i == index) { list.AddAfter(marked, new LinkedListNode<PlayListItem>(item)); break; }
+                marked = marked.Next;
+            }
+            return true;
+        }
+
+        public bool Savetofile(string Filename)
+        {
+            return true;
         }
     }
 }

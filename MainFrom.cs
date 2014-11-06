@@ -20,6 +20,8 @@ namespace MiniPlayerClassic
         private Graphics pb_g_enter;
         private Graphics pb_g_enter2;
 
+        public PlayList pl_main;
+
         //init
         public MainFrom()
         {
@@ -31,6 +33,8 @@ namespace MiniPlayerClassic
 
             MainPlayer = new Player();
             MainPlayer.call_StateChange += MainPlayer_call_StateChange;
+
+            pl_main = new PlayList();
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height);
             cProgressBar.pb_text = LabelText;
@@ -57,34 +61,39 @@ namespace MiniPlayerClassic
         {
             MainPlayer.Stop();
         }
-        
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dlg1 = new OpenFileDialog();
-            dlg1.ShowDialog();
-            MainPlayer.LoadFile(dlg1.FileName);
-            LabelText = System.IO.Path.GetFileName(dlg1.FileName);
-
-            cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
-            cProgressBar.pb_text = LabelText;
-        }
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (MainPlayer.PlayState != 1) { MainPlayer.Play(); } else { MainPlayer.Pause(); }
         }
-        //Events Checker
+//--------Events Checker--------------------------------------------------------------------------
         void MainPlayer_call_StateChange(object sender, PlayerStateMessage e)
         {
-            if (e.Message != 1)
-            { btnPlay.ImageIndex = 2; }
-            else { btnPlay.ImageIndex = 1; }
+            if (e.Message == 10)
+            {
+                LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
+                cProgressBar.pb_text = LabelText;
+                cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
+            }else 
+                if ((e.Message < 10) && (e.Message != 1)) 
+                    { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
             //throw new NotImplementedException();
         }
+//------------------------------------------------------------------------------------------------
 
-        private void tmrEvents_Tick(object sender, EventArgs e)
+        private void tbtnAdd_ButtonClick(object sender, EventArgs e)
         {
-     
+            OpenFileDialog dlg1 = new OpenFileDialog();
+            dlg1.ShowDialog();
+            MainPlayer.LoadFile(dlg1.FileName);
+
+            pl_main.Add(new PlayListItem(dlg1.FileName,""));
+            LinkedListNode<PlayListItem> marked = pl_main.list.First;
+            for (int i = 0; i < pl_main.list.Count; i++)
+            {
+                listView1.Items.Add(marked.Value.FileAddress);
+                marked = marked.Next;
+            }
         }
 
         #region About Drawing the ProgressBar
@@ -182,5 +191,6 @@ namespace MiniPlayerClassic
             }
         }
         #endregion
+
     }
 }
