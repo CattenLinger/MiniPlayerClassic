@@ -51,11 +51,10 @@ namespace MiniPlayerClassic
     public class PlayList
     {
         public LinkedList<PlayListItem> list;
-        private PlayListItem item;
         private LinkedListNode<PlayListItem> marked;
 
         private int i;
-        //private LinkedListNode<PlayListItem> item;
+
         public PlayList()
         { 
             list = new LinkedList<PlayListItem>();
@@ -70,9 +69,9 @@ namespace MiniPlayerClassic
         {
             if (index > list.Count - 1 || index < 0) { return false; }
             marked = list.First;
-            for (i = 0; i < list.Count - 1; i++)
+            for (i = 0; i < list.Count; i++)
             {
-                if (i == index) { list.Remove(marked); break; }
+                if (i == index) { list.Remove(marked); return true; }
                 marked = marked.Next;
             }
             return true;
@@ -84,10 +83,23 @@ namespace MiniPlayerClassic
             marked = list.First;
             for (i = 0; i < list.Count; i++)
             {
-                if (i == index) { list.AddAfter(marked, new LinkedListNode<PlayListItem>(item)); break; }
+                if (i == index) { list.AddAfter(marked, new LinkedListNode<PlayListItem>(item)); return true; }
                 marked = marked.Next;
             }
             return true;
+        }
+
+        public PlayListItem GetItem(int index)
+        {
+            LinkedListNode<PlayListItem> marked;
+            int i;
+            if (index < 0 || index > list.Count - 1) { return null; }
+            marked = list.First;
+            for (i = 0; i < list.Count; i++) {
+                if (i == index) { return marked.Value; }
+                marked = marked.Next;
+            }
+            return null;
         }
 
         public bool Savetofile(string Filename)

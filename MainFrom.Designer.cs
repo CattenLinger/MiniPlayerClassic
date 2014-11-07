@@ -49,7 +49,7 @@
             this.tmDeleteItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
             this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmDelList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmEmptyList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnList = new System.Windows.Forms.ToolStripSplitButton();
             this.tmSaveList = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +66,8 @@
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
             this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
             this.tmrVBar = new System.Windows.Forms.Timer(this.components);
+            this.tmAddList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmDeleteListFile = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -84,6 +86,7 @@
             this.imageList1.Images.SetKeyName(4, "rewind_button.png");
             this.imageList1.Images.SetKeyName(5, "stop_alt.png");
             this.imageList1.Images.SetKeyName(6, "up_alt.png");
+            this.imageList1.Images.SetKeyName(7, "music.png");
             // 
             // panel1
             // 
@@ -154,9 +157,14 @@
             // listView1
             // 
             resources.ApplyResources(this.listView1, "listView1");
+            this.listView1.LargeImageList = this.imageList1;
             this.listView1.Name = "listView1";
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.StateImageList = this.imageList1;
+            this.listView1.TileSize = new System.Drawing.Size(300, 36);
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
+            this.listView1.View = System.Windows.Forms.View.Tile;
+            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
             // 
             // toolStrip1
             // 
@@ -179,7 +187,8 @@
             this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tmOpenFile,
             this.toolStripSeparator4,
-            this.tmOpenList});
+            this.tmOpenList,
+            this.tmAddList});
             resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
             this.tbtnAdd.Name = "tbtnAdd";
             this.tbtnAdd.ButtonClick += new System.EventHandler(this.tbtnAdd_ButtonClick);
@@ -188,6 +197,7 @@
             // 
             this.tmOpenFile.Name = "tmOpenFile";
             resources.ApplyResources(this.tmOpenFile, "tmOpenFile");
+            this.tmOpenFile.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // toolStripSeparator4
             // 
@@ -204,16 +214,19 @@
             this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tbtnRemove.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tmDeleteItem,
+            this.tmDeleteListFile,
             this.toolStripMenuItem6,
             this.tmCloseList,
-            this.tmDelList});
+            this.tmEmptyList});
             resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
             this.tbtnRemove.Name = "tbtnRemove";
+            this.tbtnRemove.ButtonClick += new System.EventHandler(this.tbtnRemove_ButtonClick);
             // 
             // tmDeleteItem
             // 
             this.tmDeleteItem.Name = "tmDeleteItem";
             resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
+            this.tmDeleteItem.Click += new System.EventHandler(this.tbtnRemove_ButtonClick);
             // 
             // toolStripMenuItem6
             // 
@@ -225,10 +238,11 @@
             this.tmCloseList.Name = "tmCloseList";
             resources.ApplyResources(this.tmCloseList, "tmCloseList");
             // 
-            // tmDelList
+            // tmEmptyList
             // 
-            this.tmDelList.Name = "tmDelList";
-            resources.ApplyResources(this.tmDelList, "tmDelList");
+            this.tmEmptyList.Name = "tmEmptyList";
+            resources.ApplyResources(this.tmEmptyList, "tmEmptyList");
+            this.tmEmptyList.Click += new System.EventHandler(this.tmEmptyList_Click);
             // 
             // toolStripSeparator1
             // 
@@ -325,6 +339,16 @@
             this.tmrVBar.Interval = 17;
             this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
             // 
+            // tmAddList
+            // 
+            this.tmAddList.Name = "tmAddList";
+            resources.ApplyResources(this.tmAddList, "tmAddList");
+            // 
+            // tmDeleteListFile
+            // 
+            this.tmDeleteListFile.Name = "tmDeleteListFile";
+            resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
+            // 
             // MainFrom
             // 
             resources.ApplyResources(this, "$this");
@@ -383,7 +407,9 @@
         private System.Windows.Forms.ToolStripMenuItem tmDeleteItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem tmCloseList;
-        private System.Windows.Forms.ToolStripMenuItem tmDelList;
+        private System.Windows.Forms.ToolStripMenuItem tmEmptyList;
+        private System.Windows.Forms.ToolStripMenuItem tmAddList;
+        private System.Windows.Forms.ToolStripMenuItem tmDeleteListFile;
 
     }
 }

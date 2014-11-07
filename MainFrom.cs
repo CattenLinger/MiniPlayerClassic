@@ -81,21 +81,6 @@ namespace MiniPlayerClassic
         }
 //------------------------------------------------------------------------------------------------
 
-        private void tbtnAdd_ButtonClick(object sender, EventArgs e)
-        {
-            OpenFileDialog dlg1 = new OpenFileDialog();
-            dlg1.ShowDialog();
-            MainPlayer.LoadFile(dlg1.FileName);
-
-            pl_main.Add(new PlayListItem(dlg1.FileName,""));
-            LinkedListNode<PlayListItem> marked = pl_main.list.First;
-            for (int i = 0; i < pl_main.list.Count; i++)
-            {
-                listView1.Items.Add(marked.Value.FileAddress);
-                marked = marked.Next;
-            }
-        }
-
         #region About Drawing the ProgressBar
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e)
         {
@@ -191,6 +176,67 @@ namespace MiniPlayerClassic
             }
         }
         #endregion
+
+        private void tbtnAdd_ButtonClick(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg1 = new OpenFileDialog();
+            dlg1.Multiselect = true;
+            dlg1.ShowDialog();
+
+            if (dlg1.FileNames.Length <= 0) { return; }
+            else if (dlg1.FileNames.Length == 1) { MainPlayer.LoadFile(dlg1.FileNames[0]); }
+
+            for (int i = 0; i < dlg1.FileNames.Length; i++)
+            {
+                pl_main.Add(new PlayListItem(dlg1.FileNames[i], ""));
+            }
+
+            RefreshPlayList();
+        }
+
+        private void tbtnRemove_ButtonClick(object sender, EventArgs e)
+        {
+            int i;
+            ListViewItem item;
+            if (listView1.SelectedItems.Count < 1) { return; }
+            for (i = 0; i < listView1.SelectedItems.Count; i++)
+            {
+                item = listView1.SelectedItems[i];
+                pl_main.Remove(listView1.Items.IndexOf(item));
+                listView1.Items.Remove(item);
+            }
+
+            RefreshPlayList();
+        }
+
+        private void RefreshPlayList()
+        {
+            LinkedListNode<PlayListItem> marked = pl_main.list.First;
+            listView1.Items.Clear();
+            for (int i = 0; i < pl_main.list.Count; i++)
+            {
+                listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress),7);
+                marked = marked.Next;
+            }
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            PlayListItem marked;
+            if (listView1.SelectedItems.Count <= 0) { return; }
+            marked = pl_main.GetItem(listView1.Items.IndexOf(listView1.SelectedItems[0]));
+            if (MainPlayer.LoadFile(marked.FileAddress)) { MainPlayer.Play(); }
+        }
+
+        private void tmEmptyList_Click(object sender, EventArgs e)
+        {
+            if (listView1.Items.Count == 0) { return; }
+            if (MessageBox.Show("要清空列表？\n此操作不可恢复哦。",
+                "清空列表？",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No) { return; };
+
+            pl_main.list.Clear();
+            listView1.Items.Clear();
+        }
 
     }
 }
