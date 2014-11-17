@@ -76,8 +76,6 @@ namespace MiniPlayerClassic
             rect_fore = new Rectangle(0, 0, 0, height);
             //fonts
             font_label = new Font("MS YaHei UI",s_font);
-
-            
         }
 
         public void tellitlevel(int left, int right)

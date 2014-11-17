@@ -45,8 +45,10 @@
             this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tmOpenList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmAddList = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnRemove = new System.Windows.Forms.ToolStripSplitButton();
             this.tmDeleteItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmDeleteListFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
             this.tmCloseList = new System.Windows.Forms.ToolStripMenuItem();
             this.tmEmptyList = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +68,6 @@
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
             this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
             this.tmrVBar = new System.Windows.Forms.Timer(this.components);
-            this.tmAddList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmDeleteListFile = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -209,6 +209,11 @@
             this.tmOpenList.Name = "tmOpenList";
             resources.ApplyResources(this.tmOpenList, "tmOpenList");
             // 
+            // tmAddList
+            // 
+            this.tmAddList.Name = "tmAddList";
+            resources.ApplyResources(this.tmAddList, "tmAddList");
+            // 
             // tbtnRemove
             // 
             this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -227,6 +232,11 @@
             this.tmDeleteItem.Name = "tmDeleteItem";
             resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
             this.tmDeleteItem.Click += new System.EventHandler(this.tbtnRemove_ButtonClick);
+            // 
+            // tmDeleteListFile
+            // 
+            this.tmDeleteListFile.Name = "tmDeleteListFile";
+            resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
             // 
             // toolStripMenuItem6
             // 
@@ -338,16 +348,6 @@
             this.tmrVBar.Enabled = true;
             this.tmrVBar.Interval = 17;
             this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
-            // 
-            // tmAddList
-            // 
-            this.tmAddList.Name = "tmAddList";
-            resources.ApplyResources(this.tmAddList, "tmAddList");
-            // 
-            // tmDeleteListFile
-            // 
-            this.tmDeleteListFile.Name = "tmDeleteListFile";
-            resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
             // 
             // MainFrom
             // 

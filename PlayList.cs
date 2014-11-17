@@ -7,7 +7,7 @@ namespace MiniPlayerClassic
 {
 
     #region PlayList Item Define
-    public class PlayListItem
+    public class PlayListItem //播放列表项对象
     {
         public string FileAddress;
         public string Infomations;
@@ -33,7 +33,7 @@ namespace MiniPlayerClassic
             Infomations = "";
         }
 
-        public void refresh_info()
+        public void refresh_info() //用于刷新一次信息（未完成
         {
             if (Infomations == "") { return; }
             string[] info_s = Infomations.Split(new char[] {';'});
@@ -48,24 +48,24 @@ namespace MiniPlayerClassic
     }
     #endregion
 
-    public class PlayList
+    public class PlayList //播放列表对象
     {
-        public LinkedList<PlayListItem> list;
-        private LinkedListNode<PlayListItem> marked;
+        public LinkedList<PlayListItem> list; //新建一个链表
+        private LinkedListNode<PlayListItem> marked; //新建一个节点对象，因为操作链表需要先有一个节点被读取出来
 
         private int i;
 
-        public PlayList()
+        public PlayList() //初始化播放列表对象
         { 
             list = new LinkedList<PlayListItem>();
         }
 
-        public void Add(PlayListItem item)
+        public void Add(PlayListItem item)//添加节点
         {
             list.AddLast(item);
         }
 
-        public bool Remove(int index)
+        public bool Remove(int index)//按序号删除节点
         {
             if (index > list.Count - 1 || index < 0) { return false; }
             marked = list.First;
@@ -77,7 +77,7 @@ namespace MiniPlayerClassic
             return true;
         }
 
-        public bool Insert(int index, PlayListItem item) 
+        public bool Insert(int index, PlayListItem item)//插入节点
         {
             if (index > list.Count - 1 || index < 0) { return false; }
             marked = list.First;
@@ -89,7 +89,7 @@ namespace MiniPlayerClassic
             return true;
         }
 
-        public PlayListItem GetItem(int index)
+        public PlayListItem GetItem(int index) //get一个node
         {
             LinkedListNode<PlayListItem> marked;
             int i;
@@ -102,7 +102,7 @@ namespace MiniPlayerClassic
             return null;
         }
 
-        public bool Savetofile(string Filename)
+        public bool Savetofile(string Filename)//保存到顺序文件里（未完成
         {
             return true;
         }

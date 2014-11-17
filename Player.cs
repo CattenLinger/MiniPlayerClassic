@@ -18,16 +18,16 @@ namespace MiniPlayerClassic
     public class Player
     {
         #region const
-        const int default_device = -1;
+        const int default_device = -1; //定义默认设别和默认码率
         const int default_rate = 44100;
 
-        const int Player_Playing = 1;
+        const int Player_Playing = 1; //定义播放状态对应的数值
         const int Player_Paused = 2;
         const int Player_Stoped = 0;
 
         const int File_StateChange = 10;
 
-        public enum t_formate
+        public enum t_formate //时间转换函数的格式类型枚举
         {
             full_day = 0,
             full_hour = 1,
@@ -70,7 +70,7 @@ namespace MiniPlayerClassic
         //Object initialization
         private void init()
         {
-            //timer
+            //创建一个定时器（时钟），用于检测播放状态
             tmrChecker = new Timer();
             tmrChecker.Interval = 100;
             tmrChecker.Tick += tmrChecker_Tick;
@@ -78,14 +78,14 @@ namespace MiniPlayerClassic
         }
         
         //State change event
-        protected virtual void on_call_StateChanger(PlayerStateMessage e)
+        protected virtual void on_call_StateChanger(PlayerStateMessage e) //消息构造函数
         {
             EventHandler<PlayerStateMessage> handler = call_StateChange;
             if (handler != null) { handler(this, e); }
         }
 
         //timer for check informations
-        private void tmrChecker_Tick(object sender, EventArgs e)
+        private void tmrChecker_Tick(object sender, EventArgs e) //检查播放状态的时钟的代码
         {
             if (ErrorCode != 0) { return; }
 
@@ -124,10 +124,10 @@ namespace MiniPlayerClassic
         }
 
         //Input no pamaraters will use default configuration
-        public Player() 
+        public Player(IntPtr win) //播放器初始化函数（重载）
         {
             BassReg();
-            if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, IntPtr.Zero))
+            if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, win))
             {
                 BassInfo = new BASS_INFO();
                 ErrorCode = 0;
@@ -136,11 +136,11 @@ namespace MiniPlayerClassic
         }
 
         //Use custom configuration
-        public Player(int device,int rate)
+        public Player(int device,int rate,IntPtr win)//播放器初始化函数
         {
             BassReg();
             
-            if ( Bass.BASS_Init(device,rate, BASSInit.BASS_DEVICE_LATENCY , IntPtr.Zero) ) //Bass initialization
+            if ( Bass.BASS_Init(device,rate, BASSInit.BASS_DEVICE_LATENCY , win) ) //Bass initialization
             {
                 BassInfo = new BASS_INFO();
                 ErrorCode = 0;

@@ -31,8 +31,8 @@ namespace MiniPlayerClassic
         Rectangle rect_pb;
         Rectangle rect_fore;
         //values
-        public string pb_text;//text on the bar
-        public string pb_text2;
+        public String pb_text;//text on the bar
+        public String pb_text2;
 
         public int pb_value;//Progress Bar's value
         public int pb_maxvalue;//Progress Bar's max value
@@ -66,7 +66,8 @@ namespace MiniPlayerClassic
             rect_pb = new Rectangle(0, 0, width, height);
             rect_fore = new Rectangle(0, 0, 0, height);
             //fonts
-            font_labels = new Font("MS YaHei UI",s_font); 
+            font_labels = new Font("MS YaHei UI",s_font);
+
         }
 
 
@@ -87,14 +88,13 @@ namespace MiniPlayerClassic
             rect_pb.Height = height;
             rect_fore.Width = pb_f_long;
 
+            //set points
             Size info_text1 = TextRenderer.MeasureText(pb_text, font_labels);
             Size info_text2 = TextRenderer.MeasureText(pb_text2, font_labels);
 
             //point
-            Point point_label1 = new Point(0,0);
-            Point point_label2 = new Point(0,0);
-
-            //set points
+            Point point_label1 = new Point(0, 0);
+            Point point_label2 = new Point(0, 0);
             //rolling text
             if (info_text1.Width > (width - 2))
             { x_label1 = x_label1 - label_text_movestep; rollflage = true; }
@@ -118,16 +118,16 @@ namespace MiniPlayerClassic
             //labels
             if (rollflage)
             {
-                bitmap_enter.DrawString(pb_text, font_labels, b_text, point_label1);
+                bitmap_enter.DrawString(pb_text.ToString(), font_labels, b_text, point_label1);
                 point_label1.X = point_label1.X + info_text1.Width + label_text_interval ;
-                bitmap_enter.DrawString(pb_text, font_labels, b_text, point_label1);
+                bitmap_enter.DrawString(pb_text.ToString(), font_labels, b_text, point_label1);
             } 
             else 
             {
                 bitmap_enter.DrawString(pb_text, font_labels, b_text, point_label1);
             }
 
-            bitmap_enter.DrawString(pb_text2,font_labels,b_text,point_label2);
+            bitmap_enter.DrawString(pb_text2, font_labels, b_text, point_label2);
             
             //Draw the Frame, with a middle line
             bitmap_enter.DrawRectangle(p_frame, rect_fore);
@@ -137,6 +137,7 @@ namespace MiniPlayerClassic
 
             //Draw on the graphic "e"
             e.DrawImage(buffer,0,0);
+            
         }
     }
 }
