@@ -39,7 +39,8 @@
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
+            this.tmrVBar = new System.Windows.Forms.Timer(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +67,7 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.tmrVBar = new System.Windows.Forms.Timer(this.components);
+            this.listView1 = new System.Windows.Forms.ListView();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -90,6 +90,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.toolStrip1);
             this.panel1.Controls.Add(this.btnNext);
             this.panel1.Controls.Add(this.btnPrev);
             this.panel1.Controls.Add(this.pb_Volume);
@@ -150,25 +151,25 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.listView1);
-            this.panel2.Controls.Add(this.toolStrip1);
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
-            // listView1
+            // tmrPGBar
             // 
-            resources.ApplyResources(this.listView1, "listView1");
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Name = "listView1";
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.StateImageList = this.imageList1;
-            this.listView1.TileSize = new System.Drawing.Size(300, 36);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Tile;
-            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
+            this.tmrPGBar.Enabled = true;
+            this.tmrPGBar.Interval = 17;
+            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
+            // 
+            // tmrVBar
+            // 
+            this.tmrVBar.Enabled = true;
+            this.tmrVBar.Interval = 17;
+            this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
             // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbtnAdd,
@@ -178,7 +179,6 @@
             this.tbtnPlayMode,
             this.toolStripSeparator3,
             this.tbtnSetting});
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
             // 
             // tbtnAdd
@@ -197,7 +197,6 @@
             // 
             this.tmOpenFile.Name = "tmOpenFile";
             resources.ApplyResources(this.tmOpenFile, "tmOpenFile");
-            this.tmOpenFile.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // toolStripSeparator4
             // 
@@ -231,7 +230,6 @@
             // 
             this.tmDeleteItem.Name = "tmDeleteItem";
             resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
-            this.tmDeleteItem.Click += new System.EventHandler(this.tbtnRemove_ButtonClick);
             // 
             // tmDeleteListFile
             // 
@@ -337,17 +335,14 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
-            // tmrPGBar
+            // listView1
             // 
-            this.tmrPGBar.Enabled = true;
-            this.tmrPGBar.Interval = 17;
-            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
-            // 
-            // tmrVBar
-            // 
-            this.tmrVBar.Enabled = true;
-            this.tmrVBar.Interval = 17;
-            this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
+            resources.ApplyResources(this.listView1, "listView1");
+            this.listView1.Name = "listView1";
+            this.listView1.TileSize = new System.Drawing.Size(300, 36);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Tile;
+            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
             // 
             // MainFrom
             // 
@@ -360,10 +355,10 @@
             this.Name = "MainFrom";
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -377,10 +372,30 @@
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.PictureBox pb_Progress;
+        private System.Windows.Forms.Timer tmrPGBar;
+        private System.Windows.Forms.PictureBox pb_Volume;
+        private System.Windows.Forms.Timer tmrVBar;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ToolStripSplitButton tbtnAdd;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenList;
+        private System.Windows.Forms.ToolStripMenuItem tmAddList;
+        private System.Windows.Forms.ToolStripSplitButton tbtnRemove;
+        private System.Windows.Forms.ToolStripMenuItem tmDeleteItem;
+        private System.Windows.Forms.ToolStripMenuItem tmDeleteListFile;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem tmCloseList;
+        private System.Windows.Forms.ToolStripMenuItem tmEmptyList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSplitButton tbtnList;
+        private System.Windows.Forms.ToolStripMenuItem tmSaveList;
+        private System.Windows.Forms.ToolStripMenuItem tmSaveAs;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem tmNewList;
         private System.Windows.Forms.ToolStripSplitButton tbtnPlayMode;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
@@ -389,27 +404,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tbtnSetting;
-        private System.Windows.Forms.ToolStripMenuItem tmSaveList;
-        private System.Windows.Forms.ToolStripMenuItem tmSaveAs;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem tmNewList;
-        private System.Windows.Forms.PictureBox pb_Progress;
-        private System.Windows.Forms.Timer tmrPGBar;
-        private System.Windows.Forms.PictureBox pb_Volume;
-        private System.Windows.Forms.Timer tmrVBar;
-        private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.Button btnPrev;
-        private System.Windows.Forms.ToolStripSplitButton tbtnAdd;
-        private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem tmOpenList;
-        private System.Windows.Forms.ToolStripSplitButton tbtnRemove;
-        private System.Windows.Forms.ToolStripMenuItem tmDeleteItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
-        private System.Windows.Forms.ToolStripMenuItem tmCloseList;
-        private System.Windows.Forms.ToolStripMenuItem tmEmptyList;
-        private System.Windows.Forms.ToolStripMenuItem tmAddList;
-        private System.Windows.Forms.ToolStripMenuItem tmDeleteListFile;
+        private System.Windows.Forms.ListView listView1;
 
     }
 }

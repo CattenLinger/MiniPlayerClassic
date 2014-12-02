@@ -48,6 +48,53 @@ namespace MiniPlayerClassic
     }
     #endregion
 
+    public class PlayListBoard//播放列表板
+    {
+        public LinkedList<PlayList> lists;
+        private LinkedListNode<PlayList> marked;
+
+        public int Count { get { return lists.Count; } }
+
+        private int i;
+
+        public PlayListBoard()
+        {
+            lists = new LinkedList<PlayList>();
+        }
+
+        public void Create(PlayList playlist)
+        {
+            lists.AddLast(new LinkedListNode<PlayList>(playlist));
+        }
+
+        public Boolean Delete(int index)
+        {
+            if (index < 0 || index > lists.Count - 1) { return false; }
+
+            marked = lists.First;
+            for (i = 0; i < lists.Count; i++)
+            {
+                if (i == index) lists.Remove(marked);
+                marked = marked.Next;
+                return true;
+            }
+            return false;
+        }
+
+        public PlayList GetItem(int index)
+        {
+            if (index < 0 || index > lists.Count - 1) { return null; }
+
+            marked = lists.First;
+            for (i = 0; i < lists.Count; i++)
+            {
+                if (i == index) return marked.Value;
+                marked = marked.Next;
+            }
+            return null;
+        }
+    }
+
     public class PlayList //播放列表对象
     {
         public LinkedList<PlayListItem> list; //新建一个链表

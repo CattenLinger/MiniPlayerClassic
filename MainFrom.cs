@@ -16,11 +16,15 @@ namespace MiniPlayerClassic
         public c_ProgressBar cProgressBar; //进度条对象
         public c_VolumeBar cVolumeBar; //音量条对象
 
-        public string LabelText; //
-        private Graphics pb_g_enter;
+        public string LabelText; //标签文字
+        private Graphics pb_g_enter;//画布
         private Graphics pb_g_enter2;
 
         public PlayList pl_main; //播放列表对象
+
+        private int def_height;//默认尺寸
+        private int min_height;
+        private Boolean is_Minisize;//界面是否在迷你模式
 
         //一些东西的初始化
         public MainFrom()
@@ -28,6 +32,10 @@ namespace MiniPlayerClassic
             InitializeComponent();
 
             LabelText = "暂无播放任务";
+            def_height = this.Height;
+            min_height = this.Height - panel1.Height;
+            is_Minisize = true;
+
             pb_g_enter = pb_Progress.CreateGraphics(); //初始化进度条们的画布
             pb_g_enter2 = pb_Volume.CreateGraphics();
 
@@ -78,6 +86,20 @@ namespace MiniPlayerClassic
                 if ((e.Message < 10) && (e.Message != 1)) 
                     { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
             //throw new NotImplementedException();
+        }
+//------Window-size change------------------------------------------------------------------------
+        public void to_Minisize(Boolean animate)
+        {
+
+            this.Height = min_height;
+            is_Minisize = true;
+        }
+
+        public void to_NormalSize(Boolean animate)
+        {
+
+            this.Height = def_height;
+            is_Minisize = false;
         }
 //------------------------------------------------------------------------------------------------
 

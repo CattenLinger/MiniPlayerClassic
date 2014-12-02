@@ -50,10 +50,12 @@ namespace MiniPlayerClassic
         public int PlayState = Player_Stoped; //Recored playing state
         public float Volume = 1;
         //public values end
+
         private BASS_INFO BassInfo;
         private int theStream = 0;//The File Stream
         private Timer tmrChecker;
         //private values end
+
         #endregion
 
         public event EventHandler<PlayerStateMessage> call_StateChange;
