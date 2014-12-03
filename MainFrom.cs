@@ -20,7 +20,8 @@ namespace MiniPlayerClassic
         private Graphics pb_g_enter;//画布
         private Graphics pb_g_enter2;
 
-        public PlayList pl_main; //播放列表对象
+        //public PlayList pl_main; //播放列表对象
+        public PlayListBoard ListBoard;//播放列表板对象
 
         private int def_height;//默认尺寸
         private int min_height;
@@ -33,7 +34,7 @@ namespace MiniPlayerClassic
 
             LabelText = "暂无播放任务";
             def_height = this.Height;
-            min_height = this.Height - panel1.Height;
+            min_height = this.Height - panel2.Height;
             is_Minisize = true;
 
             pb_g_enter = pb_Progress.CreateGraphics(); //初始化进度条们的画布
@@ -42,7 +43,11 @@ namespace MiniPlayerClassic
             MainPlayer = new Player(this.Handle); //初始化播放器对象
             MainPlayer.call_StateChange += MainPlayer_call_StateChange;  //注册播放器改变播放状态的事件的响应函数
 
-            pl_main = new PlayList(); // 初始化播放列表
+            ListBoard = new PlayListBoard();//初始化列表板对象
+            //ListBoard.Create(new PlayList());//创建一个播放列表
+            //ListBoard.SelectList(0);//选择第一个播放列表
+
+            //pl_main = new PlayList(); // 初始化播放列表
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height); //初始化进度条
             cProgressBar.pb_text = LabelText;
@@ -53,6 +58,9 @@ namespace MiniPlayerClassic
             cVolumeBar.pb_text = "音量";
             cVolumeBar.pb_maxvalue = 100;
             cVolumeBar.pb_value = 100;
+
+            to_Minisize(false);//迷你模式
+            refreshInterface();
         }
         //init
         private void MainFrom_Load(object sender, EventArgs e)
@@ -87,19 +95,37 @@ namespace MiniPlayerClassic
                     { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
             //throw new NotImplementedException();
         }
-//------Window-size change------------------------------------------------------------------------
-        public void to_Minisize(Boolean animate)
+//------Window interface change-------------------------------------------------------------------
+        public void to_Minisize(Boolean animate)//迷你尺寸
         {
 
             this.Height = min_height;
             is_Minisize = true;
         }
 
-        public void to_NormalSize(Boolean animate)
+        public void to_NormalSize(Boolean animate)//正常尺寸
         {
 
             this.Height = def_height;
             is_Minisize = false;
+        }
+
+        public void refreshInterface()//刷新界面元素的设置
+        {
+            if (ListBoard.Count == 0)
+            {
+                this.Text = "MiniPlayer";
+                tbtnRemove.Enabled = false;
+                tbtnPlayMode.Enabled = false;
+                if (!is_Minisize) to_Minisize(true);
+            }
+            else
+            { 
+                this.Text = "MiniPlayer - List " + ListBoard.Count.ToString();
+                tbtnPlayMode.Enabled = true;
+                tbtnRemove.Enabled = true;
+                if (is_Minisize) to_NormalSize(true);
+            }
         }
 //------------------------------------------------------------------------------------------------
 
@@ -205,26 +231,33 @@ namespace MiniPlayerClassic
             dlg1.Multiselect = true; //允许文件打开窗口多选
             dlg1.ShowDialog(); //显示这个窗口
 
-            if (dlg1.FileNames.Length <= 0) { return; } //如果没有选择文件就退出函数
-            else if (dlg1.FileNames.Length == 1) { MainPlayer.LoadFile(dlg1.FileNames[0]); } //如果只有一个文件就让播放器打开这个文件
-
-            for (int i = 0; i < dlg1.FileNames.Length; i++) //把文件添加到播放列表里
+            if (dlg1.FileNames.Length <= 0) return; //如果没有选择文件就退出函数
+            else if ((dlg1.FileNames.Length == 1) && (ListBoard.Count == 0))
             {
-                pl_main.Add(new PlayListItem(dlg1.FileNames[i], ""));
+                MainPlayer.LoadFile(dlg1.FileNames[0]);
+                return;
+            }//如果只有一个文件就让播放器打开这个文件
+
+            if (ListBoard.Count == 0) tmNewList_Click(this, null);
+            for (int i = 0; i < dlg1.FileNames.Length; i++)
+            {
+                listView1.Items.Add(dlg1.FileNames[i]);
+                ListBoard.CurrentList.Add(new PlayListItem(dlg1.FileNames[i],""));
             }
 
-            RefreshPlayList();//刷新播放列表
+                RefreshPlayList();//刷新播放列表
         }
 
         private void tbtnRemove_ButtonClick(object sender, EventArgs e) //“删除选项”按钮
         {
             int i;
-            ListViewItem item; 
-            if (listView1.SelectedItems.Count < 1) { return; }
-            for (i = 0; i < listView1.SelectedItems.Count; i++)
+            ListViewItem item;
+            if (listView1.SelectedItems.Count < 1) { return; }//如果没有选中项目就返回
+
+            for (i = listView1.SelectedItems.Count - 1;i >= 0; i--)
             {
                 item = listView1.SelectedItems[i];
-                pl_main.Remove(listView1.Items.IndexOf(item));
+                ListBoard.CurrentList.Remove(listView1.Items.IndexOf(item));
                 listView1.Items.Remove(item);
             }
 
@@ -233,11 +266,11 @@ namespace MiniPlayerClassic
 
         private void RefreshPlayList()//刷新播放列表过程
         {
-            LinkedListNode<PlayListItem> marked = pl_main.list.First; //创建一个节点对象
+            LinkedListNode<PlayListItem> marked = ListBoard.CurrentList.list.First; //创建一个节点对象
             listView1.Items.Clear();//清空列表控件
-            for (int i = 0; i < pl_main.list.Count; i++) //循环扫描链表并添加选项
+            for (int i = 0; i < ListBoard.CurrentList.list.Count; i++) //循环扫描链表并添加选项
             {
-                listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress),7);
+                listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
                 marked = marked.Next;
             }
         }
@@ -246,18 +279,61 @@ namespace MiniPlayerClassic
         {
             PlayListItem marked; //创建一个列表选项对象
             if (listView1.SelectedItems.Count <= 0) { return; } //如果没选中项目就退出过程
-            marked = pl_main.GetItem(listView1.Items.IndexOf(listView1.SelectedItems[0])); //把对象从链表中读取出来
+            marked = ListBoard.CurrentList.GetItem(listView1.Items.IndexOf(listView1.SelectedItems[0])); //把对象从链表中读取出来
             if (MainPlayer.LoadFile(marked.FileAddress)) { MainPlayer.Play(); } //载入文件
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0) { return; }
+            if (listView1.Items.Count == 0) { return; }//如果列表没有选中项就返回
             if (MessageBox.Show("要清空列表？\n此操作不可恢复哦。",
                 "清空列表？",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No) { return; };
 
-            pl_main.list.Clear();
+            ListBoard.CurrentList.list.Clear();
             listView1.Items.Clear();
+        }
+
+        private void tmCloseList_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tmNewList_Click(object sender, EventArgs e)
+        {
+            ListBoard.Create(new PlayList());//创建一个播放列表
+            if (ListBoard.Count == 1)
+                ListBoard.SelectList(ListBoard.Count - 1);
+            else
+                ListBoard.SelectList(ListBoard.CurrentListIndex + 1);
+            RefreshPlayList();
+            refreshInterface();
+        }
+
+        private void btnPagePrev_Click(object sender, EventArgs e)//前一页按钮
+        {
+            ListBoard.SelectList(ListBoard.CurrentListIndex - 1);
+            RefreshPlayList();
+        }
+
+        private void btnPageNext_Click(object sender, EventArgs e)//下一页按钮
+        {
+            ListBoard.SelectList(ListBoard.CurrentListIndex + 1);
+            RefreshPlayList();
+        }
+
+        private void tmDeleteListFile_Click(object sender, EventArgs e)//删除列表操作
+        {
+            if (MessageBox.Show("删除列表吗？\n此操作不可恢复哦！", "删除列表", 
+                MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+            return;
+
+            ListBoard.Delete(ListBoard.CurrentListIndex);
+            RefreshPlayList();
+        }
+
+        private void tbtnList_Click(object sender, EventArgs e)
+        {
+            tbtnList.ShowDropDown();
         }
 
     }

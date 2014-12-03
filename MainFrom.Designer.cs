@@ -32,15 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.pb_Volume = new System.Windows.Forms.PictureBox();
-            this.pb_Progress = new System.Windows.Forms.PictureBox();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.tmrVBar = new System.Windows.Forms.Timer(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,12 +58,27 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.pb_Volume = new System.Windows.Forms.PictureBox();
+            this.pb_Progress = new System.Windows.Forms.PictureBox();
+            this.btnPlay = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.pb_Pages = new System.Windows.Forms.PictureBox();
+            this.btnPageNext = new System.Windows.Forms.Button();
+            this.btnPagePrev = new System.Windows.Forms.Button();
+            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
+            this.tmrVBar = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             this.panel2.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Pages)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -99,72 +105,6 @@
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
-            // 
-            // btnNext
-            // 
-            resources.ApplyResources(this.btnNext, "btnNext");
-            this.btnNext.ImageList = this.imageList1;
-            this.btnNext.Name = "btnNext";
-            this.btnNext.UseVisualStyleBackColor = true;
-            // 
-            // btnPrev
-            // 
-            resources.ApplyResources(this.btnPrev, "btnPrev");
-            this.btnPrev.ImageList = this.imageList1;
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.UseVisualStyleBackColor = true;
-            // 
-            // pb_Volume
-            // 
-            resources.ApplyResources(this.pb_Volume, "pb_Volume");
-            this.pb_Volume.Name = "pb_Volume";
-            this.pb_Volume.TabStop = false;
-            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
-            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
-            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
-            // 
-            // pb_Progress
-            // 
-            resources.ApplyResources(this.pb_Progress, "pb_Progress");
-            this.pb_Progress.Name = "pb_Progress";
-            this.pb_Progress.TabStop = false;
-            this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
-            this.pb_Progress.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseMove);
-            this.pb_Progress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseUp);
-            // 
-            // btnPlay
-            // 
-            resources.ApplyResources(this.btnPlay, "btnPlay");
-            this.btnPlay.ImageList = this.imageList1;
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.UseVisualStyleBackColor = true;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
-            // 
-            // btnStop
-            // 
-            resources.ApplyResources(this.btnStop, "btnStop");
-            this.btnStop.ImageList = this.imageList1;
-            this.btnStop.Name = "btnStop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.listView1);
-            resources.ApplyResources(this.panel2, "panel2");
-            this.panel2.Name = "panel2";
-            // 
-            // tmrPGBar
-            // 
-            this.tmrPGBar.Enabled = true;
-            this.tmrPGBar.Interval = 17;
-            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
-            // 
-            // tmrVBar
-            // 
-            this.tmrVBar.Enabled = true;
-            this.tmrVBar.Interval = 17;
-            this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
             // 
             // toolStrip1
             // 
@@ -235,6 +175,7 @@
             // 
             this.tmDeleteListFile.Name = "tmDeleteListFile";
             resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
+            this.tmDeleteListFile.Click += new System.EventHandler(this.tmDeleteListFile_Click);
             // 
             // toolStripMenuItem6
             // 
@@ -245,6 +186,7 @@
             // 
             this.tmCloseList.Name = "tmCloseList";
             resources.ApplyResources(this.tmCloseList, "tmCloseList");
+            this.tmCloseList.Click += new System.EventHandler(this.tmCloseList_Click);
             // 
             // tmEmptyList
             // 
@@ -267,6 +209,7 @@
             this.tmNewList});
             resources.ApplyResources(this.tbtnList, "tbtnList");
             this.tbtnList.Name = "tbtnList";
+            this.tbtnList.Click += new System.EventHandler(this.tbtnList_Click);
             // 
             // tmSaveList
             // 
@@ -287,6 +230,7 @@
             // 
             this.tmNewList.Name = "tmNewList";
             resources.ApplyResources(this.tmNewList, "tmNewList");
+            this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
             // 
             // tbtnPlayMode
             // 
@@ -335,14 +279,109 @@
             resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
             this.tbtnSetting.Name = "tbtnSetting";
             // 
+            // btnNext
+            // 
+            resources.ApplyResources(this.btnNext, "btnNext");
+            this.btnNext.ImageList = this.imageList1;
+            this.btnNext.Name = "btnNext";
+            this.btnNext.UseVisualStyleBackColor = true;
+            // 
+            // btnPrev
+            // 
+            resources.ApplyResources(this.btnPrev, "btnPrev");
+            this.btnPrev.ImageList = this.imageList1;
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            // 
+            // pb_Volume
+            // 
+            resources.ApplyResources(this.pb_Volume, "pb_Volume");
+            this.pb_Volume.Name = "pb_Volume";
+            this.pb_Volume.TabStop = false;
+            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
+            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
+            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
+            // 
+            // pb_Progress
+            // 
+            resources.ApplyResources(this.pb_Progress, "pb_Progress");
+            this.pb_Progress.Name = "pb_Progress";
+            this.pb_Progress.TabStop = false;
+            this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
+            this.pb_Progress.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseMove);
+            this.pb_Progress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseUp);
+            // 
+            // btnPlay
+            // 
+            resources.ApplyResources(this.btnPlay, "btnPlay");
+            this.btnPlay.ImageList = this.imageList1;
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
+            // btnStop
+            // 
+            resources.ApplyResources(this.btnStop, "btnStop");
+            this.btnStop.ImageList = this.imageList1;
+            this.btnStop.Name = "btnStop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.listView1);
+            this.panel2.Controls.Add(this.panel3);
+            resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Name = "panel2";
+            // 
             // listView1
             // 
             resources.ApplyResources(this.listView1, "listView1");
             this.listView1.Name = "listView1";
-            this.listView1.TileSize = new System.Drawing.Size(300, 36);
+            this.listView1.TileSize = new System.Drawing.Size(300, 26);
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Tile;
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.pb_Pages);
+            this.panel3.Controls.Add(this.btnPageNext);
+            this.panel3.Controls.Add(this.btnPagePrev);
+            resources.ApplyResources(this.panel3, "panel3");
+            this.panel3.Name = "panel3";
+            // 
+            // pb_Pages
+            // 
+            resources.ApplyResources(this.pb_Pages, "pb_Pages");
+            this.pb_Pages.Name = "pb_Pages";
+            this.pb_Pages.TabStop = false;
+            // 
+            // btnPageNext
+            // 
+            resources.ApplyResources(this.btnPageNext, "btnPageNext");
+            this.btnPageNext.Name = "btnPageNext";
+            this.btnPageNext.UseVisualStyleBackColor = true;
+            this.btnPageNext.Click += new System.EventHandler(this.btnPageNext_Click);
+            // 
+            // btnPagePrev
+            // 
+            resources.ApplyResources(this.btnPagePrev, "btnPagePrev");
+            this.btnPagePrev.Name = "btnPagePrev";
+            this.btnPagePrev.UseVisualStyleBackColor = true;
+            this.btnPagePrev.Click += new System.EventHandler(this.btnPagePrev_Click);
+            // 
+            // tmrPGBar
+            // 
+            this.tmrPGBar.Enabled = true;
+            this.tmrPGBar.Interval = 17;
+            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
+            // 
+            // tmrVBar
+            // 
+            this.tmrVBar.Enabled = true;
+            this.tmrVBar.Interval = 17;
+            this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
             // 
             // MainFrom
             // 
@@ -356,11 +395,13 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             this.panel2.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pb_Pages)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -405,6 +446,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tbtnSetting;
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.PictureBox pb_Pages;
+        private System.Windows.Forms.Button btnPageNext;
+        private System.Windows.Forms.Button btnPagePrev;
 
     }
 }

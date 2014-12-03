@@ -45,16 +45,20 @@ namespace MiniPlayerClassic
         #endregion
 
         #region values
-        public String FilePath = ""; //File Path
-        public int ErrorCode = 1; //Any matter comeout while initialization will recored here.
-        public int PlayState = Player_Stoped; //Recored playing state
-        public float Volume = 1;
-        //public values end
+        private String filepath = ""; //保存文件路径
+        private int errorcode = 1; //记录播放器在启动过程中的错误
+        private int playstate = Player_Stoped; //存储播放器状态
+        private float volume = 1;//音量
 
         private BASS_INFO BassInfo;
-        private int theStream = 0;//The File Stream
+        private int theStream = 0;//文件流
         private Timer tmrChecker;
         //private values end
+        public string FilePath { get { return filepath; } }
+        public int ErrorCode { get { return errorcode; } }
+        public int PlayState { get { return playstate; } }
+        public float Volume { get { return volume; } }
+        //public values end
 
         #endregion
 
@@ -69,7 +73,7 @@ namespace MiniPlayerClassic
             //BassNet.Registration("your_email","your_code");
         }
 
-        //Object initialization
+        //对象初始化Object initialization
         private void init()
         {
             //创建一个定时器（时钟），用于检测播放状态
@@ -79,45 +83,45 @@ namespace MiniPlayerClassic
             tmrChecker.Enabled = true;
         }
         
-        //State change event
+        //状态变化消息
         protected virtual void on_call_StateChanger(PlayerStateMessage e) //消息构造函数
         {
             EventHandler<PlayerStateMessage> handler = call_StateChange;
             if (handler != null) { handler(this, e); }
         }
 
-        //timer for check informations
+        //检查信息的时钟
         private void tmrChecker_Tick(object sender, EventArgs e) //检查播放状态的时钟的代码
         {
-            if (ErrorCode != 0) { return; }
+            if (errorcode != 0) { return; }
 
             switch (Bass.BASS_ChannelIsActive(theStream))
             {
                 case BASSActive.BASS_ACTIVE_PLAYING:
-                    if (PlayState != Player_Playing)
+                    if (playstate != Player_Playing)
                     {
-                        PlayState = Player_Playing;
+                        playstate = Player_Playing;
                         call_StateChange(this, new PlayerStateMessage(Player_Playing));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_PAUSED: 
-                    if (PlayState != Player_Paused )
+                    if (playstate != Player_Paused )
                     {
-                        PlayState = Player_Paused;
+                        playstate = Player_Paused;
                         call_StateChange(this, new PlayerStateMessage(Player_Paused));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_STOPPED: 
-                    if (PlayState != Player_Stoped)
+                    if (playstate != Player_Stoped)
                     {
-                        PlayState = Player_Stoped;
+                        playstate = Player_Stoped;
                         call_StateChange(this, new PlayerStateMessage(Player_Stoped));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_STALLED: 
-                    if (PlayState != -1)
+                    if (playstate != -1)
                     {
-                        PlayState = -1;
+                        playstate = -1;
                         call_StateChange(this, new PlayerStateMessage(-1));
                     }
                     break;
@@ -132,7 +136,7 @@ namespace MiniPlayerClassic
             if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, win))
             {
                 BassInfo = new BASS_INFO();
-                ErrorCode = 0;
+                errorcode = 0;
             }
             init();
         }
@@ -145,7 +149,7 @@ namespace MiniPlayerClassic
             if ( Bass.BASS_Init(device,rate, BASSInit.BASS_DEVICE_LATENCY , win) ) //Bass initialization
             {
                 BassInfo = new BASS_INFO();
-                ErrorCode = 0;
+                errorcode = 0;
             }
             init();
         }
@@ -165,47 +169,47 @@ namespace MiniPlayerClassic
             return BassInfo;
         }
 
-        //File load
+        //读取文件
         public Boolean LoadFile(string Filename) 
         {
             Bass.BASS_StreamFree(theStream); //free the stream
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) { return false; } else { SetVolume(Volume); }
-            FilePath = Filename;
+            if (theStream == 0) { return false; } else { SetVolume(volume); }
+            filepath = Filename;
             call_StateChange(this, new PlayerStateMessage(File_StateChange));
             return true;
         }
 
-        //Play Stream
+        //播放文件流
         public Boolean Play()
         {
-            if (PlayState == Player_Stoped) { LoadFile(FilePath); }
+            if (playstate == Player_Stoped) { LoadFile(filepath); }
             if (Bass.BASS_ChannelPlay(theStream, false)) { return true; } else { return false; }
         }
 
-        //Pause Stream
+        //暂停
         public Boolean Pause()
         {
             if (Bass.BASS_ChannelPause(theStream)) { return true; }
             return false;
         }
 
-        //Stop Stream, then clean the stream and free the file
+        //停止文件并释放文件
         public Boolean Stop()
         {
             if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) { return true; }
             return false;
         }
 
-        //Set Channel's Volume
+        //设置音量
         public Boolean SetVolume(float vol) 
         {
-            Volume = vol;
+            volume = vol;
             if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol)) { return true; }
             return false;
         }
 
-        //Get Channel's Vloume
+        //获取音量
         public float GetValue()
         { 
             float vol = 0;
@@ -213,7 +217,7 @@ namespace MiniPlayerClassic
             { return vol; }  else  { return 0; }
         }
 
-        //Get Channel's Level
+        //获取左右声道的当前响度
         public void GetLevel(ref int Left,ref int Right)
         {
             Int32 temp = Bass.BASS_ChannelGetLevel(theStream);
@@ -222,14 +226,14 @@ namespace MiniPlayerClassic
             Right = Utils.HighWord32(temp);
         }
 
-        //Set Channel's Position
+        //设置播放进度
         public Boolean SetPosition(double seconds)
         {
             if (Bass.BASS_ChannelSetPosition(theStream, seconds)) { return true;}
             return false;
         }
 
-        //Get Channle's Position
+        //获取播放进度
         public double GetPosition()
         {
             long temp;
@@ -238,7 +242,7 @@ namespace MiniPlayerClassic
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
 
-        //Get the Channel's length
+        //获取播放时间长度
         public double GetLength()
         {
             long temp;
@@ -246,24 +250,24 @@ namespace MiniPlayerClassic
             if (temp == -1) { return -1; }
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
-
-        public void getData(byte[] data) 
+        //获取频谱元数据
+        /*public void getData(byte[] data) 
         {
             if (data.Length < 512) { return; }
-            if (PlayState == Player_Playing)
+            if (playstate == Player_Playing)
             { Bass.BASS_ChannelGetData(theStream, data, 128); }
             else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
-        }
+        }*/
 
         public void getData(Single[] data)
         {
             if (data.Length < 512) { return; }
-            if (PlayState == Player_Playing)
+            if (playstate == Player_Playing)
             { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
             else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
         }
 
-        //trans mm to formated time in string 
+        //转换毫秒到格式化时间字符串
         public string trans_Time(Int64 ms) //单变量的重载
         {
             return trans_Time(ms, t_formate.full_day,true);//其实就是填默认值而已
