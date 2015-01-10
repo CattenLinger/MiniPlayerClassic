@@ -96,7 +96,7 @@ namespace MiniPlayerClassic
             //BassNet.Registration("your_email","your_code");
         }
 
-        //对象初始化Object initialization
+        //对象初始化 Object initialization
         private void init()
         {
             //创建一个定时器（时钟），用于检测播放状态
@@ -107,13 +107,13 @@ namespace MiniPlayerClassic
         }
         
         //状态变化消息
-        protected virtual void on_call_StateChanger(PlayerStateChange e) //消息构造函数
+        protected virtual void on_call_StateChanger(PlayerStateChange e) //播放器状态改变消息构造函数
         {
             EventHandler<PlayerStateChange> handler = StateChange;
             if (handler != null) { handler(this, e); }
         }
 
-        protected virtual void on_call_FileChange(PlayerFileChange e)
+        protected virtual void on_call_FileChange(PlayerFileChange e) //播放器文件改变消息构造函数
         {
             EventHandler<PlayerFileChange> handler = FileChange;
             if (handler != null) { handler(this, e); }
@@ -223,7 +223,7 @@ namespace MiniPlayerClassic
             return false;
         }
 
-        //停止文件并释放文件
+        //停止（并释放文件）
         public Boolean Stop()
         {
             if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) { return true; }
@@ -279,16 +279,9 @@ namespace MiniPlayerClassic
             if (temp == -1) { return -1; }
             return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
         }
-        //获取频谱元数据
-        /*public void getData(byte[] data) 
-        {
-            if (data.Length < 512) { return; }
-            if (playstate == Player_Playing)
-            { Bass.BASS_ChannelGetData(theStream, data, 128); }
-            else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
-        }*/
 
-        public void getData(Single[] data)
+        //获取频谱元数据
+        public void getData(ref Single[] data)
         {
             if (data.Length < 512) { return; }
             if (playstate == PlayerStates.Playing)

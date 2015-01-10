@@ -15,7 +15,7 @@ namespace MiniPlayerClassic
         const int fft_fall_step = 4;
         const int peak_fall_step = 2;
         const int level_fall_step = 4;
-
+        const int thumb_text_offset = 4;//文本的x偏移
         //画布
         private Bitmap buffer;
         private Bitmap canvas;
@@ -36,7 +36,7 @@ namespace MiniPlayerClassic
         Rectangle rect_pb;
         Rectangle rect_fore;
         //变量
-        public string pb_text;//进度条上的文字标签
+        private StringBuilder pb_label;//进度条上的文字标签
         public int pb_value;//进度条的进度值
         public int pb_maxvalue;//进度条的最大值
         private int x_label = 0;//标签的x坐标
@@ -52,6 +52,7 @@ namespace MiniPlayerClassic
         public int height, width;
         private int pb_f_long = 0;//保存进度条实际绘图区域长度
         Point point_label;
+        Size size_label;
 
         public c_VolumeBar(int w,int h)
         {
@@ -78,6 +79,16 @@ namespace MiniPlayerClassic
             //fonts
             font_label = new Font("MS YaHei UI",s_font);
             point_label = new Point(0, 0);
+            size_label = new Size(0, 0);
+
+            pb_label = new StringBuilder();
+        }
+
+        public void ChangeLabel(string s)
+        {
+            pb_label.Clear();
+            pb_label.Append(s);
+            size_label = TextRenderer.MeasureText(pb_label.ToString(), font_label);
         }
 
         public void tellitlevel(int left, int right)//外部程序在此设置响度
@@ -88,8 +99,7 @@ namespace MiniPlayerClassic
 
         public void DrawBar(Graphics e)//绘图
         {
-            const int thumb_text_offset = 4;//文本的x偏移
-
+            
             //对进度条的值进行限定
             if (pb_value >= pb_maxvalue) { pb_value = pb_maxvalue; }
             if (pb_value <= 0) { pb_value = 0; }
@@ -99,8 +109,6 @@ namespace MiniPlayerClassic
             rect_pb.Width = width;
             rect_pb.Height = height;
             rect_fore.Width = pb_f_long;
-            //获得文本标签的长度
-            Size info_text = TextRenderer.MeasureText(pb_text, font_label);
 
             //定义文本标签的坐标
             point_label.X = 0; point_label.Y = 0;
@@ -111,12 +119,12 @@ namespace MiniPlayerClassic
             if (temp_left > level_left) { temp_left -= level_fall_step; }
             if (temp_right > level_right) { temp_right -= level_fall_step; }
             //标签文本位置的计算
-            byte temp1 = (byte)(info_text.Width - thumb_text_offset);
+            byte temp1 = (byte)(size_label.Width - thumb_text_offset);
             if (pb_f_long < temp1) { x_label = 0; }
             if (pb_f_long >= temp1) { x_label = pb_f_long - temp1; }
 
             point_label.X = x_label;
-            point_label.Y = (height + 4 - info_text.Height) / 2;
+            point_label.Y = (height + 4 - size_label.Height) / 2;
 
             //填充颜色
             bitmap_enter.FillRectangle(b_back, rect_pb);
@@ -155,7 +163,7 @@ namespace MiniPlayerClassic
             }
             height--;
             //label
-            bitmap_enter.DrawString(pb_text, font_label, b_text, point_label);//画文本标签到画布
+            bitmap_enter.DrawString(pb_label.ToString(), font_label, b_text, point_label);//画文本标签到画布
             
             //Draw the Frame
             bitmap_enter.DrawRectangle(p_frame, rect_fore);

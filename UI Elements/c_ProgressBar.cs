@@ -11,7 +11,9 @@ namespace MiniPlayerClassic
     {
         //常量
         const int s_font = 10;
-
+        const int thumb_text_offset = 5;//文本的偏移值
+        const int label_text_interval = 50;
+        const int label_text_movestep = 2;
         //画布
         private Bitmap buffer;
         private Bitmap canvas;
@@ -31,14 +33,15 @@ namespace MiniPlayerClassic
         Rectangle rect_pb;
         Rectangle rect_fore;
         //变量
-        public String pb_text;//在进度条上方的文本
-        public String pb_text2;//在进度条下方的文本
+        //public String pb_text;//在进度条上方的文本
+        //public String pb_text2;//在进度条下方的文本
 
-        private StringBuilder pb_title;
-        private StringBuilder pb_subtitle;
+        private StringBuilder title;
+        private StringBuilder subtitle;
 
         public int pb_value;//进度条的进度值
         public int pb_maxvalue;//进度条的最大值
+
         private int x_label1 = 0;//上方文本的x坐标
         private int x_label2 = 0;//下方文本的x坐标
         //尺寸
@@ -46,11 +49,13 @@ namespace MiniPlayerClassic
         private int s_h_middle = 0;//中间分界条的位置
         private int pb_f_long = 0;//储存进度条的实际绘图长度
 
-        Point point_label1;
-        Point point_label2;
+        Point point_title;
+        Point point_subtitle;
 
-        int width_title = 0;
-        int width_subtitle = 0;
+        Size size_title;
+        Size size_subtitle;
+
+        bool rollflage = false;//上方文本的滚动标志
 
         public c_ProgressBar(int w,int h)
         {
@@ -78,29 +83,76 @@ namespace MiniPlayerClassic
             //字体
             font_labels = new Font("MS YaHei UI",s_font);
 
-            point_label1 = new Point(0, 0);
-            point_label2 = new Point(0, 0);
+            point_title = new Point(0, 0);
+            point_subtitle = new Point(0, 0);
 
-            pb_title = new StringBuilder();
-            pb_subtitle = new StringBuilder();
+            title = new StringBuilder();
+            subtitle = new StringBuilder();
 
-            
+            size_title = new Size(0, 0);
+            size_subtitle = new Size(0, 0);
         }
 
         public void ChangeTitle(string s)//改变标题文字
         {
-            pb_title.Clear();
-            pb_title.Append(s);
-            width_title = TextRenderer.MeasureText(pb_text.ToString(), font_labels).Width;
+            title.Clear();
+            title.Append(s);
+            size_title = TextRenderer.MeasureText(title.ToString(), font_labels);
+        }
+
+        private bool title_too_width()
+        {
+            if (size_title.Width > (width - 2))
+                rollflage = true;
+            else
+                rollflage = false;
+
+            return rollflage;
+        }
+
+        private void subtitle_style1()
+        {
+            const int ms_per_hour = 1000 * 60 * 60;
+            const int ms_per_minute = 1000 * 60;
+
+            int left_hour = pb_value / ms_per_hour;
+            bool show_hour = left_hour > 0;
+            int all_hour = pb_maxvalue / ms_per_hour;
+
+            int min,sec;
+            subtitle.Clear();
+
+            if (show_hour)
+            {
+                if (left_hour < 10) subtitle.Append('0');
+                subtitle.Append(left_hour.ToString() + ':');
+            }
+            min = pb_value % ms_per_hour / ms_per_minute;
+            if (min < 10) subtitle.Append('0'); 
+            subtitle.Append(min.ToString() + ':');
+
+            sec = pb_value % ms_per_minute / 1000;
+            if (sec < 10) subtitle.Append('0');
+            subtitle.Append(sec.ToString() + '|');
+
+            if(show_hour)
+            {
+                if (all_hour < 10) subtitle.Append('0');
+                subtitle.Append(all_hour.ToString() + ':');
+            }
+            min = pb_maxvalue % ms_per_hour / ms_per_minute;
+            if (min < 10) subtitle.Append('0');
+            subtitle.Append(min.ToString() + ':');
+
+            sec = pb_maxvalue % ms_per_minute / 1000;
+            if (sec < 10) subtitle.Append('0');
+            subtitle.Append(sec.ToString());
+
         }
 
         public void DrawBar(Graphics e)//画图函数
         {
-            const int thumb_text_offset = 4;//文本的偏移值
-            const int label_text_interval = 50;
-            const int label_text_movestep = 2;
-
-            bool rollflage = false;//上方文本的滚动标志
+            
             //进度条进度的规定
             if (pb_value >= pb_maxvalue) { pb_value = pb_maxvalue; }
             if (pb_value <= 0) { pb_value = 0; }
@@ -113,27 +165,28 @@ namespace MiniPlayerClassic
             rect_fore.Width = pb_f_long;
 
             //获取文本的长度
-            Size info_text1 = TextRenderer.MeasureText(pb_text, font_labels);
-            Size info_text2 = TextRenderer.MeasureText(pb_text2, font_labels);
+            size_subtitle = TextRenderer.MeasureText(subtitle.ToString(), font_labels);
 
             //设置文本的坐标
-            point_label1.X = 0; point_label1.Y = 0;
-            point_label2.X = 0; point_label2.Y = 0;
+            point_title.X = 0; point_title.Y = 0;
+            point_subtitle.X = 0; point_subtitle.Y = 0;
             //文本滚动的设定
-            if (info_text1.Width > (width - 2))//如果文本长度越界
-            { x_label1 = x_label1 - label_text_movestep; rollflage = true; }//滚动
-            else { x_label1 = 0; rollflage = false; }
-            if (x_label1 <= (-info_text1.Width - label_text_interval)) { x_label1 = 0; }
+            if (title_too_width())//如果文本长度越界
+                x_label1 = x_label1 - label_text_movestep;//滚动
+            else 
+                x_label1 = 0;
+            if (x_label1 <= (-size_title.Width - label_text_interval)) { x_label1 = 0; }
             //下方标签文字的位置计算
-            byte temp1 = (byte)(info_text2.Width / 2 - thumb_text_offset);
+            subtitle_style1();
+            byte temp1 = (byte)(size_subtitle.Width / 2 - thumb_text_offset);
             if (pb_f_long < temp1) { x_label2 = 0; }
             if (pb_f_long >= temp1) { x_label2 = pb_f_long - temp1; }
             if ((pb_f_long + temp1) >= width) { x_label2 = width - temp1*2; }
 
-            point_label1.X = x_label1;
-            point_label1.Y = (s_h_middle + 4 - info_text1.Height) / 2;
-            point_label2.X = x_label2;
-            point_label2.Y = s_h_middle + (s_h_middle + 4 - info_text2.Height) / 2;
+            point_title.X = x_label1;
+            point_title.Y = (s_h_middle + 4 - size_title.Height) / 2;
+            point_subtitle.X = x_label2;
+            point_subtitle.Y = s_h_middle + (s_h_middle + 4 - size_subtitle.Height) / 2;
 
             //给矩形上色
             bitmap_enter.FillRectangle(b_back, rect_pb);
@@ -142,16 +195,16 @@ namespace MiniPlayerClassic
             //labels
             if (rollflage)
             {
-                bitmap_enter.DrawString(pb_text.ToString(), font_labels, b_text, point_label1);
-                point_label1.X = point_label1.X + info_text1.Width + label_text_interval ;
-                bitmap_enter.DrawString(pb_text.ToString(), font_labels, b_text, point_label1);
+                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
+                point_title.X = point_title.X + size_title.Width + label_text_interval ;
+                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
             } 
             else 
             {
-                bitmap_enter.DrawString(pb_text, font_labels, b_text, point_label1);
+                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
             }
 
-            bitmap_enter.DrawString(pb_text2, font_labels, b_text, point_label2);
+            bitmap_enter.DrawString(subtitle.ToString(), font_labels, b_text, point_subtitle);
             
             //Draw the Frame, with a middle line
             bitmap_enter.DrawRectangle(p_frame, rect_fore);

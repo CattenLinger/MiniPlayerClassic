@@ -53,12 +53,12 @@ namespace MiniPlayerClassic
             //pl_main = new PlayList(); // 初始化播放列表
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height); //初始化进度条
-            cProgressBar.pb_text = LabelText;
+            cProgressBar.ChangeTitle(LabelText);
             cProgressBar.pb_maxvalue = 10;
             cProgressBar.pb_value = 0;
 
             cVolumeBar = new c_VolumeBar(pb_Volume.Width,pb_Volume.Height); //初始化音量条
-            cVolumeBar.pb_text = "音量";
+            cVolumeBar.ChangeLabel("音量");
             cVolumeBar.pb_maxvalue = 100;
             cVolumeBar.pb_value = 100;
 
@@ -103,7 +103,7 @@ namespace MiniPlayerClassic
             if(e.Message != "")
             {
                 LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
-                cProgressBar.pb_text = LabelText;
+                cProgressBar.ChangeTitle(LabelText);
                 cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
             }
         }
@@ -154,9 +154,6 @@ namespace MiniPlayerClassic
             {
                 temp = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width));
                 cProgressBar.pb_value = temp;
-                cProgressBar.pb_text2 = (MainPlayer.trans_Time
-                    (cProgressBar.pb_value, Player.t_formate.full_minute) +
-                    "|" + MainPlayer.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute));
                 cProgressBar.DrawBar(pb_g_enter);
             }
         }
@@ -168,9 +165,6 @@ namespace MiniPlayerClassic
             {
                 temp = (int)((float)cProgressBar.pb_maxvalue * ((float)e.X / (float)cProgressBar.width));
                 cProgressBar.pb_value = temp;
-                cProgressBar.pb_text2 = (MainPlayer.trans_Time
-                    (cProgressBar.pb_value, Player.t_formate.full_minute) + 
-                    "|" + MainPlayer.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute));
                 cProgressBar.DrawBar(pb_g_enter);
             }
         }
@@ -187,16 +181,10 @@ namespace MiniPlayerClassic
         private void tmrPGBars_Tick(object sender, EventArgs e)
         {
             double temp;
-            StringBuilder buffer = new StringBuilder();
             temp = MainPlayer.GetPosition();
             if (temp == -1) { temp = 0; }
             cProgressBar.pb_value = (int)(temp * 1000);
             cProgressBar.DrawBar(pb_g_enter);
-            buffer.Append(MainPlayer.trans_Time(cProgressBar.pb_value, Player.t_formate.full_minute));
-            buffer.Append("|");
-            buffer.Append(MainPlayer.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute));
-            cProgressBar.pb_text2 = buffer.ToString();
-            buffer.Clear();
         }
 
         private void tmrVBar_Tick(object sender, EventArgs e)
@@ -205,7 +193,7 @@ namespace MiniPlayerClassic
             int left = 0, right = 0;
             MainPlayer.GetLevel(ref left,ref right);
             cVolumeBar.tellitlevel(left,right);
-            MainPlayer.getData(cVolumeBar.fft_data);
+            MainPlayer.getData(ref cVolumeBar.fft_data);
         }
 
         #endregion
@@ -264,7 +252,8 @@ namespace MiniPlayerClassic
                 ListBoard.CurrentList.Add(new PlayListItem(dlg1.FileNames[i],""));
             }
 
-                RefreshPlayList();//刷新播放列表
+            RefreshPlayList();//刷新播放列表
+            System.GC.Collect();
         }
 
         private void tbtnRemove_ButtonClick(object sender, EventArgs e) //“删除选项”按钮

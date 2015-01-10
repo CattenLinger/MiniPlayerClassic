@@ -336,7 +336,7 @@
             // tmrPGBar
             // 
             this.tmrPGBar.Enabled = true;
-            this.tmrPGBar.Interval = 17;
+            this.tmrPGBar.Interval = 20;
             this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
             // 
             // tmrVBar
