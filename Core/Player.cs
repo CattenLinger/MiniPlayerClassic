@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Un4seen.Bass;
 using System.Windows.Forms;
@@ -283,10 +281,10 @@ namespace MiniPlayerClassic
         //获取频谱元数据
         public void getData(ref Single[] data)
         {
-            if (data.Length < 512) { return; }
+            if (data.Length < 256) { return; }
             if (playstate == PlayerStates.Playing)
-            { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
-            else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
+            { Bass.BASS_ChannelGetData(theStream, data, -2147483648); }
+            else { for (int i = 0; i < 256; i++) { data[i] = 0; } }
         }
 
         //转换毫秒到格式化时间字符串
