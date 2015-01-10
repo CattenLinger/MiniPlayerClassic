@@ -7,17 +7,12 @@ using System.Windows.Forms;
 
 
 namespace MiniPlayerClassic
-{
-    public class PlayerStateMessage : EventArgs
-    {
-        private int msg;
-        public int Message { get { return msg; } set { msg = value; } }
-        public PlayerStateMessage(int message) { msg = message; }
-    }
+{   
 
     public class Player
     {
         #region const
+
         const int default_device = -1; //定义默认设别和默认码率
         const int default_rate = 44100;
 
@@ -26,6 +21,8 @@ namespace MiniPlayerClassic
         const int Player_Stoped = 0;
 
         const int File_StateChange = 10;
+
+        public enum PlayerStates { Playing, Paused, Stoped, Stalled }
 
         public enum t_formate //时间转换函数的格式类型枚举
         {
@@ -44,10 +41,30 @@ namespace MiniPlayerClassic
 
         #endregion
 
+        #region Sub Classes
+
+        public class PlayerStateChange : EventArgs
+        {
+            private PlayerStates msg;
+            public PlayerStates Message { get { return msg; } set { msg = value; } }
+
+            public PlayerStateChange(PlayerStates message) { msg = message; }
+        }
+
+        public class PlayerFileChange : EventArgs
+        {
+            private string msg;
+            public string Message { get { return msg; } set { msg = value; } }
+
+            public PlayerFileChange(string filename) { msg = filename; }
+        }
+
+        #endregion
+
         #region values
         private String filepath = ""; //保存文件路径
         private int errorcode = 1; //记录播放器在启动过程中的错误
-        private int playstate = Player_Stoped; //存储播放器状态
+        private PlayerStates playstate = PlayerStates.Stoped; //存储播放器状态
         private float volume = 1;//音量
 
         private BASS_INFO BassInfo;
@@ -56,13 +73,19 @@ namespace MiniPlayerClassic
         //private values end
         public string FilePath { get { return filepath; } }
         public int ErrorCode { get { return errorcode; } }
-        public int PlayState { get { return playstate; } }
+        public PlayerStates PlayState { get { return playstate; } }
         public float Volume { get { return volume; } }
         //public values end
 
         #endregion
 
-        public event EventHandler<PlayerStateMessage> call_StateChange;
+        #region Events
+
+        public event EventHandler<PlayerStateChange> StateChange;
+        public event EventHandler<PlayerFileChange> FileChange;
+
+        #endregion
+
         //progresses
 
         /* If you want to close the splash of Bass.Net you need to regist at 
@@ -84,9 +107,15 @@ namespace MiniPlayerClassic
         }
         
         //状态变化消息
-        protected virtual void on_call_StateChanger(PlayerStateMessage e) //消息构造函数
+        protected virtual void on_call_StateChanger(PlayerStateChange e) //消息构造函数
         {
-            EventHandler<PlayerStateMessage> handler = call_StateChange;
+            EventHandler<PlayerStateChange> handler = StateChange;
+            if (handler != null) { handler(this, e); }
+        }
+
+        protected virtual void on_call_FileChange(PlayerFileChange e)
+        {
+            EventHandler<PlayerFileChange> handler = FileChange;
             if (handler != null) { handler(this, e); }
         }
 
@@ -98,31 +127,31 @@ namespace MiniPlayerClassic
             switch (Bass.BASS_ChannelIsActive(theStream))
             {
                 case BASSActive.BASS_ACTIVE_PLAYING:
-                    if (playstate != Player_Playing)
+                    if (playstate != PlayerStates.Playing)
                     {
-                        playstate = Player_Playing;
-                        call_StateChange(this, new PlayerStateMessage(Player_Playing));
+                        playstate = PlayerStates.Playing;
+                        StateChange(this, new PlayerStateChange(PlayerStates.Playing));
                     }
                     break;
-                case BASSActive.BASS_ACTIVE_PAUSED: 
-                    if (playstate != Player_Paused )
+                case BASSActive.BASS_ACTIVE_PAUSED:
+                    if (playstate != PlayerStates.Paused)
                     {
-                        playstate = Player_Paused;
-                        call_StateChange(this, new PlayerStateMessage(Player_Paused));
+                        playstate = PlayerStates.Paused;
+                        StateChange(this, new PlayerStateChange(PlayerStates.Paused));
                     }
                     break;
-                case BASSActive.BASS_ACTIVE_STOPPED: 
-                    if (playstate != Player_Stoped)
+                case BASSActive.BASS_ACTIVE_STOPPED:
+                    if (playstate != PlayerStates.Stoped)
                     {
-                        playstate = Player_Stoped;
-                        call_StateChange(this, new PlayerStateMessage(Player_Stoped));
+                        playstate = PlayerStates.Stoped;
+                        StateChange(this, new PlayerStateChange(PlayerStates.Stoped));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_STALLED: 
-                    if (playstate != -1)
+                    if (playstate != PlayerStates.Stalled)
                     {
-                        playstate = -1;
-                        call_StateChange(this, new PlayerStateMessage(-1));
+                        playstate = PlayerStates.Stalled;
+                        StateChange(this, new PlayerStateChange(PlayerStates.Stalled));
                     }
                     break;
             }
@@ -176,7 +205,7 @@ namespace MiniPlayerClassic
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
             if (theStream == 0) { return false; } else { SetVolume(volume); }
             filepath = Filename;
-            call_StateChange(this, new PlayerStateMessage(File_StateChange));
+            FileChange(this, new PlayerFileChange(Filename));
             return true;
         }
 
@@ -262,7 +291,7 @@ namespace MiniPlayerClassic
         public void getData(Single[] data)
         {
             if (data.Length < 512) { return; }
-            if (playstate == Player_Playing)
+            if (playstate == PlayerStates.Playing)
             { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
             else { for (int i = 0; i < 512; i++) { data[i] = 0; } }
         }

@@ -51,6 +51,7 @@ namespace MiniPlayerClassic
         //尺寸
         public int height, width;
         private int pb_f_long = 0;//保存进度条实际绘图区域长度
+        Point point_label;
 
         public c_VolumeBar(int w,int h)
         {
@@ -76,6 +77,7 @@ namespace MiniPlayerClassic
             rect_fore = new Rectangle(0, 0, 0, height);
             //fonts
             font_label = new Font("MS YaHei UI",s_font);
+            point_label = new Point(0, 0);
         }
 
         public void tellitlevel(int left, int right)//外部程序在此设置响度
@@ -101,7 +103,7 @@ namespace MiniPlayerClassic
             Size info_text = TextRenderer.MeasureText(pb_text, font_label);
 
             //定义文本标签的坐标
-            Point point_label = new Point(0,0);
+            point_label.X = 0; point_label.Y = 0;
 
             //响度显示的高度的限定以及顶端的飘落计算
             if (temp_left < level_left) { temp_left = level_left; }

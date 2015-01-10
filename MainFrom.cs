@@ -27,6 +27,8 @@ namespace MiniPlayerClassic
         private int min_height;
         private Boolean is_Minisize;//界面是否在迷你模式
 
+        private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
+
         //一些东西的初始化
         public MainFrom()
         {
@@ -34,14 +36,15 @@ namespace MiniPlayerClassic
 
             LabelText = "暂无播放任务";
             def_height = this.Height;
-            min_height = this.Height - panel2.Height;
+            min_height = this.Height - tb_Lists.Height;
             is_Minisize = true;
 
             pb_g_enter = pb_Progress.CreateGraphics(); //初始化进度条们的画布
             pb_g_enter2 = pb_Volume.CreateGraphics();
 
             MainPlayer = new Player(this.Handle); //初始化播放器对象
-            MainPlayer.call_StateChange += MainPlayer_call_StateChange;  //注册播放器改变播放状态的事件的响应函数
+            MainPlayer.StateChange += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
+            MainPlayer.FileChange += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
 
             ListBoard = new PlayListBoard();//初始化列表板对象
             //ListBoard.Create(new PlayList());//创建一个播放列表
@@ -60,6 +63,7 @@ namespace MiniPlayerClassic
             cVolumeBar.pb_value = 100;
 
             to_Minisize(false);//迷你模式
+            tb_Lists.TabPages.Clear();
             refreshInterface();
         }
         //init
@@ -80,20 +84,28 @@ namespace MiniPlayerClassic
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (MainPlayer.PlayState != 1) { MainPlayer.Play(); } else { MainPlayer.Pause(); }
+            if (MainPlayer.PlayState != Player.PlayerStates.Playing)
+                MainPlayer.Play();
+            else 
+                MainPlayer.Pause();
         }
 //--------Events Checker--------------------------------------------------------------------------
-        void MainPlayer_call_StateChange(object sender, PlayerStateMessage e) //响应播放状态改变的消息的函数
+        void MainPlayer_StateChange(object sender, Player.PlayerStateChange e) //响应播放状态改变的消息的函数
         {
-            if (e.Message == 10)
+            if (e.Message != Player.PlayerStates.Playing)
+                btnPlay.ImageIndex = 2; 
+            else 
+                btnPlay.ImageIndex = 1;
+        }
+
+        void MainPlayer_FileChange(object sender, Player.PlayerFileChange e)
+        { 
+            if(e.Message != "")
             {
                 LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
                 cProgressBar.pb_text = LabelText;
                 cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
-            }else 
-                if ((e.Message < 10) && (e.Message != 1)) 
-                    { btnPlay.ImageIndex = 2; } else { btnPlay.ImageIndex = 1; }
-            //throw new NotImplementedException();
+            }
         }
 //------Window interface change-------------------------------------------------------------------
         public void to_Minisize(Boolean animate)//迷你尺寸
@@ -112,19 +124,23 @@ namespace MiniPlayerClassic
 
         public void refreshInterface()//刷新界面元素的设置
         {
-            if (ListBoard.Count == 0)
+            if (tb_Lists.TabCount == 0)
             {
                 this.Text = "MiniPlayer";
                 tbtnRemove.Enabled = false;
                 tbtnPlayMode.Enabled = false;
                 if (!is_Minisize) to_Minisize(true);
+                tbtnModeChange.Enabled = false;
+                tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
             }
             else
             { 
-                this.Text = "MiniPlayer - List " + ListBoard.Count.ToString();
+                this.Text = "MiniPlayer - " + tb_Lists.SelectedTab.Text;
                 tbtnPlayMode.Enabled = true;
                 tbtnRemove.Enabled = true;
                 if (is_Minisize) to_NormalSize(true);
+                tbtnModeChange.Enabled = true;
+                tbtnModeChange.ToolTipText = "切换界面模式";
             }
         }
 //------------------------------------------------------------------------------------------------
@@ -171,13 +187,16 @@ namespace MiniPlayerClassic
         private void tmrPGBars_Tick(object sender, EventArgs e)
         {
             double temp;
+            StringBuilder buffer = new StringBuilder();
             temp = MainPlayer.GetPosition();
             if (temp == -1) { temp = 0; }
             cProgressBar.pb_value = (int)(temp * 1000);
             cProgressBar.DrawBar(pb_g_enter);
-            cProgressBar.pb_text2 = MainPlayer.trans_Time(cProgressBar.pb_value, Player.t_formate.full_minute)
-                                    + "|" + MainPlayer.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute);
-            
+            buffer.Append(MainPlayer.trans_Time(cProgressBar.pb_value, Player.t_formate.full_minute));
+            buffer.Append("|");
+            buffer.Append(MainPlayer.trans_Time(cProgressBar.pb_maxvalue - cProgressBar.pb_value, Player.t_formate.full_minute));
+            cProgressBar.pb_text2 = buffer.ToString();
+            buffer.Clear();
         }
 
         private void tmrVBar_Tick(object sender, EventArgs e)
@@ -199,7 +218,7 @@ namespace MiniPlayerClassic
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X/(float)pb_Volume.Width));
                 MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
-                cVolumeBar.DrawBar(pb_g_enter2);
+                //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
 
@@ -209,7 +228,7 @@ namespace MiniPlayerClassic
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
                 MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
-                cVolumeBar.DrawBar(pb_g_enter2);
+                //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
 
@@ -220,7 +239,7 @@ namespace MiniPlayerClassic
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
                 MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
-                cVolumeBar.DrawBar(pb_g_enter2);
+                //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
         #endregion
@@ -254,7 +273,7 @@ namespace MiniPlayerClassic
             ListViewItem item;
             if (listView1.SelectedItems.Count < 1) { return; }//如果没有选中项目就返回
 
-            for (i = listView1.SelectedItems.Count - 1;i >= 0; i--)
+            for (i = listView1.SelectedItems.Count - 1;i >= 0; i--)//倒序删除，避免了节点移位导致不能正确删除节点
             {
                 item = listView1.SelectedItems[i];
                 ListBoard.CurrentList.Remove(listView1.Items.IndexOf(item));
@@ -305,20 +324,13 @@ namespace MiniPlayerClassic
                 ListBoard.SelectList(ListBoard.Count - 1);
             else
                 ListBoard.SelectList(ListBoard.CurrentListIndex + 1);
-            RefreshPlayList();
+            tb_Lists.TabPages.Add("未命名列表" + newlists++.ToString());
+            if (tb_Lists.TabCount == 1)
+            {
+                listView1.Parent = tb_Lists.SelectedTab;
+            }
+            //RefreshPlayList();
             refreshInterface();
-        }
-
-        private void btnPagePrev_Click(object sender, EventArgs e)//前一页按钮
-        {
-            ListBoard.SelectList(ListBoard.CurrentListIndex - 1);
-            RefreshPlayList();
-        }
-
-        private void btnPageNext_Click(object sender, EventArgs e)//下一页按钮
-        {
-            ListBoard.SelectList(ListBoard.CurrentListIndex + 1);
-            RefreshPlayList();
         }
 
         private void tmDeleteListFile_Click(object sender, EventArgs e)//删除列表操作
@@ -327,6 +339,7 @@ namespace MiniPlayerClassic
                 MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
             return;
 
+            tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
             ListBoard.Delete(ListBoard.CurrentListIndex);
             RefreshPlayList();
         }
@@ -334,6 +347,22 @@ namespace MiniPlayerClassic
         private void tbtnList_Click(object sender, EventArgs e)
         {
             tbtnList.ShowDropDown();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listView1.Parent = tb_Lists.SelectedTab;
+            ListBoard.SelectList(tb_Lists.SelectedIndex);
+            RefreshPlayList();
+            refreshInterface();
+        }
+
+        private void tbtnModeChange_Click(object sender, EventArgs e)
+        {
+            if (is_Minisize)
+                to_NormalSize(true);
+            else
+                to_Minisize(true);
         }
 
     }

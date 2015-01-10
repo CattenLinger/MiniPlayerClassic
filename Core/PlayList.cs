@@ -26,6 +26,7 @@ namespace MiniPlayerClassic
         {
             FileAddress = file;
             Infomations = info;
+            refresh_info();
         }
         public PlayListItem()
         {
@@ -40,10 +41,9 @@ namespace MiniPlayerClassic
             singer = info_s[0];
             title = info_s[1];
             album = info_s[2];
-            if (info_s.Length > 3) 
-            {
-                for (byte i = 3; i < info_s.Length; i++ ) { others += info_s[i]; }
-            }
+            others = "";
+            if (info_s.Length > 3)
+                for (byte i = 3; i < info_s.Length; i++ ) others += info_s[i];
         }
     }
     #endregion
@@ -62,7 +62,7 @@ namespace MiniPlayerClassic
             LinkedListNode<PlayList> marked; //新建一个节点对象，因为操作链表需要先有一个节点被读取出来
             if (index > lists.Count - 1 || index < 0) return null;
 
-            if (index > (lists.Count - 1) / 2)
+            if (index > (lists.Count - 1) / 2) //折半查找
             {
                 marked = lists.First;
                 for (int i = 0; i <= lists.Count - 1; i++)
@@ -113,7 +113,7 @@ namespace MiniPlayerClassic
             return ResearchByIndex(index).Value;
         }
 
-        public bool SelectList(int index)
+        public bool SelectList(int index)//按序号选择列表
         {
             try
             {
@@ -132,7 +132,9 @@ namespace MiniPlayerClassic
     public class PlayList //播放列表对象
     {
         public LinkedList<PlayListItem> list; //新建一个链表用于存储播放列表项
-
+        private string filepath = "";
+        public string FilePath { get { return FilePath; } }
+        
         private LinkedListNode<PlayListItem> ResearchByIndex(int index)//按序号查找节点并返回节点
         {
             LinkedListNode<PlayListItem> marked; //新建一个节点对象，因为操作链表需要先有一个节点被读取出来
@@ -151,26 +153,31 @@ namespace MiniPlayerClassic
             list = new LinkedList<PlayListItem>();
         }
 
+        public PlayList(string file)
+        {
+            list = new LinkedList<PlayListItem>();
+
+        }
+
         public void Add(PlayListItem item)//添加节点
         {
             list.AddLast(item);
         }
 
-        public bool Remove(int index)//按被选择的表删除节点
+        public bool Remove(int index)//按序号删除节点
         {
             try
             {
-                    LinkedListNode<PlayListItem> mark = list.Last;
-                    for (int i = list.Count - 1; i >= 0; i--)
+                LinkedListNode<PlayListItem> mark = list.Last;
+                for (int i = list.Count - 1; i >= 0; i--)//倒序删除，配合外部的倒序取序号可以加快效率
+                {
+                    if (i == index)
                     {
-                        if (i == index)
-                        {
-                            list.Remove(ResearchByIndex(index));
-                            return true;
-                        }
-                        if(mark != list.First) mark = mark.Previous;
+                        list.Remove(ResearchByIndex(index));
+                        return true;
                     }
-                
+                    if(mark != list.First) mark = mark.Previous;//节点不是第一个的话向前移动
+                }
             }
             catch(Exception e)
             {
@@ -197,8 +204,15 @@ namespace MiniPlayerClassic
             return ResearchByIndex(index).Value;
         }
 
-        public bool Savetofile(string Filename)//保存到顺序文件里（未完成
+        public bool ReadFormFile(string Filename)//从文件读取（未完成
         {
+
+            return true;
+        }
+
+        public bool SaveToFile(string Filename)//保存到顺序文件里（未完成
+        {
+            if (filepath == "") { filepath = Filename; }
             return true;
         }
     }
