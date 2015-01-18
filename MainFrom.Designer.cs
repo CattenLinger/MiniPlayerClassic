@@ -146,11 +146,13 @@
             // 
             this.tmOpenList.Name = "tmOpenList";
             resources.ApplyResources(this.tmOpenList, "tmOpenList");
+            this.tmOpenList.Click += new System.EventHandler(this.tmOpenList_Click);
             // 
             // tmAddList
             // 
             this.tmAddList.Name = "tmAddList";
             resources.ApplyResources(this.tmAddList, "tmAddList");
+            this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
             // 
             // tbtnRemove
             // 
@@ -214,11 +216,13 @@
             // 
             this.tmSaveList.Name = "tmSaveList";
             resources.ApplyResources(this.tmSaveList, "tmSaveList");
+            this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
             // 
             // tmSaveAs
             // 
             this.tmSaveAs.Name = "tmSaveAs";
             resources.ApplyResources(this.tmSaveAs, "tmSaveAs");
+            this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
             // 
             // toolStripMenuItem5
             // 
@@ -363,6 +367,7 @@
             // 
             // listView1
             // 
+            this.listView1.AllowDrop = true;
             resources.ApplyResources(this.listView1, "listView1");
             this.listView1.Name = "listView1";
             this.listView1.TileSize = new System.Drawing.Size(300, 26);

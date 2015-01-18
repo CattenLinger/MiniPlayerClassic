@@ -117,34 +117,50 @@ namespace MiniPlayerClassic
             bool show_hour = left_hour > 0;
             int all_hour = pb_maxvalue / ms_per_hour;
 
-            int min,sec;
+            int min,sec,min2,sec2;
             subtitle.Clear();
+            min = pb_value % ms_per_hour / ms_per_minute;
+            sec = pb_value % ms_per_minute / 1000;
+            min2 = pb_maxvalue % ms_per_hour / ms_per_minute;
+            sec2 = pb_maxvalue % ms_per_minute / 1000;
 
+            if(show_hour)
+                subtitle.AppendFormat("{0:D2}:{1:D2}:{2:D2}|{3:D2}:{4:D2}:{5:D2}",left_hour,min,sec,all_hour,min2,sec2);
+            else
+                subtitle.AppendFormat("{0:D2}:{1:D2}|{2:D2}:{3:D2}",min, sec, min2, sec2);
+           
+            /*/
             if (show_hour)
             {
                 if (left_hour < 10) subtitle.Append('0');
-                subtitle.Append(left_hour.ToString() + ':');
+                subtitle.Append(left_hour);
+                subtitle.Append(';');
             }
-            min = pb_value % ms_per_hour / ms_per_minute;
-            if (min < 10) subtitle.Append('0'); 
-            subtitle.Append(min.ToString() + ':');
 
-            sec = pb_value % ms_per_minute / 1000;
+            if (min < 10) subtitle.Append('0'); 
+            subtitle.Append(min);
+            subtitle.Append(':');
+
+            
             if (sec < 10) subtitle.Append('0');
-            subtitle.Append(sec.ToString() + '|');
+            subtitle.Append(sec);
+            subtitle.Append('|');
 
             if(show_hour)
             {
                 if (all_hour < 10) subtitle.Append('0');
-                subtitle.Append(all_hour.ToString() + ':');
+                subtitle.Append(all_hour);
+                subtitle.Append(':');
             }
-            min = pb_maxvalue % ms_per_hour / ms_per_minute;
-            if (min < 10) subtitle.Append('0');
-            subtitle.Append(min.ToString() + ':');
 
-            sec = pb_maxvalue % ms_per_minute / 1000;
+            
+            if (min < 10) subtitle.Append('0');
+            subtitle.Append(min);
+            subtitle.Append(':');
+
+            
             if (sec < 10) subtitle.Append('0');
-            subtitle.Append(sec.ToString());
+            subtitle.Append(sec);//*/
 
         }
 

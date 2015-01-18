@@ -132,15 +132,18 @@ namespace MiniPlayerClassic
                 if (!is_Minisize) to_Minisize(true);
                 tbtnModeChange.Enabled = false;
                 tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
+                tmAddList.Enabled = false;
             }
             else
-            { 
+            {
+                if (ListBoard.CurrentList.FilePath != "") tb_Lists.SelectedTab.Text = System.IO.Path.GetFileNameWithoutExtension(ListBoard.CurrentList.FilePath);
                 this.Text = "MiniPlayer - " + tb_Lists.SelectedTab.Text;
                 tbtnPlayMode.Enabled = true;
                 tbtnRemove.Enabled = true;
                 if (is_Minisize) to_NormalSize(true);
                 tbtnModeChange.Enabled = true;
                 tbtnModeChange.ToolTipText = "切换界面模式";
+                tmAddList.Enabled = true;
             }
         }
 //------------------------------------------------------------------------------------------------
@@ -274,12 +277,15 @@ namespace MiniPlayerClassic
 
         private void RefreshPlayList()//刷新播放列表过程
         {
-            LinkedListNode<PlayListItem> marked = ListBoard.CurrentList.list.First; //创建一个节点对象
             listView1.Items.Clear();//清空列表控件
-            for (int i = 0; i < ListBoard.CurrentList.list.Count; i++) //循环扫描链表并添加选项
+            if (ListBoard.Count != 0)
             {
-                listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
-                marked = marked.Next;
+                LinkedListNode<PlayListItem> marked = ListBoard.CurrentList.Items.First; //创建一个节点对象
+                for (int i = 0; i < ListBoard.CurrentList.Count; i++) //循环扫描链表并添加选项
+                {
+                    listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
+                    marked = marked.Next;
+                }
             }
         }
 
@@ -297,13 +303,29 @@ namespace MiniPlayerClassic
             if (MessageBox.Show("要清空列表？\n此操作不可恢复哦。",
                 "清空列表？",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No) { return; };
 
-            ListBoard.CurrentList.list.Clear();
+            ListBoard.CurrentList.Clear();
             listView1.Items.Clear();
         }
 
         private void tmCloseList_Click(object sender, EventArgs e)
         {
+            if (ListBoard.CurrentList.OperationCount != 0)
+            { 
+                switch(MessageBox.Show("列表已修改，保存？", "列表", MessageBoxButtons.YesNoCancel))
+                {
+                    case System.Windows.Forms.DialogResult.Cancel:
+                        return;
 
+                    case System.Windows.Forms.DialogResult.Yes:
+                        tmSaveList_Click(sender, e);
+                        break;
+                }
+            }
+
+            ListBoard.Delete(ListBoard.CurrentListIndex);
+            RefreshPlayList();
+            tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
+            refreshInterface();
         }
 
         private void tmNewList_Click(object sender, EventArgs e)
@@ -328,9 +350,10 @@ namespace MiniPlayerClassic
                 MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
             return;
 
-            tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
             ListBoard.Delete(ListBoard.CurrentListIndex);
             RefreshPlayList();
+            tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
+
         }
 
         private void tbtnList_Click(object sender, EventArgs e)
@@ -352,6 +375,77 @@ namespace MiniPlayerClassic
                 to_NormalSize(true);
             else
                 to_Minisize(true);
+        }
+
+        private void tmOpenList_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg1 = new OpenFileDialog();
+            dlg1.ShowDialog();
+            if (dlg1.FileName != "")
+            {
+                ListBoard.Create(new PlayList(dlg1.FileName));
+                tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(dlg1.FileName));
+                ListBoard.SelectList(ListBoard.lists.Count - 1);
+                RefreshPlayList();
+                refreshInterface();
+                tb_Lists.SelectedIndex = tb_Lists.TabCount - 1;
+                listView1.Parent = tb_Lists.SelectedTab;
+            }
+        }
+
+        private void tmAddList_Click(object sender, EventArgs e)
+        {
+            if(ListBoard.Count != 0)
+            {
+                OpenFileDialog dlg1 = new OpenFileDialog();
+                dlg1.ShowDialog();
+                string tmp1 = dlg1.FileName;
+                if(tmp1 != "")
+                {
+                    ListBoard.CurrentList.AddFromFile(tmp1);
+                    RefreshPlayList();
+                }
+            }
+        }
+
+        private void tmSaveList_Click(object sender, EventArgs e)
+        {
+            if(ListBoard.CurrentList.FilePath == "")
+            {
+                SaveFileDialog dlg1 = new SaveFileDialog();
+                dlg1.ShowDialog();
+                string temp1 = dlg1.FileName;
+                if (dlg1.FileName != "")
+                {
+                    if (!ListBoard.CurrentList.SaveToFile(dlg1.FileName))
+                    {
+                        MessageBox.Show("存储列表时发生错误。", "列表");
+                    }
+                }
+            }
+            else
+            {
+                if (!ListBoard.CurrentList.SaveToFile(ListBoard.CurrentList.FilePath))
+                {
+                    MessageBox.Show("存储列表时发生错误。", "列表");
+                }
+            }
+            refreshInterface();
+        }
+
+        private void tmSaveAs_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg1 = new SaveFileDialog();
+            dlg1.ShowDialog();
+            string temp1 = dlg1.FileName;
+            if (dlg1.FileName != "")
+            {
+                if (!ListBoard.CurrentList.SaveToFile(dlg1.FileName))
+                {
+                    MessageBox.Show("存储列表时发生错误。", "列表");
+                }
+            }
+            refreshInterface();
         }
 
     }

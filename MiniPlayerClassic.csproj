@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms.cs" />
     <Compile Include="UI Elements\c_ProgressBar.cs" />
     <Compile Include="MainFrom.cs">
       <SubType>Form</SubType>
