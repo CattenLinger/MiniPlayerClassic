@@ -33,87 +33,6 @@ namespace MiniPlayerClassic
     }
     #endregion
 
-    public class PlayListBoard//播放列表板
-    {
-        public LinkedList<PlayList> lists;//存储列表的链表
-        public int CurrentListIndex { get { return currentlistindex; } }
-        public PlayList CurrentList;//当前被激活的播放列表
-        public int Count { get { return lists.Count; } }//获取列表项目数
-
-        private int currentlistindex = 0;//当前被激活的播放列表的序号
-
-        private LinkedListNode<PlayList> ResearchByIndex(int index)//按序号查找节点并返回节点
-        {
-            LinkedListNode<PlayList> marked;
-            if (index > lists.Count - 1 || index < 0) return null;
-
-            if (index > (lists.Count - 1) / 2) //折半查找
-            {
-                marked = lists.First;
-                for (int i = 0; i <= lists.Count - 1; i++)
-                {
-                    if (i == index) return marked;
-                    marked = marked.Next;
-                }
-            }
-            else
-            {
-                marked = lists.Last;
-                for (int i = lists.Count - 1; i >= 0; i--)
-                {
-                    if (i == index) return marked;
-                    marked = marked.Previous;
-                }
-            }
-            return null;
-        }
-
-        public PlayListBoard()//构造函数
-        {
-            lists = new LinkedList<PlayList>();
-        }
-
-        public void Create(PlayList playlist)//创建并添加列表
-        {
-            lists.AddLast(new LinkedListNode<PlayList>(playlist));
-        }
-
-        public bool Delete(int index)//按序号删除列表
-        {
-            try
-            {
-                lists.Remove(ResearchByIndex(index));
-                if (lists.Count != 0) SelectList(currentlistindex - 1);
-                else if (lists.Count == 0) currentlistindex = -1;
-            }
-            catch (Exception e)
-            {
-                if (e != null) return false;
-            }
-            return false;
-        }
-
-        public PlayList GetItem(int index)//按序号获取一个播放列表对象
-        {
-            return ResearchByIndex(index).Value;
-        }
-
-        public bool SelectList(int index)//按序号选择列表
-        {
-            try
-            {
-                CurrentList = ResearchByIndex(index).Value;
-                currentlistindex = index;
-                return true;
-            }
-            catch (Exception e)
-            {
-                if(e != null) return false;
-            }
-            return false;
-        }
-    }
-//----------------------------------------------------------------------------------------------------------
     public class PlayList //播放列表对象
     {
         private LinkedList<PlayListItem> items; //新建一个链表用于存储播放列表项
@@ -123,7 +42,7 @@ namespace MiniPlayerClassic
         public string FilePath { get { return filepath; } }
         private int operationscount = 0;
         public int OperationCount { get { return operationscount; } }
-        
+
         private LinkedListNode<PlayListItem> ResearchByIndex(int index)//按序号查找节点并返回节点
         {
             LinkedListNode<PlayListItem> marked;
@@ -173,7 +92,10 @@ namespace MiniPlayerClassic
             {
                 if (e != null) return false;
             }
+            
             operationscount++;
+            
+
             return true;
         }
 
@@ -188,6 +110,7 @@ namespace MiniPlayerClassic
             {
                 if (e != null) return false;
             }
+            operationscount++;
             return true;
         }
 
@@ -218,6 +141,7 @@ namespace MiniPlayerClassic
         public bool SaveToFile(string FileName)
         {
             if (FileName != filepath) filepath = FileName;
+            operationscount = 0;
             return save_file();
         }
 

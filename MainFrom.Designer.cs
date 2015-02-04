@@ -66,7 +66,7 @@
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.tmrVBar = new System.Windows.Forms.Timer(this.components);
+            this.tmrChecker = new System.Windows.Forms.Timer(this.components);
             this.tb_Lists = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -340,14 +340,12 @@
             // tmrPGBar
             // 
             this.tmrPGBar.Enabled = true;
-            this.tmrPGBar.Interval = 30;
+            this.tmrPGBar.Interval = 17;
             this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
             // 
-            // tmrVBar
+            // tmrChecker
             // 
-            this.tmrVBar.Enabled = true;
-            this.tmrVBar.Interval = 17;
-            this.tmrVBar.Tick += new System.EventHandler(this.tmrVBar_Tick);
+            this.tmrChecker.Enabled = true;
             // 
             // tb_Lists
             // 
@@ -384,6 +382,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainFrom";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFrom_FormClosing);
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -406,7 +405,7 @@
         private System.Windows.Forms.PictureBox pb_Progress;
         private System.Windows.Forms.Timer tmrPGBar;
         private System.Windows.Forms.PictureBox pb_Volume;
-        private System.Windows.Forms.Timer tmrVBar;
+        private System.Windows.Forms.Timer tmrChecker;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.ToolStrip toolStrip1;
