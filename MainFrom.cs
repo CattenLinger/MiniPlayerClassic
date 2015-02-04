@@ -21,18 +21,19 @@ namespace MiniPlayerClassic
         private Graphics pb_g_enter;//画布
         private Graphics pb_g_enter2;
 
-        //public PlayList pl_main; //播放列表对象
-        //public PlayListBoard ListBoard;//播放列表板对象
         List<PlayList> PlayLists;//用于管理多个播放列表
-
-        PlayList CurrentPlayingList;//当前正在播放的列表
-        LinkedListNode<PlayListItem> CurrentPlayingItem;//当前正在被播放的列表项
 
         private int def_height;//默认尺寸
         private int min_height;
         private Boolean is_Minisize;//界面是否在迷你模式
 
         private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
+
+        enum playbackHeadState { ByIndex, Single, Single_Cycling, List_Cycling }
+        private playbackHeadState playbackhead_state;
+        private LinkedListNode<PlayListItem> playbackhead;
+        private bool playback = false;
+        private bool buttonaction = false;
 
         //一些东西的初始化
         public MainFrom()
@@ -51,11 +52,6 @@ namespace MiniPlayerClassic
             MainPlayer.StateChange += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.FileChange += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
 
-            //ListBoard = new PlayListBoard();//初始化列表板对象
-            //ListBoard.Create(new PlayList());//创建一个播放列表
-            //ListBoard.SelectList(0);//选择第一个播放列表
-            //pl_main = new PlayList(); // 初始化播放列表
-
             PlayLists = new List<PlayList>(32);
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height); //初始化进度条
@@ -71,6 +67,7 @@ namespace MiniPlayerClassic
             to_Minisize(false);//迷你模式
             tb_Lists.TabPages.Clear();
             refreshInterface();
+            playbackhead_state = playbackHeadState.Single;
         }
         //init
         private void MainFrom_Load(object sender, EventArgs e)
@@ -86,6 +83,7 @@ namespace MiniPlayerClassic
         private void btnStop_Click(object sender, EventArgs e)
         {
             MainPlayer.Stop();
+            buttonaction = true;
         }
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
@@ -94,6 +92,44 @@ namespace MiniPlayerClassic
                 MainPlayer.Play();
             else 
                 MainPlayer.Pause();
+            buttonaction = true;
+        }
+
+        private void playbackactions()
+        {
+            switch (playbackhead_state)
+            {
+                case playbackHeadState.ByIndex:
+                    playbackhead = playbackhead.Next;
+                    if (playbackhead != null) 
+                    {
+                        if (MainPlayer.LoadFile(playbackhead.Value.FileAddress))
+                            MainPlayer.Play();
+                    }
+                    else { playback = false; }
+                    break;
+
+                case playbackHeadState.List_Cycling:
+                    if (playbackhead.Next == null)
+                    {
+                        if (playbackhead.List.First == null)
+                        {
+                            playback = false;
+                            break;
+                        }
+                        playbackhead = playbackhead.List.First;
+                    }
+                    else { playbackhead = playbackhead.Next; }
+                    if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) MainPlayer.Play();
+                    break;
+
+                case playbackHeadState.Single:
+                    break;
+
+                case playbackHeadState.Single_Cycling:
+                    MainPlayer.Play();
+                    break;
+            }
         }
 //--------Events Checker--------------------------------------------------------------------------
         void MainPlayer_StateChange(object sender, Player.PlayerStateChange e) //响应播放状态改变的消息的函数
@@ -102,6 +138,15 @@ namespace MiniPlayerClassic
                 btnPlay.ImageIndex = 2; 
             else 
                 btnPlay.ImageIndex = 1;
+
+            if (playback && !buttonaction && MainPlayer.PlayState != Player.PlayerStates.Playing)
+            {
+                if (PlayLists.Count == 0)
+                    playback = false;
+                else
+                    playbackactions();
+            }
+            buttonaction = false;
         }
 
         void MainPlayer_FileChange(object sender, Player.PlayerFileChange e)
@@ -139,6 +184,7 @@ namespace MiniPlayerClassic
                 tbtnModeChange.Enabled = false;
                 tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
                 tmAddList.Enabled = false;
+                playback = false;
             }
             else
             {
@@ -152,6 +198,7 @@ namespace MiniPlayerClassic
                 tbtnModeChange.Enabled = true;
                 tbtnModeChange.ToolTipText = "切换界面模式";
                 tmAddList.Enabled = true;
+                playback = true;
             }
         }
 //------------------------------------------------------------------------------------------------
@@ -160,6 +207,7 @@ namespace MiniPlayerClassic
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e) 
         {
             tmrPGBar.Enabled = false;
+            buttonaction = false;
             int temp;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
@@ -302,10 +350,8 @@ namespace MiniPlayerClassic
 
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
-            PlayListItem marked; //创建一个列表选项对象
-            if (listView1.SelectedItems.Count <= 0) { return; } //如果没选中项目就退出过程
-            marked = PlayLists[tb_Lists.SelectedIndex].GetItem(listView1.Items.IndexOf(listView1.SelectedItems[0])); //把对象从链表中读取出来
-            if (MainPlayer.LoadFile(marked.FileAddress)) { MainPlayer.Play(); } //载入文件
+            playbackhead = PlayLists[tb_Lists.SelectedIndex].GetNode(listView1.Items.IndexOf(listView1.SelectedItems[0])); //把对象从链表中读取出来
+            if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); } //载入文件
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
@@ -348,7 +394,6 @@ namespace MiniPlayerClassic
             {
                 listView1.Parent = tb_Lists.SelectedTab;
             }
-            //RefreshPlayList();
             refreshInterface();
         }
 
@@ -363,8 +408,8 @@ namespace MiniPlayerClassic
                     System.IO.File.Delete(PlayLists[tb_Lists.SelectedIndex].FilePath);
 
             PlayLists.RemoveAt(tb_Lists.SelectedIndex);
-            RefreshPlayList();
             tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
+            RefreshPlayList();
 
         }
 
@@ -465,7 +510,6 @@ namespace MiniPlayerClassic
 
         private void MainFrom_FormClosing(object sender, FormClosingEventArgs e)
         {
-            bool flag = false;
             if(PlayLists.Count != 0)
             {
                 for (int i = 0; i < PlayLists.Count; i++)
@@ -480,6 +524,68 @@ namespace MiniPlayerClassic
                         }
                     }
                 }
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem1.Checked = true;
+            toolStripMenuItem2.Checked = false;
+            toolStripMenuItem3.Checked = false;
+            toolStripMenuItem4.Checked = false;
+            playbackhead_state = playbackHeadState.ByIndex;
+            tbtnPlayMode.Text = toolStripMenuItem1.Text;
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem1.Checked = false;
+            toolStripMenuItem2.Checked = true;
+            toolStripMenuItem3.Checked = false;
+            toolStripMenuItem4.Checked = false;
+            playbackhead_state = playbackHeadState.List_Cycling;
+            tbtnPlayMode.Text = toolStripMenuItem2.Text;
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem1.Checked = false;
+            toolStripMenuItem2.Checked = false;
+            toolStripMenuItem3.Checked = true;
+            toolStripMenuItem4.Checked = false;
+            playbackhead_state = playbackHeadState.Single;
+            tbtnPlayMode.Text = toolStripMenuItem3.Text;
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem1.Checked = false;
+            toolStripMenuItem2.Checked = false;
+            toolStripMenuItem3.Checked = false;
+            toolStripMenuItem4.Checked = true;
+            playbackhead_state = playbackHeadState.Single_Cycling;
+            tbtnPlayMode.Text = toolStripMenuItem4.Text;
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (playbackhead.Next == null) return;
+            playbackhead = playbackhead.Next;
+            if (playbackhead != null)
+            {
+                buttonaction = true;
+                if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
+            }
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (playbackhead.Previous == null) return;
+            playbackhead = playbackhead.Previous;
+            if (playbackhead != null)
+            {
+                buttonaction = true;
+                if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
             }
         }
 

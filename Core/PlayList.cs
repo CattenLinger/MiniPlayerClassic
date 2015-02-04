@@ -120,9 +120,14 @@ namespace MiniPlayerClassic
             operationscount++;
         }
 
-        public PlayListItem GetItem(int index) //get一个node
+        public PlayListItem GetItem(int index) 
         {
             return ResearchByIndex(index).Value;
+        }
+
+        public LinkedListNode<PlayListItem> GetNode(int index)
+        {
+            return ResearchByIndex(index);
         }
 
         public bool OpenListFile(string Filename)

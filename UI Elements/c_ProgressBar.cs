@@ -31,8 +31,6 @@ namespace MiniPlayerClassic
         Rectangle rect_pb;
         Rectangle rect_fore;
         //变量
-        //public String pb_text;//在进度条上方的文本
-        //public String pb_text2;//在进度条下方的文本
 
         private StringBuilder title;
         private StringBuilder subtitle;
@@ -128,39 +126,6 @@ namespace MiniPlayerClassic
                 subtitle.AppendFormat("{0:D2}:{1:D2}:{2:D2}|{3:D2}:{4:D2}:{5:D2}",left_hour,min,sec,all_hour,min2,sec2);
             else
                 subtitle.AppendFormat("{0:D2}:{1:D2}|{2:D2}:{3:D2}",min, sec, min2, sec2);
-           
-            /*/
-            if (show_hour)
-            {
-                if (left_hour < 10) subtitle.Append('0');
-                subtitle.Append(left_hour);
-                subtitle.Append(';');
-            }
-
-            if (min < 10) subtitle.Append('0'); 
-            subtitle.Append(min);
-            subtitle.Append(':');
-
-            
-            if (sec < 10) subtitle.Append('0');
-            subtitle.Append(sec);
-            subtitle.Append('|');
-
-            if(show_hour)
-            {
-                if (all_hour < 10) subtitle.Append('0');
-                subtitle.Append(all_hour);
-                subtitle.Append(':');
-            }
-
-            
-            if (min < 10) subtitle.Append('0');
-            subtitle.Append(min);
-            subtitle.Append(':');
-
-            
-            if (sec < 10) subtitle.Append('0');
-            subtitle.Append(sec);//*/
 
         }
 

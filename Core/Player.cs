@@ -2,6 +2,7 @@
 using System.Text;
 using Un4seen.Bass;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 
 namespace MiniPlayerClassic
@@ -195,7 +196,7 @@ namespace MiniPlayerClassic
         //播放文件流
         public Boolean Play()
         {
-            if (playstate == Player_Stoped) { LoadFile(filepath); }
+            if (playstate == PlayerStates.Stoped) { LoadFile(filepath); }
             if (Bass.BASS_ChannelPlay(theStream, false)) { return true; } else { return false; }
         }
 
@@ -209,7 +210,7 @@ namespace MiniPlayerClassic
         //停止（并释放文件）
         public Boolean Stop()
         {
-            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) { return true; }
+            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) {  return true; }
             return false;
         }
 
@@ -273,4 +274,5 @@ namespace MiniPlayerClassic
         }
 
     }
+
 }
