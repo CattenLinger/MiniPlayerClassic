@@ -16,13 +16,17 @@ namespace MiniPlayerClassic
         public PlayListItem(string file, string info)
         {
             FileAddress = file;
-            Infomations = info;
+
+            if (info != "")
+                Infomations = info;
+            else
+                Infomations = "{title};{artist};{album};{others}";
         }
 
         public PlayListItem()
         {
             FileAddress = "";
-            Infomations = "";
+            Infomations = "{title};{artist};{album};{others}";
         }
 
         public void UpdateInfo(string file, string info)

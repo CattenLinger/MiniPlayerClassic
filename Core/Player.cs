@@ -77,7 +77,7 @@ namespace MiniPlayerClassic
         */
         private void BassReg()
         {
-            //BassNet.Registration("your_email","your_code");
+            //BassNet.Registration("your_email", "your_code");
         }
 
         //对象初始化 Object initialization

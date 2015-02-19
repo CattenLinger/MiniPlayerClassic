@@ -11,11 +11,17 @@ namespace MiniPlayerClassic
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainFrom());
+            bool firstrun;
+            System.Threading.Mutex run = new System.Threading.Mutex(true, "MiniPlayerClassic", out firstrun);
+            if(firstrun)
+            {
+                run.ReleaseMutex();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainFrom(args));
+            }
         }
     }
 }

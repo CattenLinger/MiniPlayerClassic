@@ -36,7 +36,7 @@ namespace MiniPlayerClassic
         private bool buttonaction = false;
 
         //一些东西的初始化
-        public MainFrom()
+        public MainFrom(string[] args)
         {
             InitializeComponent();
 
@@ -68,7 +68,57 @@ namespace MiniPlayerClassic
             tb_Lists.TabPages.Clear();
             refreshInterface();
             playbackhead_state = playbackHeadState.Single;
+
+            loadargs(args);
         }
+
+        public void loadargs(string[] args)
+        {
+            if (args.Length != 0)
+            {
+                if (args.Length == 1)
+                {
+                    if (System.IO.Path.GetExtension(args[0]) == ".spl")
+                    {
+                        PlayLists.Add(new PlayList(args[0]));
+                        tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(args[0]));
+                        RefreshPlayList();
+                        refreshInterface();
+                    }
+                    else
+                    {
+                        if (MainPlayer.LoadFile(args[0]))
+                            MainPlayer.Play();
+                    }
+                }
+
+                if (args.Length > 1)
+                {
+                    List<string> temp1 = new List<string>();
+                    List<string> temp2 = new List<string>();
+                    foreach (string filenames in args)
+                    {
+                        if (System.IO.Path.GetExtension(filenames) == ".spl")
+                            temp1.Add(filenames);
+                        else
+                            temp2.Add(filenames);
+                    }
+                    if (temp2.Count != 0) tmNewList_Click(this, null);
+                    foreach (string filenames in temp2)
+                    {
+                        PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(filenames, ""));
+                    }
+                    foreach (string filenames in temp1)
+                    {
+                        PlayLists.Add(new PlayList(filenames));
+                        tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(filenames));
+                        RefreshPlayList();
+                    }
+                    refreshInterface();
+                }
+            }
+        }
+
         //init
         private void MainFrom_Load(object sender, EventArgs e)
         {
@@ -192,6 +242,7 @@ namespace MiniPlayerClassic
                     tb_Lists.SelectedTab.Text = System.IO.Path.GetFileNameWithoutExtension(PlayLists[tb_Lists.SelectedIndex].FilePath);
 
                 this.Text = "MiniPlayer - " + tb_Lists.SelectedTab.Text;
+                listView1.Parent = tb_Lists.SelectedTab;
                 tbtnPlayMode.Enabled = true;
                 tbtnRemove.Enabled = true;
                 if (is_Minisize) to_NormalSize(true);
@@ -587,6 +638,11 @@ namespace MiniPlayerClassic
                 buttonaction = true;
                 if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
             }
+        }
+
+        private void listView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            
         }
 
     }
