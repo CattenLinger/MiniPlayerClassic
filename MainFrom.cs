@@ -257,7 +257,7 @@ namespace MiniPlayerClassic
                     tb_Lists.SelectedTab.Text = System.IO.Path.GetFileNameWithoutExtension(PlayLists[tb_Lists.SelectedIndex].FilePath);
 
                 this.Text = "MiniPlayer - " + tb_Lists.SelectedTab.Text;
-                listView1.Parent = tb_Lists.SelectedTab;
+                listBox1.Parent = tb_Lists.SelectedTab;
                 tbtnPlayMode.Enabled = true;
                 tbtnRemove.Enabled = true;
                 if (is_Minisize) to_NormalSize(true);
@@ -400,7 +400,7 @@ namespace MiniPlayerClassic
             if (PlayLists.Count == 0) tmNewList_Click(this, null);
             for (int i = 0; i < dlg1.FileNames.Length; i++)
             {
-                listView1.Items.Add(dlg1.FileNames[i]);
+                listBox1.Items.Add(dlg1.FileNames[i]);
                 PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(dlg1.FileNames[i],""));
             }
             
@@ -411,14 +411,13 @@ namespace MiniPlayerClassic
         private void tbtnRemove_ButtonClick(object sender, EventArgs e) //“删除选项”按钮
         {
             int i;
-            ListViewItem item;
-            if (listView1.SelectedItems.Count < 1) { return; }//如果没有选中项目就返回
 
-            for (i = listView1.SelectedItems.Count - 1;i >= 0; i--)//倒序删除，避免了节点移位导致不能正确删除节点
+            if (listBox1.SelectedItems.Count < 1) { return; }//如果没有选中项目就返回
+
+            for (i = listBox1.SelectedItems.Count - 1;i >= 0; i--)//倒序删除，避免了节点移位导致不能正确删除节点
             {
-                item = listView1.SelectedItems[i];
-                PlayLists[tb_Lists.SelectedIndex].Remove(listView1.Items.IndexOf(item));
-                listView1.Items.Remove(item);
+                listBox1.Items.Remove(listBox1.SelectedItems[i]);
+                PlayLists[tb_Lists.SelectedIndex].Remove(i);
             }
             
             RefreshPlayList();
@@ -426,32 +425,32 @@ namespace MiniPlayerClassic
 
         private void RefreshPlayList()//刷新播放列表过程
         {
-            listView1.Items.Clear();//清空列表控件
+            listBox1.Items.Clear();//清空列表控件
             if (PlayLists.Count != 0)
             {
                 LinkedListNode<PlayListItem> marked = PlayLists[tb_Lists.SelectedIndex].Items.First; //创建一个节点对象
                 for (int i = 0; i < PlayLists[tb_Lists.SelectedIndex].Count; i++) //循环扫描链表并添加选项
                 {
-                    listView1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
+                    listBox1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
                     marked = marked.Next;
                 }
             }
         }
 
-        private void listView1_DoubleClick(object sender, EventArgs e)
+        private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            playbackhead = PlayLists[tb_Lists.SelectedIndex].GetNode(listView1.Items.IndexOf(listView1.SelectedItems[0])); //把对象从链表中读取出来
+            playbackhead = PlayLists[tb_Lists.SelectedIndex].GetNode(listBox1.Items.IndexOf(listBox1.SelectedItems[0])); //把对象从链表中读取出来
             if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); } //载入文件
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count == 0) { return; }//如果列表没有选中项就返回
+            if (listBox1.Items.Count == 0) { return; }//如果列表没有选中项就返回
             if (MessageBox.Show("要清空列表？\n此操作不可恢复哦。",
                 "清空列表？",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No) { return; };
 
             PlayLists[tb_Lists.SelectedIndex].Clear();
-            listView1.Items.Clear();
+            listBox1.Items.Clear();
         }
 
         private void tmCloseList_Click(object sender, EventArgs e)
@@ -482,7 +481,7 @@ namespace MiniPlayerClassic
             tb_Lists.TabPages.Add("*未命名列表" + newlists++.ToString());
             if (tb_Lists.TabCount == 1)
             {
-                listView1.Parent = tb_Lists.SelectedTab;
+                listBox1.Parent = tb_Lists.SelectedTab;
             }
             refreshInterface();
         }
@@ -510,7 +509,7 @@ namespace MiniPlayerClassic
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listView1.Parent = tb_Lists.SelectedTab;
+            listBox1.Parent = tb_Lists.SelectedTab;
             RefreshPlayList();
             refreshInterface();
         }
@@ -535,7 +534,7 @@ namespace MiniPlayerClassic
                 RefreshPlayList();
                 refreshInterface();
                 tb_Lists.SelectedIndex = tb_Lists.TabCount - 1;
-                listView1.Parent = tb_Lists.SelectedTab;
+                listBox1.Parent = tb_Lists.SelectedTab;
             }
         }
 
@@ -682,7 +681,7 @@ namespace MiniPlayerClassic
             }
         }
 
-        private void listView1_MouseDown(object sender, MouseEventArgs e)
+        private void listBox1_MouseDown(object sender, MouseEventArgs e)
         {
             
         }
