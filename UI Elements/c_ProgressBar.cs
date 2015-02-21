@@ -104,7 +104,7 @@ namespace MiniPlayerClassic
             size_title = TextRenderer.MeasureText(title.ToString(), font_labels);
         }
 
-        private bool title_too_width()
+        private bool _title_too_width()
         {
             if (size_title.Width > (width - 2))
                 rollflage = true;
@@ -158,10 +158,10 @@ namespace MiniPlayerClassic
             point_title.X = 0; point_title.Y = 0;
             point_subtitle.X = 0; point_subtitle.Y = 0;
             //文本滚动的设定
-            if (title_too_width())//如果文本长度越界
+            if (_title_too_width())//如果文本长度越界
                 x_label1 = x_label1 - label_text_movestep;//滚动
             else 
-                x_label1 = 0;
+                x_label1 = (width - size_title.Width) / 2;
             if (x_label1 <= (-size_title.Width - label_text_interval)) { x_label1 = 0; }
             //下方标签文字的位置计算
             subtitle_style1();

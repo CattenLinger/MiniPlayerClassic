@@ -193,7 +193,6 @@ namespace MiniPlayerClassic
                 temp.Add(temp2);
             }
             file.Close();
-            System.GC.Collect();
             return temp;
         }
 
@@ -225,7 +224,6 @@ namespace MiniPlayerClassic
                 } while (item != null);
             }
             file.Close();
-            System.GC.Collect();
             return true;
         }
     }

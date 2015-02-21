@@ -32,7 +32,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.pb_Volume = new System.Windows.Forms.PictureBox();
+            this.pb_Progress = new System.Windows.Forms.PictureBox();
+            this.btnPlay = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
+            this.tb_Lists = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,25 +66,15 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.pb_Volume = new System.Windows.Forms.PictureBox();
-            this.pb_Progress = new System.Windows.Forms.PictureBox();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.tmrChecker = new System.Windows.Forms.Timer(this.components);
-            this.tb_Lists = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panel1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             this.tb_Lists.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -102,198 +101,6 @@
             this.panel1.Controls.Add(this.btnStop);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbtnAdd,
-            this.tbtnRemove,
-            this.toolStripSeparator1,
-            this.tbtnList,
-            this.tbtnPlayMode,
-            this.toolStripSeparator3,
-            this.tbtnSetting,
-            this.tbtnModeChange});
-            this.toolStrip1.Name = "toolStrip1";
-            // 
-            // tbtnAdd
-            // 
-            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tmOpenFile,
-            this.toolStripSeparator4,
-            this.tmOpenList,
-            this.tmAddList});
-            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
-            this.tbtnAdd.Name = "tbtnAdd";
-            this.tbtnAdd.ButtonClick += new System.EventHandler(this.tbtnAdd_ButtonClick);
-            // 
-            // tmOpenFile
-            // 
-            this.tmOpenFile.Name = "tmOpenFile";
-            resources.ApplyResources(this.tmOpenFile, "tmOpenFile");
-            this.tmOpenFile.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
-            // 
-            // tmOpenList
-            // 
-            this.tmOpenList.Name = "tmOpenList";
-            resources.ApplyResources(this.tmOpenList, "tmOpenList");
-            this.tmOpenList.Click += new System.EventHandler(this.tmOpenList_Click);
-            // 
-            // tmAddList
-            // 
-            this.tmAddList.Name = "tmAddList";
-            resources.ApplyResources(this.tmAddList, "tmAddList");
-            this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
-            // 
-            // tbtnRemove
-            // 
-            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbtnRemove.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tmDeleteItem,
-            this.tmDeleteListFile,
-            this.toolStripMenuItem6,
-            this.tmCloseList,
-            this.tmEmptyList});
-            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
-            this.tbtnRemove.Name = "tbtnRemove";
-            this.tbtnRemove.ButtonClick += new System.EventHandler(this.tbtnRemove_ButtonClick);
-            // 
-            // tmDeleteItem
-            // 
-            this.tmDeleteItem.Name = "tmDeleteItem";
-            resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
-            // 
-            // tmDeleteListFile
-            // 
-            this.tmDeleteListFile.Name = "tmDeleteListFile";
-            resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
-            this.tmDeleteListFile.Click += new System.EventHandler(this.tmDeleteListFile_Click);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
-            // 
-            // tmCloseList
-            // 
-            this.tmCloseList.Name = "tmCloseList";
-            resources.ApplyResources(this.tmCloseList, "tmCloseList");
-            this.tmCloseList.Click += new System.EventHandler(this.tmCloseList_Click);
-            // 
-            // tmEmptyList
-            // 
-            this.tmEmptyList.Name = "tmEmptyList";
-            resources.ApplyResources(this.tmEmptyList, "tmEmptyList");
-            this.tmEmptyList.Click += new System.EventHandler(this.tmEmptyList_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
-            // 
-            // tbtnList
-            // 
-            this.tbtnList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbtnList.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tmSaveList,
-            this.tmSaveAs,
-            this.toolStripMenuItem5,
-            this.tmNewList});
-            resources.ApplyResources(this.tbtnList, "tbtnList");
-            this.tbtnList.Name = "tbtnList";
-            this.tbtnList.Click += new System.EventHandler(this.tbtnList_Click);
-            // 
-            // tmSaveList
-            // 
-            this.tmSaveList.Name = "tmSaveList";
-            resources.ApplyResources(this.tmSaveList, "tmSaveList");
-            this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
-            // 
-            // tmSaveAs
-            // 
-            this.tmSaveAs.Name = "tmSaveAs";
-            resources.ApplyResources(this.tmSaveAs, "tmSaveAs");
-            this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
-            // 
-            // tmNewList
-            // 
-            this.tmNewList.Name = "tmNewList";
-            resources.ApplyResources(this.tmNewList, "tmNewList");
-            this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
-            // 
-            // tbtnPlayMode
-            // 
-            this.tbtnPlayMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
-            this.toolStripSeparator2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4});
-            resources.ApplyResources(this.tbtnPlayMode, "tbtnPlayMode");
-            this.tbtnPlayMode.Name = "tbtnPlayMode";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Checked = true;
-            this.toolStripMenuItem3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
-            // 
-            // tbtnSetting
-            // 
-            this.tbtnSetting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
-            this.tbtnSetting.Name = "tbtnSetting";
-            // 
-            // tbtnModeChange
-            // 
-            this.tbtnModeChange.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(this.tbtnModeChange, "tbtnModeChange");
-            this.tbtnModeChange.Name = "tbtnModeChange";
-            this.tbtnModeChange.Click += new System.EventHandler(this.tbtnModeChange_Click);
             // 
             // btnNext
             // 
@@ -350,11 +157,6 @@
             this.tmrPGBar.Interval = 17;
             this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
             // 
-            // tmrChecker
-            // 
-            this.tmrChecker.Enabled = true;
-            this.tmrChecker.Tick += new System.EventHandler(this.tmrChecker_Tick);
-            // 
             // tb_Lists
             // 
             this.tb_Lists.Controls.Add(this.tabPage1);
@@ -373,10 +175,219 @@
             // 
             // listBox1
             // 
+            this.listBox1.AllowDrop = true;
+            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             resources.ApplyResources(this.listBox1, "listBox1");
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            // 
+            // tbtnAdd
+            // 
+            this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbtnAdd.DropDownButtonWidth = 15;
+            this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmOpenFile,
+            this.toolStripSeparator4,
+            this.tmOpenList,
+            this.tmAddList});
+            resources.ApplyResources(this.tbtnAdd, "tbtnAdd");
+            this.tbtnAdd.Name = "tbtnAdd";
+            this.tbtnAdd.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.tbtnAdd.Click += new System.EventHandler(this.tbtnAdd_Click);
+            // 
+            // tmOpenFile
+            // 
+            this.tmOpenFile.Name = "tmOpenFile";
+            resources.ApplyResources(this.tmOpenFile, "tmOpenFile");
+            this.tmOpenFile.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            // 
+            // tmOpenList
+            // 
+            this.tmOpenList.Name = "tmOpenList";
+            resources.ApplyResources(this.tmOpenList, "tmOpenList");
+            this.tmOpenList.Click += new System.EventHandler(this.tmOpenList_Click);
+            // 
+            // tmAddList
+            // 
+            this.tmAddList.Name = "tmAddList";
+            resources.ApplyResources(this.tmAddList, "tmAddList");
+            this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
+            // 
+            // tbtnRemove
+            // 
+            this.tbtnRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbtnRemove.DropDownButtonWidth = 9;
+            this.tbtnRemove.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmDeleteItem,
+            this.tmDeleteListFile,
+            this.toolStripMenuItem6,
+            this.tmCloseList,
+            this.tmEmptyList});
+            resources.ApplyResources(this.tbtnRemove, "tbtnRemove");
+            this.tbtnRemove.Name = "tbtnRemove";
+            this.tbtnRemove.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.tbtnRemove.ButtonClick += new System.EventHandler(this.tbtnRemove_ButtonClick);
+            // 
+            // tmDeleteItem
+            // 
+            this.tmDeleteItem.Name = "tmDeleteItem";
+            resources.ApplyResources(this.tmDeleteItem, "tmDeleteItem");
+            // 
+            // tmDeleteListFile
+            // 
+            this.tmDeleteListFile.Name = "tmDeleteListFile";
+            resources.ApplyResources(this.tmDeleteListFile, "tmDeleteListFile");
+            this.tmDeleteListFile.Click += new System.EventHandler(this.tmDeleteListFile_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
+            // 
+            // tmCloseList
+            // 
+            this.tmCloseList.Name = "tmCloseList";
+            resources.ApplyResources(this.tmCloseList, "tmCloseList");
+            this.tmCloseList.Click += new System.EventHandler(this.tmCloseList_Click);
+            // 
+            // tmEmptyList
+            // 
+            this.tmEmptyList.Name = "tmEmptyList";
+            resources.ApplyResources(this.tmEmptyList, "tmEmptyList");
+            this.tmEmptyList.Click += new System.EventHandler(this.tmEmptyList_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // tbtnList
+            // 
+            this.tbtnList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbtnList.DropDownButtonWidth = 15;
+            this.tbtnList.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmSaveList,
+            this.tmSaveAs,
+            this.toolStripMenuItem5,
+            this.tmNewList});
+            resources.ApplyResources(this.tbtnList, "tbtnList");
+            this.tbtnList.Name = "tbtnList";
+            this.tbtnList.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.tbtnList.Click += new System.EventHandler(this.tbtnList_Click);
+            // 
+            // tmSaveList
+            // 
+            this.tmSaveList.Name = "tmSaveList";
+            resources.ApplyResources(this.tmSaveList, "tmSaveList");
+            this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
+            // 
+            // tmSaveAs
+            // 
+            this.tmSaveAs.Name = "tmSaveAs";
+            resources.ApplyResources(this.tmSaveAs, "tmSaveAs");
+            this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
+            // 
+            // tmNewList
+            // 
+            this.tmNewList.Name = "tmNewList";
+            resources.ApplyResources(this.tmNewList, "tmNewList");
+            this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
+            // 
+            // tbtnPlayMode
+            // 
+            this.tbtnPlayMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2,
+            this.toolStripSeparator2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
+            resources.ApplyResources(this.tbtnPlayMode, "tbtnPlayMode");
+            this.tbtnPlayMode.Name = "tbtnPlayMode";
+            this.tbtnPlayMode.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            // 
+            // tbtnModeChange
+            // 
+            this.tbtnModeChange.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tbtnModeChange.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.tbtnModeChange, "tbtnModeChange");
+            this.tbtnModeChange.Name = "tbtnModeChange";
+            this.tbtnModeChange.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.tbtnModeChange.Click += new System.EventHandler(this.tbtnModeChange_Click);
+            // 
+            // tbtnSetting
+            // 
+            this.tbtnSetting.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tbtnSetting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.tbtnSetting, "tbtnSetting");
+            this.tbtnSetting.Name = "tbtnSetting";
+            this.tbtnSetting.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.tbtnSetting.Click += new System.EventHandler(this.tbtnSetting_Click);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStrip1.CanOverflow = false;
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbtnAdd,
+            this.tbtnRemove,
+            this.toolStripSeparator1,
+            this.tbtnList,
+            this.tbtnPlayMode,
+            this.toolStripSeparator3,
+            this.tbtnModeChange,
+            this.tbtnSetting});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             // 
             // MainFrom
             // 
@@ -391,12 +402,12 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             this.tb_Lists.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -410,10 +421,12 @@
         private System.Windows.Forms.PictureBox pb_Progress;
         private System.Windows.Forms.Timer tmrPGBar;
         private System.Windows.Forms.PictureBox pb_Volume;
-        private System.Windows.Forms.Timer tmrChecker;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnPrev;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.TabControl tb_Lists;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ListBox listBox1;
+        internal System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripSplitButton tbtnAdd;
         private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
@@ -438,11 +451,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton tbtnSetting;
         private System.Windows.Forms.ToolStripButton tbtnModeChange;
-        private System.Windows.Forms.TabControl tb_Lists;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ToolStripButton tbtnSetting;
 
     }
 }

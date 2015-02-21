@@ -65,6 +65,7 @@ namespace MiniPlayerClassic
         public float Volume { get { return volume; } }
         public Bitmap waveform = null;
         public Un4seen.Bass.Misc.WaveForm wf1 = null;
+        public string SupportStream { get { return Bass.SupportedStreamExtensions; } }
         
         //public values end
 
@@ -147,7 +148,6 @@ namespace MiniPlayerClassic
                     }
                     break;
             }
-            //throw new NotImplementedException();
         }
 
         //Input no pamaraters will use default configuration

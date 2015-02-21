@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Resources;
+using System.Reflection;
 
 
 namespace MiniPlayerClassic
@@ -211,6 +213,7 @@ namespace MiniPlayerClassic
                     playbackactions();
             }
             buttonaction = false;
+            System.GC.Collect();
         }
 
         void MainPlayer_FileChange(object sender, Player.PlayerFileChange e)
@@ -222,6 +225,7 @@ namespace MiniPlayerClassic
                 cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
                 MainPlayer.GetWaveForm(cProgressBar.width, cProgressBar.height);
             }
+            System.GC.Collect();
         }
 //------Window interface change-------------------------------------------------------------------
         public void to_Minisize(Boolean animate)//迷你尺寸
@@ -266,6 +270,7 @@ namespace MiniPlayerClassic
                 tmAddList.Enabled = true;
                 playback = true;
             }
+
         }
 //------------------------------------------------------------------------------------------------
 
@@ -386,14 +391,20 @@ namespace MiniPlayerClassic
         private void tbtnAdd_ButtonClick(object sender, EventArgs e) //“添加文件”按钮
         {
             OpenFileDialog dlg1 = new OpenFileDialog(); //创建一个文件打开窗口对象
-            dlg1.Filter = "All Acceptable files|*.mp3;*.ogg;*.wav|MP3 File|*.mp3|OGG File|*.ogg|Wave File|*.wav";
+            dlg1.Filter = "Supported files|" + MainPlayer.SupportStream;
+            dlg1.Filter += "|All Files|*.*";
+            /*string[] extensionnames = MainPlayer.SupportStream.Split(';');
+            foreach(string extname in extensionnames)
+            {
+                dlg1.Filter += String.Format("|{0}|{1}",extname.Substring(2).ToUpper() + " Files",extname);
+            }*/
             dlg1.Multiselect = true; //允许文件打开窗口多选
             dlg1.ShowDialog(); //显示这个窗口
 
             if (dlg1.FileNames.Length <= 0) return; //如果没有选择文件就退出函数
             else if ((dlg1.FileNames.Length == 1) && (PlayLists.Count == 0))
             {
-                MainPlayer.LoadFile(dlg1.FileNames[0]);
+                if(MainPlayer.LoadFile(dlg1.FileNames[0])) MainPlayer.Play();
                 return;
             }//如果只有一个文件就让播放器打开这个文件
 
@@ -621,40 +632,24 @@ namespace MiniPlayerClassic
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            toolStripMenuItem1.Checked = true;
-            toolStripMenuItem2.Checked = false;
-            toolStripMenuItem3.Checked = false;
-            toolStripMenuItem4.Checked = false;
             playbackhead_state = playbackHeadState.ByIndex;
             tbtnPlayMode.Text = toolStripMenuItem1.Text;
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            toolStripMenuItem1.Checked = false;
-            toolStripMenuItem2.Checked = true;
-            toolStripMenuItem3.Checked = false;
-            toolStripMenuItem4.Checked = false;
             playbackhead_state = playbackHeadState.List_Cycling;
             tbtnPlayMode.Text = toolStripMenuItem2.Text;
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            toolStripMenuItem1.Checked = false;
-            toolStripMenuItem2.Checked = false;
-            toolStripMenuItem3.Checked = true;
-            toolStripMenuItem4.Checked = false;
             playbackhead_state = playbackHeadState.Single;
             tbtnPlayMode.Text = toolStripMenuItem3.Text;
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            toolStripMenuItem1.Checked = false;
-            toolStripMenuItem2.Checked = false;
-            toolStripMenuItem3.Checked = false;
-            toolStripMenuItem4.Checked = true;
             playbackhead_state = playbackHeadState.Single_Cycling;
             tbtnPlayMode.Text = toolStripMenuItem4.Text;
         }
@@ -681,12 +676,12 @@ namespace MiniPlayerClassic
             }
         }
 
-        private void listBox1_MouseDown(object sender, MouseEventArgs e)
+        private void tbtnAdd_Click(object sender, EventArgs e)
         {
-            
+            tbtnAdd.ShowDropDown();
         }
 
-        private void tmrChecker_Tick(object sender, EventArgs e)
+        private void tbtnSetting_Click(object sender, EventArgs e)
         {
 
         }
