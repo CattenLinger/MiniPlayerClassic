@@ -10,8 +10,8 @@ namespace MiniPlayerClassic
         //常量
         const int s_font = 10;
         const float fft_data_zoom = 16f;
-        const int fft_fall_step = 4;
-        const int peak_fall_step = 2;
+        const int fft_fall_step = 5;
+        const int peak_fall_step = 1;
         const int level_fall_step = 4;
         const int thumb_text_offset = 4;//文本的x偏移
         //画布
@@ -40,13 +40,13 @@ namespace MiniPlayerClassic
         public int pb_maxvalue;//进度条的最大值
         private int x_label = 0;//标签的x坐标
 
-        public Single[] fft_data = new Single[256];//绘制频谱的元数据的存储的地方
+        public Single[] fft_data = new Single[512];//绘制频谱的元数据的存储的地方
         private int level_left = 0;//频谱柱相关变量
         private int level_right = 0;
         private int temp_left = 0;
         private int temp_right = 0;
-        private short[] temp_fft = new short[256];
-        private short[] temp_peak = new short[256];
+        private short[] temp_fft = new short[512];
+        private short[] temp_peak = new short[512];
         //尺寸
         public int height, width;
         private int pb_f_long = 0;//保存进度条实际绘图区域长度
@@ -68,7 +68,7 @@ namespace MiniPlayerClassic
             p_fft = new Pen(Color.Green, 1);//频谱
             //刷子初始化
             b_back = new SolidBrush(Color.WhiteSmoke);
-            b_fore = new SolidBrush(Color.LightBlue);
+            b_fore = new SolidBrush(Color.DeepSkyBlue);
             b_text = new SolidBrush(Color.Black);
             b_level = new SolidBrush(Color.LightGray);
             b_fft = new SolidBrush(Color.Green);
@@ -140,8 +140,8 @@ namespace MiniPlayerClassic
             int tmp1 = temp_left, tmp2 = temp_right;
             if (tmp1 > pb_f_long) tmp1 = pb_f_long;
             if (tmp2 > pb_f_long) tmp2 = pb_f_long;
-            //设置莱姆色，并绘制响度条
-            b_level.Color = Color.Lime;
+            //绘制响度条
+            b_level.Color = Color.SkyBlue;
             bitmap_enter.FillRectangle(b_level, 0, 0, tmp1, height / 2);
             bitmap_enter.FillRectangle(b_level, 0, height / 2, tmp2, height / 2);
             //频谱绘制

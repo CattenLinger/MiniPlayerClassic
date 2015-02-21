@@ -22,6 +22,10 @@ namespace MiniPlayerClassic
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainFrom(args));
             }
+            else
+            {
+                Application.Exit();
+            }
         }
     }
 }

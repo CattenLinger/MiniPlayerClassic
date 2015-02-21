@@ -2,6 +2,7 @@
 using System.Text;
 using Un4seen.Bass;
 using System.Windows.Forms;
+using System.Drawing;
 using System.Collections.Generic;
 
 
@@ -54,11 +55,17 @@ namespace MiniPlayerClassic
         private BASS_INFO BassInfo;
         private int theStream = 0;//文件流
         private Timer tmrChecker;
+
+        int _waveform_width = 0;
+        int _waveform_height = 0;
         //private values end
         public string FilePath { get { return filepath; } }
         public int ErrorCode { get { return errorcode; } }
         public PlayerStates PlayState { get { return playstate; } }
         public float Volume { get { return volume; } }
+        public Bitmap waveform = null;
+        public Un4seen.Bass.Misc.WaveForm wf1 = null;
+        
         //public values end
 
         #endregion
@@ -67,6 +74,7 @@ namespace MiniPlayerClassic
 
         public event EventHandler<PlayerStateChange> StateChange;
         public event EventHandler<PlayerFileChange> FileChange;
+        public event EventHandler WaveFormFinished;
 
         #endregion
 
@@ -166,7 +174,34 @@ namespace MiniPlayerClassic
             }
             init();
         }
+        
+        public void GetWaveForm(int width, int height)
+        {
+            wf1 = new Un4seen.Bass.Misc.WaveForm(filepath,new Un4seen.Bass.Misc.WAVEFORMPROC(waveformvcallback),null);
+            wf1.ColorLeft = Color.Cyan;
+            wf1.ColorRight = Color.LightCyan;
+            wf1.ColorBackground = Color.White;
+            wf1.DrawEnvelope = false;
+            wf1.DrawVolume = Un4seen.Bass.Misc.WaveForm.VOLUMEDRAWTYPE.None;
+            wf1.DrawWaveForm = Un4seen.Bass.Misc.WaveForm.WAVEFORMDRAWTYPE.Mono;
+            wf1.RenderStart(true, BASSFlag.BASS_DEFAULT);
+            _waveform_height = height;
+            _waveform_width = width;
+        }
 
+        private void waveformvcallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
+        {
+            if(finished)
+            {
+                if(wf1 != null)
+                {
+                    waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false);
+                    WaveFormFinished(this, new EventArgs());
+                }
+            }
+            //throw new NotImplementedException();
+        }
+        
         //Get Bass info in text
         public string PlayerTextInfo() 
         {
@@ -269,7 +304,7 @@ namespace MiniPlayerClassic
         {
             if (data.Length < 256) { return; }
             if (playstate == PlayerStates.Playing)
-            { Bass.BASS_ChannelGetData(theStream, data, -2147483648); }
+            { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
             else { for (int i = 0; i < 256; i++) { data[i] = 0; } }
         }
 

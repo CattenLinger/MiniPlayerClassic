@@ -13,6 +13,9 @@ namespace MiniPlayerClassic
 {
     public partial class MainFrom : Form
     {
+        bool _progressbar_draw = true;
+        bool _volumebar_draw = true;
+
         public Player MainPlayer; //播放器对象
         public c_ProgressBar cProgressBar; //进度条对象
         public c_VolumeBar cVolumeBar; //音量条对象
@@ -35,6 +38,8 @@ namespace MiniPlayerClassic
         private bool playback = false;
         private bool buttonaction = false;
 
+        private Un4seen.Bass.BASSTimer ScuptrumTimer;
+
         //一些东西的初始化
         public MainFrom(string[] args)
         {
@@ -51,6 +56,7 @@ namespace MiniPlayerClassic
             MainPlayer = new Player(this.Handle); //初始化播放器对象
             MainPlayer.StateChange += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.FileChange += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
+            MainPlayer.WaveFormFinished += MainPlayer_WaveFormFinished;
 
             PlayLists = new List<PlayList>(32);
 
@@ -70,6 +76,14 @@ namespace MiniPlayerClassic
             playbackhead_state = playbackHeadState.Single;
 
             loadargs(args);
+            ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
+            ScuptrumTimer.Tick += ScuptrumTimer_Tick;
+            ScuptrumTimer.Start();
+        }
+
+        void MainPlayer_WaveFormFinished(object sender, EventArgs e)
+        {
+            cProgressBar.UpdateWaveForm(MainPlayer.waveform);
         }
 
         public void loadargs(string[] args)
@@ -206,6 +220,7 @@ namespace MiniPlayerClassic
                 LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
                 cProgressBar.ChangeTitle(LabelText);
                 cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
+                MainPlayer.GetWaveForm(cProgressBar.width, cProgressBar.height);
             }
         }
 //------Window interface change-------------------------------------------------------------------
@@ -257,7 +272,7 @@ namespace MiniPlayerClassic
         #region About Drawing the ProgressBar //这里因为都是些很易懂的过程就懒得注释了
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e) 
         {
-            tmrPGBar.Enabled = false;
+            _progressbar_draw = false;
             buttonaction = false;
             int temp;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
@@ -281,13 +296,37 @@ namespace MiniPlayerClassic
 
         private void pb_Progress_MouseUp(object sender, MouseEventArgs e)
         {
-            tmrPGBar.Enabled = true;
+            _progressbar_draw = true;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             { MainPlayer.SetPosition((double)cProgressBar.pb_value / 1000); }
         }
         #endregion
 
         #region Bar's Timer
+
+        void ScuptrumTimer_Tick(object sender, EventArgs e)
+        {
+            double temp;
+            temp = MainPlayer.GetPosition();
+            if (temp == -1) { temp = 0; }
+
+            if(_progressbar_draw)
+            {
+                cProgressBar.pb_value = (int)(temp * 1000);
+                cProgressBar.DrawBar(pb_g_enter);
+            }
+
+            if(_volumebar_draw)
+            {
+                cVolumeBar.DrawBar(pb_g_enter2);
+                int left = 0, right = 0;
+                MainPlayer.GetLevel(ref left, ref right);
+                cVolumeBar.tellitlevel(left, right);
+                MainPlayer.getData(ref cVolumeBar.fft_data);
+            }
+
+        }
+
         private void tmrPGBars_Tick(object sender, EventArgs e)
         {
             double temp;
@@ -576,6 +615,9 @@ namespace MiniPlayerClassic
                     }
                 }
             }
+
+            ScuptrumTimer.Stop();
+            ScuptrumTimer.Dispose();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -643,6 +685,11 @@ namespace MiniPlayerClassic
         private void listView1_MouseDown(object sender, MouseEventArgs e)
         {
             
+        }
+
+        private void tmrChecker_Tick(object sender, EventArgs e)
+        {
+
         }
 
     }

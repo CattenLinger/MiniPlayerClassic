@@ -15,6 +15,7 @@ namespace MiniPlayerClassic
         //画布
         private Bitmap buffer;
         private Bitmap canvas;
+        private Bitmap waveform = null;
 
         public Graphics draw;
         public Graphics bitmap_enter;
@@ -70,7 +71,7 @@ namespace MiniPlayerClassic
             p_middleline.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             //画刷
             b_back = new SolidBrush(Color.WhiteSmoke);
-            b_fore = new SolidBrush(Color.Yellow);
+            b_fore = new SolidBrush(Color.SkyBlue);
             b_text = new SolidBrush(Color.Black);
             
             //矩形
@@ -87,6 +88,13 @@ namespace MiniPlayerClassic
 
             size_title = new Size(0, 0);
             size_subtitle = new Size(0, 0);
+        }
+
+        public void UpdateWaveForm(Bitmap bit)
+        {
+            if (bit == null) { waveform = null; return; }
+            waveform = bit;
+            waveform.MakeTransparent(Color.White);
         }
 
         public void ChangeTitle(string s)//改变标题文字
@@ -170,6 +178,8 @@ namespace MiniPlayerClassic
             //给矩形上色
             bitmap_enter.FillRectangle(b_back, rect_pb);
             bitmap_enter.FillRectangle(b_fore, rect_fore);
+
+            if (waveform != null) bitmap_enter.DrawImage(waveform, 1, 2);
 
             //labels
             if (rollflage)

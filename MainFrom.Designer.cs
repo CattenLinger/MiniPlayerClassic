@@ -347,13 +347,13 @@
             // 
             // tmrPGBar
             // 
-            this.tmrPGBar.Enabled = true;
             this.tmrPGBar.Interval = 17;
             this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
             // 
             // tmrChecker
             // 
             this.tmrChecker.Enabled = true;
+            this.tmrChecker.Tick += new System.EventHandler(this.tmrChecker_Tick);
             // 
             // tb_Lists
             // 
