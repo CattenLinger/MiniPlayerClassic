@@ -70,7 +70,7 @@ namespace MiniPlayerClassic
             p_middleline = new Pen(Color.Black,1);
             p_middleline.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             //画刷
-            b_back = new SolidBrush(Color.WhiteSmoke);
+            b_back = new SolidBrush(Color.LightGray);
             b_fore = new SolidBrush(Color.SkyBlue);
             b_text = new SolidBrush(Color.Black);
             

@@ -32,16 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrom));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.pb_Volume = new System.Windows.Forms.PictureBox();
-            this.pb_Progress = new System.Windows.Forms.PictureBox();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
-            this.tb_Lists = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -68,13 +59,22 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
             this.tbtnSetting = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.pb_Volume = new System.Windows.Forms.PictureBox();
+            this.pb_Progress = new System.Windows.Forms.PictureBox();
+            this.btnPlay = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.tmrPGBar = new System.Windows.Forms.Timer(this.components);
+            this.tb_Lists = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
             this.tb_Lists.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -102,86 +102,25 @@
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
             // 
-            // btnNext
+            // toolStrip1
             // 
-            resources.ApplyResources(this.btnNext, "btnNext");
-            this.btnNext.ImageList = this.imageList1;
-            this.btnNext.Name = "btnNext";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-            // 
-            // btnPrev
-            // 
-            resources.ApplyResources(this.btnPrev, "btnPrev");
-            this.btnPrev.ImageList = this.imageList1;
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.UseVisualStyleBackColor = true;
-            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
-            // 
-            // pb_Volume
-            // 
-            resources.ApplyResources(this.pb_Volume, "pb_Volume");
-            this.pb_Volume.Name = "pb_Volume";
-            this.pb_Volume.TabStop = false;
-            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
-            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
-            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
-            // 
-            // pb_Progress
-            // 
-            resources.ApplyResources(this.pb_Progress, "pb_Progress");
-            this.pb_Progress.Name = "pb_Progress";
-            this.pb_Progress.TabStop = false;
-            this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
-            this.pb_Progress.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseMove);
-            this.pb_Progress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseUp);
-            // 
-            // btnPlay
-            // 
-            resources.ApplyResources(this.btnPlay, "btnPlay");
-            this.btnPlay.ImageList = this.imageList1;
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.UseVisualStyleBackColor = true;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
-            // 
-            // btnStop
-            // 
-            resources.ApplyResources(this.btnStop, "btnStop");
-            this.btnStop.ImageList = this.imageList1;
-            this.btnStop.Name = "btnStop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // tmrPGBar
-            // 
-            this.tmrPGBar.Interval = 17;
-            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
-            // 
-            // tb_Lists
-            // 
-            this.tb_Lists.Controls.Add(this.tabPage1);
-            resources.ApplyResources(this.tb_Lists, "tb_Lists");
-            this.tb_Lists.Multiline = true;
-            this.tb_Lists.Name = "tb_Lists";
-            this.tb_Lists.SelectedIndex = 0;
-            this.tb_Lists.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.listBox1);
-            resources.ApplyResources(this.tabPage1, "tabPage1");
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // listBox1
-            // 
-            this.listBox1.AllowDrop = true;
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.listBox1, "listBox1");
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Name = "listBox1";
-            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStrip1.CanOverflow = false;
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbtnAdd,
+            this.tbtnRemove,
+            this.toolStripSeparator1,
+            this.tbtnList,
+            this.tbtnPlayMode,
+            this.toolStripSeparator3,
+            this.tbtnModeChange,
+            this.tbtnSetting});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             // 
             // tbtnAdd
             // 
@@ -369,25 +308,94 @@
             this.tbtnSetting.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.tbtnSetting.Click += new System.EventHandler(this.tbtnSetting_Click);
             // 
-            // toolStrip1
+            // btnNext
             // 
-            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStrip1.CanOverflow = false;
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbtnAdd,
-            this.tbtnRemove,
-            this.toolStripSeparator1,
-            this.tbtnList,
-            this.tbtnPlayMode,
-            this.toolStripSeparator3,
-            this.tbtnModeChange,
-            this.tbtnSetting});
-            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.btnNext.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnNext, "btnNext");
+            this.btnNext.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.btnNext.ImageList = this.imageList1;
+            this.btnNext.Name = "btnNext";
+            this.btnNext.UseVisualStyleBackColor = false;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnPrev, "btnPrev");
+            this.btnPrev.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.btnPrev.ImageList = this.imageList1;
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.UseVisualStyleBackColor = false;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
+            // pb_Volume
+            // 
+            resources.ApplyResources(this.pb_Volume, "pb_Volume");
+            this.pb_Volume.Name = "pb_Volume";
+            this.pb_Volume.TabStop = false;
+            this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
+            this.pb_Volume.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseMove);
+            this.pb_Volume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseUp);
+            // 
+            // pb_Progress
+            // 
+            resources.ApplyResources(this.pb_Progress, "pb_Progress");
+            this.pb_Progress.Name = "pb_Progress";
+            this.pb_Progress.TabStop = false;
+            this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
+            this.pb_Progress.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseMove);
+            this.pb_Progress.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseUp);
+            // 
+            // btnPlay
+            // 
+            this.btnPlay.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnPlay, "btnPlay");
+            this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.btnPlay.ImageList = this.imageList1;
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.UseVisualStyleBackColor = false;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnStop, "btnStop");
+            this.btnStop.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.btnStop.ImageList = this.imageList1;
+            this.btnStop.Name = "btnStop";
+            this.btnStop.UseVisualStyleBackColor = false;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // tmrPGBar
+            // 
+            this.tmrPGBar.Interval = 17;
+            this.tmrPGBar.Tick += new System.EventHandler(this.tmrPGBars_Tick);
+            // 
+            // tb_Lists
+            // 
+            this.tb_Lists.Controls.Add(this.tabPage1);
+            resources.ApplyResources(this.tb_Lists, "tb_Lists");
+            this.tb_Lists.Multiline = true;
+            this.tb_Lists.Name = "tb_Lists";
+            this.tb_Lists.SelectedIndex = 0;
+            this.tb_Lists.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.listBox1);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            this.listBox1.AllowDrop = true;
+            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.listBox1, "listBox1");
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // MainFrom
             // 
@@ -402,12 +410,12 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).EndInit();
             this.tb_Lists.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
