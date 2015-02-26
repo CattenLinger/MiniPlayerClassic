@@ -36,7 +36,7 @@ namespace MiniPlayerClassic
 
         enum playbackHeadState { ByIndex, Single, Single_Cycling, List_Cycling }
         private playbackHeadState playbackhead_state;
-        private LinkedListNode<PlayListItem> playbackhead;
+        private PlayListItem playbackhead;
         private bool playback = false;
         private bool buttonaction = false;
 
@@ -112,22 +112,22 @@ namespace MiniPlayerClassic
                 {
                     List<string> temp1 = new List<string>();
                     List<string> temp2 = new List<string>();
-                    foreach (string filenames in args)
+                    foreach (string filename in args)
                     {
-                        if (System.IO.Path.GetExtension(filenames) == ".spl")
-                            temp1.Add(filenames);
+                        if (System.IO.Path.GetExtension(filename) == ".spl")
+                            temp1.Add(filename);
                         else
-                            temp2.Add(filenames);
+                            temp2.Add(filename);
                     }
                     if (temp2.Count != 0) tmNewList_Click(this, null);
                     foreach (string filenames in temp2)
                     {
                         PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(filenames, ""));
                     }
-                    foreach (string filenames in temp1)
+                    foreach (string filename in temp1)
                     {
-                        PlayLists.Add(new PlayList(filenames));
-                        tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(filenames));
+                        PlayLists.Add(new PlayList(filename));
+                        tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
                         RefreshPlayList();
                     }
                     refreshInterface();
@@ -162,11 +162,11 @@ namespace MiniPlayerClassic
         }
 
         private void playbackactions()
-        {
+        {/*
             switch (playbackhead_state)
             {
                 case playbackHeadState.ByIndex:
-                    playbackhead = playbackhead.Next;
+                    playbackhead = ;
                     if (playbackhead != null) 
                     {
                         if (MainPlayer.LoadFile(playbackhead.Value.FileAddress))
@@ -195,7 +195,7 @@ namespace MiniPlayerClassic
                 case playbackHeadState.Single_Cycling:
                     MainPlayer.Play();
                     break;
-            }
+            }//*/
         }
 //--------Events Checker--------------------------------------------------------------------------
         void MainPlayer_StateChange(object sender, Player.PlayerStateChange e) //响应播放状态改变的消息的函数
@@ -425,10 +425,10 @@ namespace MiniPlayerClassic
 
             if (listBox1.SelectedItems.Count < 1) { return; }//如果没有选中项目就返回
 
-            for (i = listBox1.SelectedItems.Count - 1;i >= 0; i--)//倒序删除，避免了节点移位导致不能正确删除节点
+            for (i = listBox1.SelectedItems.Count - 1;i >= 0; i--)
             {
                 listBox1.Items.Remove(listBox1.SelectedItems[i]);
-                PlayLists[tb_Lists.SelectedIndex].Remove(i);
+                PlayLists[tb_Lists.SelectedIndex].RemoveAt(i);
             }
             
             RefreshPlayList();
@@ -439,19 +439,17 @@ namespace MiniPlayerClassic
             listBox1.Items.Clear();//清空列表控件
             if (PlayLists.Count != 0)
             {
-                LinkedListNode<PlayListItem> marked = PlayLists[tb_Lists.SelectedIndex].Items.First; //创建一个节点对象
-                for (int i = 0; i < PlayLists[tb_Lists.SelectedIndex].Count; i++) //循环扫描链表并添加选项
+                for (int i = 0; i < PlayLists[tb_Lists.SelectedIndex].Count; i++)
                 {
-                    listBox1.Items.Add(System.IO.Path.GetFileName(marked.Value.FileAddress));
-                    marked = marked.Next;
+                    listBox1.Items.Add(System.IO.Path.GetFileName(PlayLists[tb_Lists.SelectedIndex][i].FileAddress));
                 }
             }
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            playbackhead = PlayLists[tb_Lists.SelectedIndex].GetNode(listBox1.Items.IndexOf(listBox1.SelectedItems[0])); //把对象从链表中读取出来
-            if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); } //载入文件
+            playbackhead = PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])]; //把对象从链表中读取出来
+            if (MainPlayer.LoadFile(playbackhead.FileAddress)) { MainPlayer.Play(); } //载入文件
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
@@ -655,25 +653,25 @@ namespace MiniPlayerClassic
         }
 
         private void btnNext_Click(object sender, EventArgs e)
-        {
+        {/*
             if (playbackhead.Next == null) return;
             playbackhead = playbackhead.Next;
             if (playbackhead != null)
             {
                 buttonaction = true;
                 if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
-            }
+            }//*/
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
-        {
+        {/*
             if (playbackhead.Previous == null) return;
             playbackhead = playbackhead.Previous;
             if (playbackhead != null)
             {
                 buttonaction = true;
                 if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
-            }
+            }//*/
         }
 
         private void tbtnAdd_Click(object sender, EventArgs e)

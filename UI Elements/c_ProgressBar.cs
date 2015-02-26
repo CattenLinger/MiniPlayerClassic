@@ -94,7 +94,6 @@ namespace MiniPlayerClassic
         {
             if (bit == null) { waveform = null; return; }
             waveform = bit;
-            waveform.MakeTransparent(Color.White);
         }
 
         public void ChangeTitle(string s)//改变标题文字

@@ -196,6 +196,7 @@ namespace MiniPlayerClassic
                 if(wf1 != null)
                 {
                     waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false);
+                    waveform.MakeTransparent(Color.White);
                     WaveFormFinished(this, new EventArgs());
                 }
             }
