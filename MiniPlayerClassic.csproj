@@ -172,9 +172,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MiniPlayer.ico" />
-    <None Include="resources\Image1.png" />
-    <None Include="resources\down_alt.png" />
-    <None Include="resources\up_alt.png" />
+    <None Include="Resources\pause.png" />
+    <None Include="Resources\play.png" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\previous.png" />
+    <None Include="Resources\stop.png" />
+    <None Include="Resources\shuffle.png" />
+    <None Include="Resources\tilde.png" />
+    <None Include="Resources\arrow-down.png" />
+    <None Include="Resources\arrow-up.png" />
+    <None Include="Resources\repeat.png" />
+    <None Include="Resources\repeat-2.png" />
+    <None Include="Resources\return.png" />
+    <None Include="Resources\minus.png" />
+    <None Include="Resources\plus.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\document.png" />
     <Content Include="Voice.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

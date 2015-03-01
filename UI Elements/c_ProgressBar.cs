@@ -71,7 +71,7 @@ namespace MiniPlayerClassic
             p_middleline.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             //画刷
             b_back = new SolidBrush(Color.LightGray);
-            b_fore = new SolidBrush(Color.SkyBlue);
+            b_fore = new SolidBrush(Color.FromArgb(200,Color.LightGoldenrodYellow));//E0FFFF
             b_text = new SolidBrush(Color.Black);
             
             //矩形
@@ -174,11 +174,13 @@ namespace MiniPlayerClassic
             point_subtitle.X = x_label2;
             point_subtitle.Y = s_h_middle + (s_h_middle + 4 - size_subtitle.Height) / 2;
 
-            //给矩形上色
             bitmap_enter.FillRectangle(b_back, rect_pb);
+            if (waveform != null) bitmap_enter.DrawImage(waveform, 1, 2);
             bitmap_enter.FillRectangle(b_fore, rect_fore);
 
-            if (waveform != null) bitmap_enter.DrawImage(waveform, 1, 2);
+            p_frame.Color = Color.LightGoldenrodYellow;
+            bitmap_enter.DrawLine(p_frame, rect_fore.Width, 0, rect_fore.Width, height);
+            if (pb_f_long > 0) { bitmap_enter.DrawLine(p_frame, pb_f_long - 1, 0, pb_f_long - 1, height); }
 
             //labels
             if (rollflage)
@@ -194,12 +196,9 @@ namespace MiniPlayerClassic
 
             bitmap_enter.DrawString(subtitle.ToString(), font_labels, b_text, point_subtitle);
             
-            //Draw the Frame, with a middle line
-            bitmap_enter.DrawRectangle(p_frame, rect_fore);
-            bitmap_enter.DrawLine(p_middleline, 0, s_h_middle, width, s_h_middle);
+            p_frame.Color = Color.LightSlateGray;
             bitmap_enter.DrawRectangle(p_frame, rect_pb);
-            if (pb_f_long > 0 ){ bitmap_enter.DrawLine(p_frame,pb_f_long - 1,0,pb_f_long - 1,height);}
-
+            bitmap_enter.DrawLine(p_middleline, 0, s_h_middle, width, s_h_middle);
             //Draw on the graphic "e"
             e.DrawImage(buffer,0,0);
         }

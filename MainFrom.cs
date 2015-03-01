@@ -9,12 +9,97 @@ using System.Text;
 using System.Windows.Forms;
 using System.Resources;
 using System.Reflection;
-
+using System.Runtime.InteropServices;
 
 namespace MiniPlayerClassic
 {
+
     public partial class MainFrom : Form
     {
+        #region DLL Import And Windows Message Managing(一些非托管实现的功能的封装)
+
+        [DllImport("user32.dll")]
+        private static extern int RegisterHotKey(IntPtr hwnd, int id, int fsModifiers, int vk);
+        [DllImport("user32.dll")]
+        private static extern int UnregisterHotKey(IntPtr hwnd, int id);
+
+        private const int WM_HOTKEY = 0x312; //窗口消息-热键
+        private const int WM_CREATE = 0x1; //窗口消息-创建
+        private const int WM_DESTROY = 0x2; //窗口消息-销毁
+
+        private const int VK_MEDIA_PLAYPAUSE = 179;
+        private const int VK_MEDIA_NEXT = 176;
+        private const int VK_MEDIA_PREV = 177;
+        private const int VK_MEDIA_MUSIC = 181;
+
+        private const int VK_VOICE_ONOFF = 173;
+        private const int VK_VOICE_UP = 175;
+        private const int VK_VOICE_DOWN = 174;
+
+        private const int MOD_NONE = 0;
+        /// <summary>
+        /// 注册热键
+        /// </summary>
+        /// <param name="hwnd">窗口句柄</param>
+        /// <param name="hotKey_id">指派用于生成消息的热键ID</param>
+        /// <param name="fsModifiers">组合键</param>
+        /// <param name="vk">生成消息的热键</param>
+        private bool RegKey(IntPtr hwnd, int hotKey_id, int fsModifiers, int vk)
+        {
+            if (RegisterHotKey(hwnd, hotKey_id, fsModifiers, vk) == 0) 
+                return false; 
+            else 
+                return true; 
+        }
+
+        /// <summary>
+        /// 注销热键
+        /// </summary>
+        /// <param name="hwnd">窗口句柄</param>
+        /// <param name="hotKey_id">原用于生成消息所指派的热键ID</param>
+        private void UnRegKey(IntPtr hwnd, int hotKey_id)
+        {
+            UnregisterHotKey(hwnd, hotKey_id);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            switch (m.Msg)
+            {
+                case WM_HOTKEY: //窗口消息-热键
+                    switch (m.WParam.ToInt32())
+                    {
+                        case WM_HOTKEY:
+                            btnPlay_Click(this, null);
+                            break;
+                        case WM_HOTKEY + 1:
+                            btnNext_Click(this,null);
+                            break;
+                        case WM_HOTKEY + 2:
+                            btnPrev_Click(this, null);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case WM_CREATE: //窗口消息-创建
+                    RegKey(Handle, WM_HOTKEY + 0, 0, VK_MEDIA_PLAYPAUSE); //注册热键
+                    RegKey(Handle, WM_HOTKEY + 1, 0, VK_MEDIA_NEXT);
+                    RegKey(Handle, WM_HOTKEY + 2, 0, VK_MEDIA_PREV);
+                    break;
+                case WM_DESTROY: //窗口消息-销毁
+                    UnRegKey(Handle, WM_HOTKEY + 0); //销毁热键
+                    UnRegKey(Handle, WM_HOTKEY + 1);
+                    UnRegKey(Handle, WM_HOTKEY + 2);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
         bool _progressbar_draw = true;
         bool _volumebar_draw = true;
 
@@ -30,11 +115,12 @@ namespace MiniPlayerClassic
 
         private int def_height;//默认尺寸
         private int min_height;
-        private Boolean is_Minisize;//界面是否在迷你模式
+        private bool is_Minisize;//界面是否在迷你模式
+
 
         private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
 
-        enum playbackHeadState { ByIndex, Single, Single_Cycling, List_Cycling }
+        enum playbackHeadState { ByIndex, Single, Single_Cycling, List_Cycling, Shuffle }
         private playbackHeadState playbackhead_state;
         private PlayListItem playbackhead;
         private bool playback = false;
@@ -77,7 +163,7 @@ namespace MiniPlayerClassic
             refreshInterface();
             playbackhead_state = playbackHeadState.Single;
 
-            loadargs(args);
+            load_file_list(args);
             ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
             ScuptrumTimer.Tick += ScuptrumTimer_Tick;
             ScuptrumTimer.Start();
@@ -88,7 +174,11 @@ namespace MiniPlayerClassic
             cProgressBar.UpdateWaveForm(MainPlayer.waveform);
         }
 
-        public void loadargs(string[] args)
+        /// <summary>
+        /// 从一个字符串列表里读取文件
+        /// </summary>
+        /// <param name="args">储存文件路径的字符串列表</param>
+        public void load_file_list(string[] args)
         {
             if (args.Length != 0)
             {
@@ -119,7 +209,7 @@ namespace MiniPlayerClassic
                         else
                             temp2.Add(filename);
                     }
-                    if (temp2.Count != 0) tmNewList_Click(this, null);
+                    if (temp2.Count != 0 && tb_Lists.TabCount == 0) tmNewList_Click(this, null);
                     foreach (string filenames in temp2)
                     {
                         PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(filenames, ""));
@@ -201,9 +291,9 @@ namespace MiniPlayerClassic
         void MainPlayer_StateChange(object sender, Player.PlayerStateChange e) //响应播放状态改变的消息的函数
         {
             if (e.Message != Player.PlayerStates.Playing)
-                btnPlay.ImageIndex = 2; 
-            else 
-                btnPlay.ImageIndex = 1;
+                btnPlay.Image = Properties.Resources.play;
+            else
+                btnPlay.Image = Properties.Resources.pause;
 
             if (playback && !buttonaction && MainPlayer.PlayState != Player.PlayerStates.Playing)
             {
@@ -250,6 +340,7 @@ namespace MiniPlayerClassic
                 tbtnRemove.Enabled = false;
                 tbtnPlayMode.Enabled = false;
                 if (!is_Minisize) to_Minisize(true);
+                tbtnModeChange.Image = Properties.Resources.arrow_down;
                 tbtnModeChange.Enabled = false;
                 tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
                 tmAddList.Enabled = false;
@@ -265,6 +356,7 @@ namespace MiniPlayerClassic
                 tbtnPlayMode.Enabled = true;
                 tbtnRemove.Enabled = true;
                 if (is_Minisize) to_NormalSize(true);
+                tbtnModeChange.Image = Properties.Resources.arrow_up;
                 tbtnModeChange.Enabled = true;
                 tbtnModeChange.ToolTipText = "切换界面模式";
                 tmAddList.Enabled = true;
@@ -391,31 +483,16 @@ namespace MiniPlayerClassic
         private void tbtnAdd_ButtonClick(object sender, EventArgs e) //“添加文件”按钮
         {
             OpenFileDialog dlg1 = new OpenFileDialog(); //创建一个文件打开窗口对象
-            dlg1.Filter = "Supported files|" + MainPlayer.SupportStream;
+            dlg1.Filter = "Supported files|" + MainPlayer.SupportStream + ";*.spl";
+            dlg1.Filter += "|Simple List File|*.spl";
             dlg1.Filter += "|All Files|*.*";
-            /*string[] extensionnames = MainPlayer.SupportStream.Split(';');
-            foreach(string extname in extensionnames)
-            {
-                dlg1.Filter += String.Format("|{0}|{1}",extname.Substring(2).ToUpper() + " Files",extname);
-            }*/
+            
             dlg1.Multiselect = true; //允许文件打开窗口多选
             dlg1.ShowDialog(); //显示这个窗口
 
             if (dlg1.FileNames.Length <= 0) return; //如果没有选择文件就退出函数
-            else if ((dlg1.FileNames.Length == 1) && (PlayLists.Count == 0))
-            {
-                if(MainPlayer.LoadFile(dlg1.FileNames[0])) MainPlayer.Play();
-                return;
-            }//如果只有一个文件就让播放器打开这个文件
+            else load_file_list(dlg1.FileNames);
 
-            if (PlayLists.Count == 0) tmNewList_Click(this, null);
-            for (int i = 0; i < dlg1.FileNames.Length; i++)
-            {
-                listBox1.Items.Add(dlg1.FileNames[i]);
-                PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(dlg1.FileNames[i],""));
-            }
-            
-            RefreshPlayList();//刷新播放列表
             System.GC.Collect();
         }
 
@@ -526,25 +603,20 @@ namespace MiniPlayerClassic
         private void tbtnModeChange_Click(object sender, EventArgs e)
         {
             if (is_Minisize)
+            {
+                tbtnModeChange.Image = Properties.Resources.arrow_up;
                 to_NormalSize(true);
+            }
             else
+            {
+                tbtnModeChange.Image = Properties.Resources.arrow_down;
                 to_Minisize(true);
+            }  
         }
 
         private void tmOpenList_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg1 = new OpenFileDialog();
-            dlg1.Filter = "Simple List File|*.spl";
-            dlg1.ShowDialog();
-            if (dlg1.FileName != "")
-            {
-                PlayLists.Add(new PlayList(dlg1.FileName));
-                tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(dlg1.FileName));
-                RefreshPlayList();
-                refreshInterface();
-                tb_Lists.SelectedIndex = tb_Lists.TabCount - 1;
-                listBox1.Parent = tb_Lists.SelectedTab;
-            }
+
         }
 
         private void tmAddList_Click(object sender, EventArgs e)
@@ -628,28 +700,32 @@ namespace MiniPlayerClassic
             ScuptrumTimer.Dispose();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void tmPlaytheList_Click(object sender, EventArgs e)
         {
             playbackhead_state = playbackHeadState.ByIndex;
-            tbtnPlayMode.Text = toolStripMenuItem1.Text;
+            tbtnPlayMode.Text = tmPlaytheList.Text;
+            tbtnPlayMode.Image = Properties.Resources.single_list;
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void tmListRepeat_Click(object sender, EventArgs e)
         {
             playbackhead_state = playbackHeadState.List_Cycling;
-            tbtnPlayMode.Text = toolStripMenuItem2.Text;
+            tbtnPlayMode.Text = tmListRepeat.Text;
+            tbtnPlayMode.Image = Properties.Resources.repeat_list;
         }
 
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        private void tmSingleRepeat_Click(object sender, EventArgs e)
         {
             playbackhead_state = playbackHeadState.Single;
-            tbtnPlayMode.Text = toolStripMenuItem3.Text;
+            tbtnPlayMode.Text = tmSingle.Text;
+            tbtnPlayMode.Image = Properties.Resources.single;
         }
 
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        private void tmSingle_Click(object sender, EventArgs e)
         {
             playbackhead_state = playbackHeadState.Single_Cycling;
-            tbtnPlayMode.Text = toolStripMenuItem4.Text;
+            tbtnPlayMode.Text = tmSingleRepeat.Text;
+            tbtnPlayMode.Image = Properties.Resources.repeat_single;
         }
 
         private void btnNext_Click(object sender, EventArgs e)
@@ -674,15 +750,26 @@ namespace MiniPlayerClassic
             }//*/
         }
 
-        private void tbtnAdd_Click(object sender, EventArgs e)
+        private void tbtnPlayMode_ButtonClick(object sender, EventArgs e)
         {
-            tbtnAdd.ShowDropDown();
+            if (tbtnPlayMode.Text == tmPlaytheList.Text)
+                tmListRepeat_Click(this, null);
+            else if (tbtnPlayMode.Text == tmListRepeat.Text)
+                tmSingleRepeat_Click(this, null);
+            else if (tbtnPlayMode.Text == tmSingleRepeat.Text)
+                tmSingle_Click(this, null);
+            else if (tbtnPlayMode.Text == tmSingle.Text)
+                tmSuffle_Click(this, null);
+            else if (tbtnPlayMode.Text == tmShuffle.Text)
+                tmPlaytheList_Click(this, null);
+
         }
 
-        private void tbtnSetting_Click(object sender, EventArgs e)
+        private void tmSuffle_Click(object sender, EventArgs e)
         {
-
+            playbackhead_state = playbackHeadState.Shuffle;
+            tbtnPlayMode.Text = tmShuffle.Text;
+            tbtnPlayMode.Image = Properties.Resources.shuffle;
         }
-
     }
 }

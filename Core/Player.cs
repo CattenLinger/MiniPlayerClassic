@@ -178,8 +178,8 @@ namespace MiniPlayerClassic
         public void GetWaveForm(int width, int height)
         {
             wf1 = new Un4seen.Bass.Misc.WaveForm(filepath,new Un4seen.Bass.Misc.WAVEFORMPROC(waveformvcallback),null);
-            wf1.ColorLeft = Color.Cyan;
-            wf1.ColorRight = Color.LightCyan;
+            wf1.ColorLeft = Color.WhiteSmoke;
+            wf1.ColorRight = wf1.ColorLeft;
             wf1.ColorBackground = Color.White;
             wf1.DrawEnvelope = false;
             wf1.DrawVolume = Un4seen.Bass.Misc.WaveForm.VOLUMEDRAWTYPE.None;
@@ -195,7 +195,14 @@ namespace MiniPlayerClassic
             {
                 if(wf1 != null)
                 {
-                    (waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false)).MakeTransparent(Color.White);
+                    try
+                    {
+                        (waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false)).MakeTransparent(Color.White);
+                    }
+                    catch(Exception)
+                    {
+                        waveform = null;
+                    }
                     WaveFormFinished(this, new EventArgs());
                 }
             }

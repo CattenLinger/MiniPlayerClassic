@@ -13,19 +13,19 @@ namespace MiniPlayerClassic
         [STAThread]
         static void Main(string[] args)
         {
-            bool firstrun;
-            System.Threading.Mutex run = new System.Threading.Mutex(true, "MiniPlayerClassic", out firstrun);
-            if(firstrun)
-            {
-                run.ReleaseMutex();
+            //bool firstrun;
+            //System.Threading.Mutex run = new System.Threading.Mutex(true, "MiniPlayerClassic", out firstrun);
+            //if(firstrun)
+            //{
+            //    run.ReleaseMutex();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainFrom(args));
-            }
-            else
-            {
-                Application.Exit();
-            }
+            //}
+            //else
+            //{
+            //    Application.Exit();
+            //}
         }
     }
 }

@@ -8,17 +8,45 @@ namespace MiniPlayerClassic
 {
 
     #region PlayList Item Define.
-    public class PlayListItem //播放列表项对象
+
+    /// <summary>
+    /// 播放列表项
+    /// </summary>
+    public class PlayListItem
     {
         private string _infomations;
         private string _fileaddress;
+        /// <summary>
+        /// 项目地址
+        /// </summary>
         public string FileAddress { get { return _fileaddress; } }
+        /// <summary>
+        /// 项目附加信息
+        /// </summary>
         public string Infomations { get { return _infomations; } }
 
+        /// <summary>
+        /// 获得一个基于项目附加信息生成的字符串组
+        /// </summary>
         public string[] InfoList { get { return _infomations.Split(SplitChar); } }
+        /// <summary>
+        /// 项目附加信息关键字
+        /// </summary>
         public static string[] KeyWords = { "Title", "Artist", "Album", "Others" };
+        /// <summary>
+        /// 项目附加信息枚举
+        /// </summary>
+        public enum KeyWord { Title, Artist, Album, Others }
+        /// <summary>
+        /// 项目附加信息的分隔符
+        /// </summary>
         public char SplitChar = ';';
 
+        /// <summary>
+        /// 基于已有信息创建播放列表项
+        /// </summary>
+        /// <param name="file">描述项目路径</param>
+        /// <param name="info">附加信息(一般用“;”分割，可通过改变SplitChar改变分隔符)</param>
         public PlayListItem(string file, string info)
         {
             _fileaddress = file;
@@ -29,18 +57,30 @@ namespace MiniPlayerClassic
                 _infomations = "{title};{artist};{album};{others}";
         }
 
+        /// <summary>
+        /// 创建一个空播放列表项
+        /// </summary>
         public PlayListItem()
         {
             _fileaddress = "";
             _infomations = "{title};{artist};{album};{others}";
         }
 
+        /// <summary>
+        /// 更新播放项信息
+        /// </summary>
+        /// <param name="file">项目路径（输入空字符串表示不更新）</param>
+        /// <param name="info">项目附加信息（输入空字符串表示不更新）</param>
         public void UpdateInfo(string file, string info)
         {
             if(file != "") _fileaddress = file;
             if(info != "") _infomations = info;
         }
 
+        /// <summary>
+        /// 对象的描述性字符串输出
+        /// </summary>
+        /// <returns>此对象所包含的所有字符串</returns>
         public override string ToString() 
         { 
             return "FileAddress:" + _fileaddress + "\n" + "Infomations:" + _infomations; 
@@ -48,16 +88,29 @@ namespace MiniPlayerClassic
     }
     #endregion
 
-    public class PlayList : List<PlayListItem> //播放列表对象
+    /// <summary>
+    /// 播放列表对象
+    /// </summary>
+    public class PlayList : List<PlayListItem>
     {
-        private string _filepath = "";//文件名
+        private string _filepath = "";
+        /// <summary>
+        /// 列表文件地址
+        /// </summary>
         public string FilePath { get { return _filepath; } }
         private int _operationscount = 0;//操作计次
+        /// <summary>
+        /// 列表操作数计次，
+        /// </summary>
         public int OperationCount { get { return _operationscount; } set { _operationscount = value; } }
 
         private IListProcessor ListProcessor = null;//列表处理接口对象
 
-        public PlayList(string file) //预定文件名的播放列表对象构造函数
+        /// <summary>
+        /// 预定文件名的播放列表对象构造函数
+        /// </summary>
+        /// <param name="file">列表文件地址</param>
+        public PlayList(string file) 
         {
             if(File.Exists(file))
             {
@@ -77,8 +130,16 @@ namespace MiniPlayerClassic
                 throw new FileLoadException("File Opening Error, Please check the file is Exits or Accessable.", file);
         }
 
-        public PlayList() {}//谁知道有啥用捏┑(￣Д ￣)┍
+        /// <summary>
+        /// 谁知道有啥用捏┑(￣Д ￣)┍(创建一个空列表)
+        /// </summary>
+        public PlayList() { }
 
+        /// <summary>
+        /// 从指定文件加载列表
+        /// </summary>
+        /// <param name="Filename">文件名</param>
+        /// <returns>若操作成功则返回true</returns>
         public bool OpenListFile(string Filename) //打开列表文件
         {
             string ext;
@@ -103,7 +164,12 @@ namespace MiniPlayerClassic
             return false;
         }
 
-        public bool AddFromFile(string Filename)//追加列表文件
+        /// <summary>
+        /// 从指定文件追加列表项
+        /// </summary>
+        /// <param name="Filename">文件名</param>
+        /// <returns>若操作成功则返回true</returns>
+        public bool AddFromFile(string Filename)
         {
             string ext;
             if(File.Exists(Filename))
@@ -125,6 +191,11 @@ namespace MiniPlayerClassic
             return false;
         }
 
+        /// <summary>
+        /// 保存列表到指定文件
+        /// </summary>
+        /// <param name="Filename">文件名</param>
+        /// <returns>若操作成功则返回true</returns>
         public bool SaveToFile(string Filename)
         {
             string ext = Path.GetExtension(Filename);
@@ -137,6 +208,11 @@ namespace MiniPlayerClassic
             return false;
         }
 
+        /// <summary>
+        /// 自动判断文件扩展名并返回合适的ListProcess子类
+        /// </summary>
+        /// <param name="Extension">扩展名(例如 .spl)</param>
+        /// <returns>用于加载对应类型的列表文件的ListProcess子类</returns>
         private IListProcessor _create_listprocessor(string Extension)
         {
             //-------------------------------------------------------------------------------
@@ -294,18 +370,47 @@ namespace MiniPlayerClassic
      */
     #endregion
 
-    interface IListProcessor //列表读取对象接口
+    /// <summary>
+    /// 列表读取对象接口
+    /// </summary>
+    interface IListProcessor
     {
-        List<string> AddressList { get; }//地址列表
-        List<string> InfomationsList { get; }//信息列表
-        string Extension { get; }//扩展名（一般只读
-        int ItemCount { get; }//项目数量（地址列表项目数量，如果AL表null返回0
+        /// <summary>
+        /// 地址列表
+        /// </summary>
+        List<string> AddressList { get; }
+        /// <summary>
+        /// 信息列表
+        /// </summary>
+        List<string> InfomationsList { get; }
+        /// <summary>
+        /// 代表子类对应的文件类型的扩展名
+        /// </summary>
+        string Extension { get; }
+        /// <summary>
+        /// 项目数量（地址列表项目数量，如果AL表null返回0
+        /// </summary>
+        int ItemCount { get; }
 
-        bool ReadListFile(string Filename);//当然是加载列表啦
-        bool SaveListFile(PlayList List, string Filename);//当然是保存列表啦
+        /// <summary>
+        /// 加载列表文件
+        /// </summary>
+        /// <param name="Filename">文件地址</param>
+        /// <returns>若操作成功则返回true</returns>
+        bool ReadListFile(string Filename);
+        /// <summary>
+        /// 保存PlayList到指定文件
+        /// </summary>
+        /// <param name="List">要保存的PlayList对象</param>
+        /// <param name="Filename">文件路径</param>
+        /// <returns>若操作成功则返回true</returns>
+        bool SaveListFile(PlayList List, string Filename);
     }
 
-    public class SimpleListReader : IListProcessor // .spl，Simple List File（简单列表文件） 读取对象
+    /// <summary>
+    /// Simple List File（简单列表文件） 读取对象
+    /// </summary>
+    public class SimpleListReader : IListProcessor
     {
         public List<string> AddressList { get { return _addresslist; } }
         public List<string> InfomationsList { get { return _infomationslist; } }
