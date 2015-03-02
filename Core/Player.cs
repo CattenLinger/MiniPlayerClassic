@@ -7,50 +7,116 @@ using System.Collections.Generic;
 
 
 namespace MiniPlayerClassic
-{   
+{
+    /// <summary>
+    /// 播放器状态枚举
+    /// </summary>
+    public enum TrackStates { Playing, Paused, Stoped, Stalled }
+    
+    /// <summary>
+    /// 播放器状态改变消息
+    /// </summary>
+    public class TrackStateChange : EventArgs
+    {
+        private TrackStates msg;
+        public TrackStates Message { get { return msg; } set { msg = value; } }
 
-    public class Player
+        public TrackStateChange(TrackStates message) { msg = message; }
+    }
+
+    /// <summary>
+    /// 播放器文件改变消息
+    /// </summary>
+    public class TrackFileChange : EventArgs
+    {
+        private string msg;
+        public string Message { get { return msg; } set { msg = value; } }
+
+        public TrackFileChange(string filename) { msg = filename; }
+    }
+
+    /// <summary>
+    /// 播放器接口
+    /// </summary>
+    public interface IPlayer
+    {
+        /// <summary>
+        /// 解码器信息
+        /// </summary>
+        string DecoderInfo { get; }
+        /// <summary>
+        /// 文件路径
+        /// </summary>
+        string FilePath { get; }
+        /// <summary>
+        /// 音量信息
+        /// </summary>
+        float Volume { get; set; }
+        /// <summary>
+        /// 当前播放进度
+        /// </summary>
+        double TrackPosition { get; set; }
+        /// <summary>
+        /// 音轨长度
+        /// </summary>
+        double TrackLength { get; }
+        /// <summary>
+        /// 播放状态
+        /// </summary>
+        TrackStates TrackState { get; }
+        /// <summary>
+        /// 支持的文件的扩展名
+        /// </summary>
+        string SupportStream { get; }
+
+        /// <summary>
+        /// 载入文件
+        /// </summary>
+        /// <param name="TrackName">文件路径</param>
+        /// <returns>若成功返回true</returns>
+        bool LoadFile(string TrackName);
+
+        /// <summary>
+        /// 播放
+        /// </summary>
+        /// <returns>成功则返回true</returns>
+        bool Play();
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        /// <returns>成功则返回true</returns>
+        bool Pause();
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        /// <returns>成功则返回true</returns>
+        bool Stop();
+
+        /// <summary>
+        /// 播放状态改变消息
+        /// </summary>
+        event EventHandler<TrackStateChange> TrackStateChanged;
+        /// <summary>
+        /// 文件改变消息
+        /// </summary>
+        event EventHandler<TrackFileChange> TrackFileChanged;
+
+    }
+
+    public class BassNET_Player : IPlayer
     {
         #region const
 
         const int default_device = -1; //定义默认设别和默认码率
         const int default_rate = 44100;
 
-        const int Player_Playing = 1; //定义播放状态对应的数值
-        const int Player_Paused = 2;
-        const int Player_Stoped = 0;
-
-        const int File_StateChange = 10;
-
-        public enum PlayerStates { Playing, Paused, Stoped, Stalled }
-
-        #endregion
-
-        #region Sub Classes
-
-        public class PlayerStateChange : EventArgs
-        {
-            private PlayerStates msg;
-            public PlayerStates Message { get { return msg; } set { msg = value; } }
-
-            public PlayerStateChange(PlayerStates message) { msg = message; }
-        }
-
-        public class PlayerFileChange : EventArgs
-        {
-            private string msg;
-            public string Message { get { return msg; } set { msg = value; } }
-
-            public PlayerFileChange(string filename) { msg = filename; }
-        }
-
         #endregion
 
         #region values
         private String filepath = ""; //保存文件路径
         private int errorcode = 1; //记录播放器在启动过程中的错误
-        private PlayerStates playstate = PlayerStates.Stoped; //存储播放器状态
-        private float volume = 1;//音量
+        private TrackStates playstate = TrackStates.Stoped; //存储播放器状态
+        private float _volume = 1;//音量
 
         private BASS_INFO BassInfo;
         private int theStream = 0;//文件流
@@ -60,9 +126,9 @@ namespace MiniPlayerClassic
         int _waveform_height = 0;
         //private values end
         public string FilePath { get { return filepath; } }
-        public int ErrorCode { get { return errorcode; } }
-        public PlayerStates PlayState { get { return playstate; } }
-        public float Volume { get { return volume; } }
+        public String DecoderInfo { get { return "Bass.NET"; } }
+        public TrackStates TrackState { get { return playstate; } }
+
         public Bitmap waveform = null;
         public Un4seen.Bass.Misc.WaveForm wf1 = null;
         public string SupportStream { get { return Bass.SupportedStreamExtensions; } }
@@ -73,8 +139,8 @@ namespace MiniPlayerClassic
 
         #region Events
 
-        public event EventHandler<PlayerStateChange> StateChange;
-        public event EventHandler<PlayerFileChange> FileChange;
+        public event EventHandler<TrackStateChange> TrackStateChanged;
+        public event EventHandler<TrackFileChange> TrackFileChanged;
         public event EventHandler WaveFormFinished;
 
         #endregion
@@ -100,15 +166,15 @@ namespace MiniPlayerClassic
         }
         
         //状态变化消息
-        protected virtual void on_call_StateChanger(PlayerStateChange e) //播放器状态改变消息构造函数
+        protected virtual void on_call_StateChanger(TrackStateChange e) //播放器状态改变消息构造函数
         {
-            EventHandler<PlayerStateChange> handler = StateChange;
+            EventHandler<TrackStateChange> handler = TrackStateChanged;
             if (handler != null) { handler(this, e); }
         }
 
-        protected virtual void on_call_FileChange(PlayerFileChange e) //播放器文件改变消息构造函数
+        protected virtual void on_call_FileChange(TrackFileChange e) //播放器文件改变消息构造函数
         {
-            EventHandler<PlayerFileChange> handler = FileChange;
+            EventHandler<TrackFileChange> handler = TrackFileChanged;
             if (handler != null) { handler(this, e); }
         }
 
@@ -120,38 +186,38 @@ namespace MiniPlayerClassic
             switch (Bass.BASS_ChannelIsActive(theStream))
             {
                 case BASSActive.BASS_ACTIVE_PLAYING:
-                    if (playstate != PlayerStates.Playing)
+                    if (playstate != TrackStates.Playing)
                     {
-                        playstate = PlayerStates.Playing;
-                        StateChange(this, new PlayerStateChange(PlayerStates.Playing));
+                        playstate = TrackStates.Playing;
+                        TrackStateChanged(this, new TrackStateChange(TrackStates.Playing));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_PAUSED:
-                    if (playstate != PlayerStates.Paused)
+                    if (playstate != TrackStates.Paused)
                     {
-                        playstate = PlayerStates.Paused;
-                        StateChange(this, new PlayerStateChange(PlayerStates.Paused));
+                        playstate = TrackStates.Paused;
+                        TrackStateChanged(this, new TrackStateChange(TrackStates.Paused));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_STOPPED:
-                    if (playstate != PlayerStates.Stoped)
+                    if (playstate != TrackStates.Stoped)
                     {
-                        playstate = PlayerStates.Stoped;
-                        StateChange(this, new PlayerStateChange(PlayerStates.Stoped));
+                        playstate = TrackStates.Stoped;
+                        TrackStateChanged(this, new TrackStateChange(TrackStates.Stoped));
                     }
                     break;
                 case BASSActive.BASS_ACTIVE_STALLED: 
-                    if (playstate != PlayerStates.Stalled)
+                    if (playstate != TrackStates.Stalled)
                     {
-                        playstate = PlayerStates.Stalled;
-                        StateChange(this, new PlayerStateChange(PlayerStates.Stalled));
+                        playstate = TrackStates.Stalled;
+                        TrackStateChanged(this, new TrackStateChange(TrackStates.Stalled));
                     }
                     break;
             }
         }
 
         //Input no pamaraters will use default configuration
-        public Player(IntPtr win) //播放器初始化函数（重载）
+        public BassNET_Player(IntPtr win) //播放器初始化函数（重载）
         {
             BassReg();
             if (Bass.BASS_Init(default_device, default_rate, BASSInit.BASS_DEVICE_LATENCY, win))
@@ -163,7 +229,7 @@ namespace MiniPlayerClassic
         }
 
         //Use custom configuration
-        public Player(int device,int rate,IntPtr win)//播放器初始化函数
+        public BassNET_Player(int device, int rate, IntPtr win)//播放器初始化函数
         {
             BassReg();
             
@@ -208,37 +274,22 @@ namespace MiniPlayerClassic
             }
             //throw new NotImplementedException();
         }
-        
-        //Get Bass info in text
-        public string PlayerTextInfo() 
-        {
-            Bass.BASS_GetInfo(BassInfo);
-            string info = BassInfo.ToString();
-            return info;
-        }
-
-        //Get BassInfo object's info
-        public BASS_INFO PlayerInfo() 
-        {
-            Bass.BASS_GetInfo(BassInfo);
-            return BassInfo;
-        }
 
         //读取文件
         public Boolean LoadFile(string Filename) 
         {
             Bass.BASS_StreamFree(theStream); //free the stream
             theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
-            if (theStream == 0) { return false; } else { SetVolume(volume); }
+            if (theStream == 0) { return false; } else { Volume = _volume; }
             filepath = Filename;
-            FileChange(this, new PlayerFileChange(Filename));
+            TrackFileChanged(this, new TrackFileChange(Filename));
             return true;
         }
 
         //播放文件流
         public Boolean Play()
         {
-            if (playstate == PlayerStates.Stoped) { LoadFile(filepath); }
+            if (playstate == TrackStates.Stoped) { LoadFile(filepath); }
             if (Bass.BASS_ChannelPlay(theStream, false)) { return true; } else { return false; }
         }
 
@@ -257,19 +308,19 @@ namespace MiniPlayerClassic
         }
 
         //设置音量
-        public Boolean SetVolume(float vol) 
+        public float Volume
         {
-            volume = vol;
-            if (Bass.BASS_ChannelSetAttribute(theStream,BASSAttribute.BASS_ATTRIB_VOL,vol)) { return true; }
-            return false;
-        }
-
-        //获取音量
-        public float GetValue()
-        { 
-            float vol = 0;
-            if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL,ref vol))
-            { return vol; }  else  { return 0; }
+            get
+            { 
+                float vol = 0;
+                if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, ref vol))
+                { return vol; } else { return 0; } 
+            }
+            set 
+            {
+                _volume = value;
+                Bass.BASS_ChannelSetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, _volume);
+            }
         }
 
         //获取左右声道的当前响度
@@ -281,36 +332,38 @@ namespace MiniPlayerClassic
             Right = Utils.HighWord32(temp);
         }
 
-        //设置播放进度
-        public Boolean SetPosition(double seconds)
+        public double TrackPosition
         {
-            if (Bass.BASS_ChannelSetPosition(theStream, seconds)) { return true;}
-            return false;
+            get
+            {
+                long temp;
+                temp = Bass.BASS_ChannelGetPosition(theStream);
+                if (temp == -1) { return -1; }
+                return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
+            }
+
+            set
+            {
+                Bass.BASS_ChannelSetPosition(theStream, value);
+            }
         }
 
-        //获取播放进度
-        public double GetPosition()
+        public double TrackLength
         {
-            long temp;
-            temp = Bass.BASS_ChannelGetPosition(theStream);
-            if (temp == -1) { return -1; }
-            return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
-        }
-
-        //获取播放时间长度
-        public double GetLength()
-        {
-            long temp;
-            temp = Bass.BASS_ChannelGetLength(theStream);
-            if (temp == -1) { return -1; }
-            return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
+            get
+            {
+                long temp;
+                temp = Bass.BASS_ChannelGetLength(theStream);
+                if (temp == -1) { return -1; }
+                return Bass.BASS_ChannelBytes2Seconds(theStream, temp);
+            }
         }
 
         //获取频谱元数据
         public void getData(ref Single[] data)
         {
             if (data.Length < 256) { return; }
-            if (playstate == PlayerStates.Playing)
+            if (playstate == TrackStates.Playing)
             { Bass.BASS_ChannelGetData(theStream, data, -2147483647); }
             else { for (int i = 0; i < 256; i++) { data[i] = 0; } }
         }

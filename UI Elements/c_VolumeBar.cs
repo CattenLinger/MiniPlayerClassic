@@ -24,7 +24,6 @@ namespace MiniPlayerClassic
               clBackGround = Color.LightGray,
               clText = Color.Black,
               clFFT = Color.MediumSeaGreen,
-              //clLevel = Color.SkyBlue,
               clBackgroundLevel = Color.DeepSkyBlue;
 
         private Bitmap buffer, canvas;
@@ -133,17 +132,6 @@ namespace MiniPlayerClassic
             //计算并用矩形填充响度条的区域
             bitmap_enter.FillRectangle(brush, 0, 0, temp_level_left, height / 2);
             bitmap_enter.FillRectangle(brush, 0, height / 2, temp_level_right, height / 2);
-
-            /*
-            //设置响度条（前景）的长度
-            int tmp1 = temp_level_left, tmp2 = temp_level_right;
-            if (tmp1 > pb_f_long) tmp1 = pb_f_long;
-            if (tmp2 > pb_f_long) tmp2 = pb_f_long;
-            //绘制响度条
-            brush.Color = clLevel;
-            bitmap_enter.FillRectangle(brush, 0, 0, tmp1, height / 2);
-            bitmap_enter.FillRectangle(brush, 0, height / 2, tmp2, height / 2);
-             * */
 
             //频谱绘制
             for (i = 0; i <= 100; i++)//处理元数据

@@ -13,46 +13,43 @@ namespace MiniPlayerClassic
         const int label_text_interval = 50;
         const int label_text_movestep = 2;
         //画布
-        private Bitmap buffer;
-        private Bitmap canvas;
+        private Bitmap buffer, canvas;
         private Bitmap waveform = null;
 
         public Graphics draw;
         public Graphics bitmap_enter;
         //画笔
-        private Pen p_frame;
-        private Pen p_middleline;
+        private Pen pen;
         //笔刷
-        SolidBrush b_back;
-        SolidBrush b_fore;
-        SolidBrush b_text;
+        SolidBrush brush;
         //字体
-        Font font_labels;
+        Font font;
         //矩形尺寸
-        Rectangle rect_pb;
-        Rectangle rect_fore;
+        Rectangle rect_pb, rect_fore;
         //变量
 
-        private StringBuilder title;
-        private StringBuilder subtitle;
+        private StringBuilder title, subtitle;
 
-        public int pb_value;//进度条的进度值
-        public int pb_maxvalue;//进度条的最大值
+        public int pb_value, pb_maxvalue;
 
-        private int x_label1 = 0;//上方文本的x坐标
-        private int x_label2 = 0;//下方文本的x坐标
+        private int x_label1 = 0, x_label2 = 0;//文本的x坐标
         //尺寸
         public int height, width;
         private int s_h_middle = 0;//中间分界条的位置
         private int pb_f_long = 0;//储存进度条的实际绘图长度
 
-        Point point_title;
-        Point point_subtitle;
+        Point point_title, point_subtitle;
 
         Size size_title;
         Size size_subtitle;
 
         bool rollflage = false;//上方文本的滚动标志
+
+        Color clBackGround = Color.LightGray,
+              clFore = Color.FromArgb(200, Color.Yellow),
+              clText = Color.Black,
+              clFrame = Color.LightSlateGray,
+              clThumb = Color.Yellow;
 
         public c_ProgressBar(int w,int h)
         {
@@ -66,19 +63,14 @@ namespace MiniPlayerClassic
             draw = Graphics.FromImage(canvas);
             bitmap_enter = Graphics.FromImage(buffer);
             //笔刷
-            p_frame = new Pen(Color.Black, 1);
-            p_middleline = new Pen(Color.Black,1);
-            p_middleline.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            pen = new Pen(clFrame);
             //画刷
-            b_back = new SolidBrush(Color.LightGray);
-            b_fore = new SolidBrush(Color.FromArgb(200,Color.LightGoldenrodYellow));//E0FFFF
-            b_text = new SolidBrush(Color.Black);
-            
+            brush = new SolidBrush(clBackGround);
             //矩形
             rect_pb = new Rectangle(0, 0, width, height);
             rect_fore = new Rectangle(0, 0, 0, height);
             //字体
-            font_labels = new Font("MS YaHei UI",s_font);
+            font = new Font("MS YaHei UI",s_font);
 
             point_title = new Point(0, 0);
             point_subtitle = new Point(0, 0);
@@ -100,7 +92,7 @@ namespace MiniPlayerClassic
         {
             title.Clear();
             title.Append(s);
-            size_title = TextRenderer.MeasureText(title.ToString(), font_labels);
+            size_title = TextRenderer.MeasureText(title.ToString(), font);
         }
 
         private bool _title_too_width()
@@ -151,7 +143,7 @@ namespace MiniPlayerClassic
             rect_fore.Width = pb_f_long;
 
             //获取文本的长度
-            size_subtitle = TextRenderer.MeasureText(subtitle.ToString(), font_labels);
+            size_subtitle = TextRenderer.MeasureText(subtitle.ToString(), font);
 
             //设置文本的坐标
             point_title.X = 0; point_title.Y = 0;
@@ -174,31 +166,38 @@ namespace MiniPlayerClassic
             point_subtitle.X = x_label2;
             point_subtitle.Y = s_h_middle + (s_h_middle + 4 - size_subtitle.Height) / 2;
 
-            bitmap_enter.FillRectangle(b_back, rect_pb);
+            brush.Color = clBackGround;
+            bitmap_enter.FillRectangle(brush, rect_pb);
             if (waveform != null) bitmap_enter.DrawImage(waveform, 1, 2);
-            bitmap_enter.FillRectangle(b_fore, rect_fore);
+            brush.Color = clFore;
+            bitmap_enter.FillRectangle(brush, rect_fore);
 
-            p_frame.Color = Color.LightGoldenrodYellow;
-            bitmap_enter.DrawLine(p_frame, rect_fore.Width, 0, rect_fore.Width, height);
-            if (pb_f_long > 0) { bitmap_enter.DrawLine(p_frame, pb_f_long - 1, 0, pb_f_long - 1, height); }
+
+            pen.Color = clThumb;
+            bitmap_enter.DrawLine(pen, rect_fore.Width, 0, rect_fore.Width, height);
+            if (pb_f_long > 0) { bitmap_enter.DrawLine(pen, pb_f_long - 1, 0, pb_f_long - 1, height); }
 
             //labels
+            brush.Color = clText;
             if (rollflage)
             {
-                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
+                bitmap_enter.DrawString(title.ToString(), font, brush, point_title);
                 point_title.X = point_title.X + size_title.Width + label_text_interval ;
-                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
+                bitmap_enter.DrawString(title.ToString(), font, brush, point_title);
             } 
             else 
             {
-                bitmap_enter.DrawString(title.ToString(), font_labels, b_text, point_title);
+                bitmap_enter.DrawString(title.ToString(), font, brush, point_title);
             }
 
-            bitmap_enter.DrawString(subtitle.ToString(), font_labels, b_text, point_subtitle);
-            
-            p_frame.Color = Color.LightSlateGray;
-            bitmap_enter.DrawRectangle(p_frame, rect_pb);
-            bitmap_enter.DrawLine(p_middleline, 0, s_h_middle, width, s_h_middle);
+            bitmap_enter.DrawString(subtitle.ToString(), font, brush, point_subtitle);
+
+
+            pen.Color = clFrame;
+            bitmap_enter.DrawRectangle(pen, rect_pb);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            bitmap_enter.DrawLine(pen, 0, s_h_middle, width, s_h_middle);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
             //Draw on the graphic "e"
             e.DrawImage(buffer,0,0);
         }

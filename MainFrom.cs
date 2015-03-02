@@ -103,7 +103,8 @@ namespace MiniPlayerClassic
         bool _progressbar_draw = true;
         bool _volumebar_draw = true;
 
-        public Player MainPlayer; //播放器对象
+        public IPlayer MainPlayer;
+        public BassNET_Player BassNET_Player; //播放器对象
         public c_ProgressBar cProgressBar; //进度条对象
         public c_VolumeBar cVolumeBar; //音量条对象
 
@@ -141,10 +142,12 @@ namespace MiniPlayerClassic
             pb_g_enter = pb_Progress.CreateGraphics(); //初始化进度条们的画布
             pb_g_enter2 = pb_Volume.CreateGraphics();
 
-            MainPlayer = new Player(this.Handle); //初始化播放器对象
-            MainPlayer.StateChange += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
-            MainPlayer.FileChange += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
-            MainPlayer.WaveFormFinished += MainPlayer_WaveFormFinished;
+            BassNET_Player = new BassNET_Player(this.Handle); //初始化播放器对象
+            MainPlayer = BassNET_Player;
+            MainPlayer.TrackStateChanged += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
+            MainPlayer.TrackFileChanged += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
+
+            BassNET_Player.WaveFormFinished += MainPlayer_WaveFormFinished;
 
             PlayLists = new List<PlayList>(32);
 
@@ -171,7 +174,7 @@ namespace MiniPlayerClassic
 
         void MainPlayer_WaveFormFinished(object sender, EventArgs e)
         {
-            cProgressBar.UpdateWaveForm(MainPlayer.waveform);
+            cProgressBar.UpdateWaveForm(BassNET_Player.waveform);
         }
 
         /// <summary>
@@ -244,9 +247,9 @@ namespace MiniPlayerClassic
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (MainPlayer.PlayState != Player.PlayerStates.Playing)
+            if (MainPlayer.TrackState != TrackStates.Playing)
                 MainPlayer.Play();
-            else 
+            else
                 MainPlayer.Pause();
             buttonaction = true;
         }
@@ -288,14 +291,14 @@ namespace MiniPlayerClassic
             }//*/
         }
 //--------Events Checker--------------------------------------------------------------------------
-        void MainPlayer_StateChange(object sender, Player.PlayerStateChange e) //响应播放状态改变的消息的函数
+        void MainPlayer_StateChange(object sender, TrackStateChange e) //响应播放状态改变的消息的函数
         {
-            if (e.Message != Player.PlayerStates.Playing)
+            if (e.Message != TrackStates.Playing)
                 btnPlay.Image = Properties.Resources.play;
             else
                 btnPlay.Image = Properties.Resources.pause;
 
-            if (playback && !buttonaction && MainPlayer.PlayState != Player.PlayerStates.Playing)
+            if (playback && !buttonaction && MainPlayer.TrackState != TrackStates.Playing)
             {
                 if (PlayLists.Count == 0)
                     playback = false;
@@ -306,14 +309,14 @@ namespace MiniPlayerClassic
             System.GC.Collect();
         }
 
-        void MainPlayer_FileChange(object sender, Player.PlayerFileChange e)
+        void MainPlayer_FileChange(object sender, TrackFileChange e)
         { 
             if(e.Message != "")
             {
                 LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
                 cProgressBar.ChangeTitle(LabelText);
-                cProgressBar.pb_maxvalue = (int)(MainPlayer.GetLength() * 1000);
-                MainPlayer.GetWaveForm(cProgressBar.width, cProgressBar.height);
+                cProgressBar.pb_maxvalue = (int)(MainPlayer.TrackLength * 1000);
+                BassNET_Player.GetWaveForm(cProgressBar.width, cProgressBar.height);
             }
             System.GC.Collect();
         }
@@ -395,7 +398,7 @@ namespace MiniPlayerClassic
         {
             _progressbar_draw = true;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            { MainPlayer.SetPosition((double)cProgressBar.pb_value / 1000); }
+            { MainPlayer.TrackPosition = (double)cProgressBar.pb_value / 1000; }
         }
         #endregion
 
@@ -404,7 +407,7 @@ namespace MiniPlayerClassic
         void ScuptrumTimer_Tick(object sender, EventArgs e)
         {
             double temp;
-            temp = MainPlayer.GetPosition();
+            temp = MainPlayer.TrackPosition;
             if (temp == -1) { temp = 0; }
 
             if(_progressbar_draw)
@@ -417,9 +420,9 @@ namespace MiniPlayerClassic
             {
                 cVolumeBar.DrawBar(pb_g_enter2);
                 int left = 0, right = 0;
-                MainPlayer.GetLevel(ref left, ref right);
+                BassNET_Player.GetLevel(ref left, ref right);
                 cVolumeBar.tellitlevel(left, right);
-                MainPlayer.getData(ref cVolumeBar.fft_data);
+                BassNET_Player.getData(ref cVolumeBar.fft_data);
             }
 
         }
@@ -427,16 +430,16 @@ namespace MiniPlayerClassic
         private void tmrPGBars_Tick(object sender, EventArgs e)
         {
             double temp;
-            temp = MainPlayer.GetPosition();
+            temp = MainPlayer.TrackPosition;
             if (temp == -1) { temp = 0; }
             cProgressBar.pb_value = (int)(temp * 1000);
             cProgressBar.DrawBar(pb_g_enter);
 
             cVolumeBar.DrawBar(pb_g_enter2);
             int left = 0, right = 0;
-            MainPlayer.GetLevel(ref left, ref right);
+            BassNET_Player.GetLevel(ref left, ref right);
             cVolumeBar.tellitlevel(left, right);
-            MainPlayer.getData(ref cVolumeBar.fft_data);
+            BassNET_Player.getData(ref cVolumeBar.fft_data);
         }
 
         private void tmrVBar_Tick(object sender, EventArgs e)
@@ -453,7 +456,7 @@ namespace MiniPlayerClassic
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X/(float)pb_Volume.Width));
-                MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
                 //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
@@ -463,7 +466,7 @@ namespace MiniPlayerClassic
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
-                MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
                 //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
@@ -474,7 +477,7 @@ namespace MiniPlayerClassic
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
-                MainPlayer.SetVolume((float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue);
+                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
                 //cVolumeBar.DrawBar(pb_g_enter2);
             }
         }
