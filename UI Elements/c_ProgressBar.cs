@@ -9,7 +9,7 @@ namespace MiniPlayerClassic
     {
         //常量
         const int s_font = 10;
-        const int thumb_text_offset = 5;//文本的偏移值
+        const int thumb_text_offset = 0;//文本的偏移值
         const int label_text_interval = 50;
         const int label_text_movestep = 2;
         //画布
@@ -23,6 +23,7 @@ namespace MiniPlayerClassic
         //笔刷
         SolidBrush brush;
         //字体
+        public Font TextFont { get { return font; } set { font = value;} }
         Font font;
         //矩形尺寸
         Rectangle rect_pb, rect_fore;

@@ -104,6 +104,7 @@ namespace MiniPlayerClassic
         bool _volumebar_draw = true;
 
         public IPlayer MainPlayer;
+        public IVisualEffects VisualEffectHelper;
         public BassNET_Player BassNET_Player; //播放器对象
         public c_ProgressBar cProgressBar; //进度条对象
         public c_VolumeBar cVolumeBar; //音量条对象
@@ -114,8 +115,8 @@ namespace MiniPlayerClassic
 
         List<PlayList> PlayLists;//用于管理多个播放列表
 
-        private int def_height;//默认尺寸
-        private int min_height;
+        private Size Mini_size, Normal_size, mini_Normal_size;
+        private int Latest_height = 500;
         private bool is_Minisize;//界面是否在迷你模式
 
 
@@ -126,8 +127,9 @@ namespace MiniPlayerClassic
         private PlayListItem playbackhead;
         private bool playback = false;
         private bool buttonaction = false;
+        public bool _developMode = false;
 
-        private Un4seen.Bass.BASSTimer ScuptrumTimer;
+        //private Un4seen.Bass.BASSTimer ScuptrumTimer;
 
         //一些东西的初始化
         public MainFrom(string[] args)
@@ -135,8 +137,13 @@ namespace MiniPlayerClassic
             InitializeComponent();
 
             LabelText = "暂无播放任务";
-            def_height = this.Height;
-            min_height = this.Height - tb_Lists.Height;
+            Normal_size = new Size(this.Width, this.Height);
+            Mini_size = new Size(this.Width, this.Height - tb_Lists.Height);
+            mini_Normal_size = new Size(this.Width, this.Height - tb_Lists.Height + 24);
+
+            this.MinimumSize = Mini_size;
+            this.MaximumSize = Mini_size;
+
             is_Minisize = true;
 
             pb_g_enter = pb_Progress.CreateGraphics(); //初始化进度条们的画布
@@ -144,22 +151,25 @@ namespace MiniPlayerClassic
 
             BassNET_Player = new BassNET_Player(this.Handle); //初始化播放器对象
             MainPlayer = BassNET_Player;
+            VisualEffectHelper = BassNET_Player;
             MainPlayer.TrackStateChanged += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.TrackFileChanged += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
 
-            BassNET_Player.WaveFormFinished += MainPlayer_WaveFormFinished;
+            VisualEffectHelper.WaveFormFinished += MainPlayer_WaveFormFinished;
 
-            PlayLists = new List<PlayList>(32);
+            PlayLists = new List<PlayList>(10);
 
             cProgressBar = new c_ProgressBar(pb_Progress.Width, pb_Progress.Height); //初始化进度条
             cProgressBar.ChangeTitle(LabelText);
             cProgressBar.pb_maxvalue = 10;
             cProgressBar.pb_value = 0;
+            cProgressBar.TextFont = this.Font;
 
             cVolumeBar = new c_VolumeBar(pb_Volume.Width,pb_Volume.Height); //初始化音量条
             cVolumeBar.ChangeLabel("音量");
-            cVolumeBar.pb_maxvalue = 100;
-            cVolumeBar.pb_value = 100;
+            cVolumeBar.MaxValue = 100;
+            cVolumeBar.Value = 100;
+            cVolumeBar.TextFont = this.Font;
 
             to_Minisize(false);//迷你模式
             tb_Lists.TabPages.Clear();
@@ -167,16 +177,16 @@ namespace MiniPlayerClassic
             playbackhead_state = playbackHeadState.Single;
 
             load_file_list(args);
-            ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
-            ScuptrumTimer.Tick += ScuptrumTimer_Tick;
-            ScuptrumTimer.Start();
+            //ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
+            //ScuptrumTimer.Tick += ScuptrumTimer_Tick;
+            //ScuptrumTimer.Start();
         }
 
         void MainPlayer_WaveFormFinished(object sender, EventArgs e)
         {
-            cProgressBar.UpdateWaveForm(BassNET_Player.waveform);
+            cProgressBar.UpdateWaveForm(VisualEffectHelper.WaveForm);
         }
-
+        #region 私有处理过程
         /// <summary>
         /// 从一个字符串列表里读取文件
         /// </summary>
@@ -219,15 +229,22 @@ namespace MiniPlayerClassic
                     }
                     foreach (string filename in temp1)
                     {
+                        if(PlayLists.Count >= 10 && PlayLists.Count < 12)
+                            if (MessageBox.Show("列表数目太多。\n"
+                                                + "继续增加会影响程序稳定性，真的要继续添加吗？"
+                                                + "\nMiniPlayer只为简单的日常使用设计，不适合专业用户。",
+                                                "程序稳定性警告",
+                                                MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                                return;
                         PlayLists.Add(new PlayList(filename));
                         tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
-                        RefreshPlayList();
                     }
+                    RefreshPlayList();
                     refreshInterface();
                 }
             }
         }
-
+        #endregion
         //init
         private void MainFrom_Load(object sender, EventArgs e)
         {
@@ -316,23 +333,26 @@ namespace MiniPlayerClassic
                 LabelText = System.IO.Path.GetFileName(MainPlayer.FilePath);
                 cProgressBar.ChangeTitle(LabelText);
                 cProgressBar.pb_maxvalue = (int)(MainPlayer.TrackLength * 1000);
-                BassNET_Player.GetWaveForm(cProgressBar.width, cProgressBar.height);
+                VisualEffectHelper.GetWaveForm(cProgressBar.width, cProgressBar.height);
             }
             System.GC.Collect();
         }
 //------Window interface change-------------------------------------------------------------------
         public void to_Minisize(Boolean animate)//迷你尺寸
         {
-
-            this.Height = min_height;
+            int temp = Latest_height;
+            this.MaximumSize = Mini_size;
+            this.MinimumSize = this.MaximumSize;
             is_Minisize = true;
+            Latest_height = temp;
         }
 
         public void to_NormalSize(Boolean animate)//正常尺寸
         {
-
-            this.Height = def_height;
+            this.MaximumSize = Normal_size;
+            this.MinimumSize = mini_Normal_size;
             is_Minisize = false;
+            this.Height = Latest_height;
         }
 
         public void refreshInterface()//刷新界面元素的设置
@@ -348,6 +368,8 @@ namespace MiniPlayerClassic
                 tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
                 tmAddList.Enabled = false;
                 playback = false;
+                btnNext.Enabled = false;
+                btnPrev.Enabled = false;
             }
             else
             {
@@ -364,6 +386,8 @@ namespace MiniPlayerClassic
                 tbtnModeChange.ToolTipText = "切换界面模式";
                 tmAddList.Enabled = true;
                 playback = true;
+                btnNext.Enabled = true;
+                btnPrev.Enabled = true;
             }
 
         }
@@ -404,47 +428,22 @@ namespace MiniPlayerClassic
 
         #region Bar's Timer
 
-        void ScuptrumTimer_Tick(object sender, EventArgs e)
-        {
-            double temp;
-            temp = MainPlayer.TrackPosition;
-            if (temp == -1) { temp = 0; }
-
-            if(_progressbar_draw)
-            {
-                cProgressBar.pb_value = (int)(temp * 1000);
-                cProgressBar.DrawBar(pb_g_enter);
-            }
-
-            if(_volumebar_draw)
-            {
-                cVolumeBar.DrawBar(pb_g_enter2);
-                int left = 0, right = 0;
-                BassNET_Player.GetLevel(ref left, ref right);
-                cVolumeBar.tellitlevel(left, right);
-                BassNET_Player.getData(ref cVolumeBar.fft_data);
-            }
-
-        }
-
         private void tmrPGBars_Tick(object sender, EventArgs e)
         {
             double temp;
             temp = MainPlayer.TrackPosition;
             if (temp == -1) { temp = 0; }
-            cProgressBar.pb_value = (int)(temp * 1000);
-            cProgressBar.DrawBar(pb_g_enter);
+            if (_progressbar_draw)
+            {
+                cProgressBar.pb_value = (int)(temp * 1000);
+                cProgressBar.DrawBar(pb_g_enter);
+            }
 
             cVolumeBar.DrawBar(pb_g_enter2);
             int left = 0, right = 0;
-            BassNET_Player.GetLevel(ref left, ref right);
+            VisualEffectHelper.GetLevel(ref left, ref right);
             cVolumeBar.tellitlevel(left, right);
-            BassNET_Player.getData(ref cVolumeBar.fft_data);
-        }
-
-        private void tmrVBar_Tick(object sender, EventArgs e)
-        {
-            
+            VisualEffectHelper.getData(ref cVolumeBar.fft_data);
         }
 
         #endregion
@@ -452,12 +451,12 @@ namespace MiniPlayerClassic
         #region VolumeBar
         private void pb_Volume_MouseDown(object sender, MouseEventArgs e)
         {
-            //tmrVBar.Enabled = false;
+            _volumebar_draw = false;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X/(float)pb_Volume.Width));
-                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
-                //cVolumeBar.DrawBar(pb_g_enter2);
+                cVolumeBar.Value = (int)((float)cVolumeBar.MaxValue * ((float)e.X/(float)pb_Volume.Width));
+                MainPlayer.Volume = (float)cVolumeBar.Value / (float)cVolumeBar.MaxValue;
+                cVolumeBar.ChangeLabel(cVolumeBar.Value.ToString() + '%');
             }
         }
 
@@ -465,20 +464,20 @@ namespace MiniPlayerClassic
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
-                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
-                //cVolumeBar.DrawBar(pb_g_enter2);
+                cVolumeBar.Value = (int)((float)cVolumeBar.MaxValue * ((float)e.X / (float)pb_Volume.Width));
+                MainPlayer.Volume = (float)cVolumeBar.Value / (float)cVolumeBar.MaxValue;
+                cVolumeBar.ChangeLabel(cVolumeBar.Value.ToString() + '%');
             }
         }
 
         private void pb_Volume_MouseUp(object sender, MouseEventArgs e)
         {
-            //tmrVBar.Enabled = true;
+            _volumebar_draw = true;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                cVolumeBar.pb_value = (int)((float)cVolumeBar.pb_maxvalue * ((float)e.X / (float)pb_Volume.Width));
-                MainPlayer.Volume = (float)cVolumeBar.pb_value / (float)cVolumeBar.pb_maxvalue;
-                //cVolumeBar.DrawBar(pb_g_enter2);
+                cVolumeBar.Value = (int)((float)cVolumeBar.MaxValue * ((float)e.X / (float)pb_Volume.Width));
+                MainPlayer.Volume = (float)cVolumeBar.Value / (float)cVolumeBar.MaxValue;
+                cVolumeBar.ChangeLabel("音量");
             }
         }
         #endregion
@@ -494,6 +493,10 @@ namespace MiniPlayerClassic
             dlg1.ShowDialog(); //显示这个窗口
 
             if (dlg1.FileNames.Length <= 0) return; //如果没有选择文件就退出函数
+            else if (dlg1.FileNames.Length == 1 && (PlayLists.Count != 0))
+            {
+                PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(dlg1.FileNames[0], ""));
+            }
             else load_file_list(dlg1.FileNames);
 
             System.GC.Collect();
@@ -544,6 +547,7 @@ namespace MiniPlayerClassic
 
         private void tmCloseList_Click(object sender, EventArgs e)
         {
+            if (PlayLists.Count == 0) return;
             if (PlayLists[tb_Lists.SelectedIndex].OperationCount != 0)
             { 
                 switch(MessageBox.Show("列表已修改，保存？", "列表", MessageBoxButtons.YesNoCancel))
@@ -565,6 +569,14 @@ namespace MiniPlayerClassic
 
         private void tmNewList_Click(object sender, EventArgs e)
         {
+            if (PlayLists.Count >= 10 && PlayLists.Count < 12)
+                if (MessageBox.Show("列表数目太多。\n"
+                                  + "继续增加会影响程序稳定性，真的要继续添加吗？"
+                                  + "\nMiniPlayer只为简单的日常使用设计，不适合专业用户。", 
+                                    "程序稳定性警告", 
+                                    MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                    return;
+
             PlayLists.Add(new PlayList());//创建一个播放列表
 
             tb_Lists.TabPages.Add("*未命名列表" + newlists++.ToString());
@@ -577,14 +589,15 @@ namespace MiniPlayerClassic
 
         private void tmDeleteListFile_Click(object sender, EventArgs e)//删除列表操作
         {
-            if (MessageBox.Show("删除列表文件吗？\n此操作不可恢复哦！", "删除列表", 
+            if (PlayLists[tb_Lists.SelectedIndex].FilePath != "")
+            {
+                if (MessageBox.Show("删除列表文件吗？\n此操作不可恢复哦！", "删除列表",
                 MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-            return;
+                    return;
 
-            if(PlayLists[tb_Lists.SelectedIndex].FilePath != "")
-                if(System.IO.File.Exists(PlayLists[tb_Lists.SelectedIndex].FilePath))
+                if (System.IO.File.Exists(PlayLists[tb_Lists.SelectedIndex].FilePath))
                     System.IO.File.Delete(PlayLists[tb_Lists.SelectedIndex].FilePath);
-
+            }
             PlayLists.RemoveAt(tb_Lists.SelectedIndex);
             tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
             RefreshPlayList();
@@ -699,8 +712,8 @@ namespace MiniPlayerClassic
                 }
             }
 
-            ScuptrumTimer.Stop();
-            ScuptrumTimer.Dispose();
+            //ScuptrumTimer.Stop();
+            //ScuptrumTimer.Dispose();
         }
 
         private void tmPlaytheList_Click(object sender, EventArgs e)
@@ -773,6 +786,75 @@ namespace MiniPlayerClassic
             playbackhead_state = playbackHeadState.Shuffle;
             tbtnPlayMode.Text = tmShuffle.Text;
             tbtnPlayMode.Image = Properties.Resources.shuffle;
+        }
+
+        private void MainFrom_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                tbtnAdd_ButtonClick(this, null);
+            if (e.Control && e.KeyCode == Keys.L)
+                tmNewList_Click(this, null);
+            if (e.Control && e.KeyCode == Keys.C)
+                tmCloseList_Click(this, null);
+            else if (_developMode) MessageBox.Show(String.Format("Button {0} Down!", e.KeyValue));
+        }
+
+        private void MainFrom_ResizeEnd(object sender, EventArgs e)
+        {
+            if (Latest_height < 450) return;
+            Latest_height = this.Height;
+        }
+
+        private void tbtnSettings_Click(object sender, EventArgs e)
+        {
+            frmSettings SettingFrom = new frmSettings();
+            SettingFrom.Show();
+        }
+
+        private void MainFrom_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void MainFrom_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+            if (files != null)
+            {
+                if (files.Length > 1)
+                {
+                    if (PlayLists.Count == 0) tmAddList_Click(this, null);
+                    load_file_list(files);
+                    refreshInterface();
+                }
+                else
+                {
+                    if(System.IO.Path.GetExtension(files[0]) != ".spl"){
+                        if (PlayLists.Count != 0)
+                        {
+                            PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(files[0], ""));
+                            RefreshPlayList();
+                        }
+                        else
+                        {
+                            if (MainPlayer.LoadFile(files[0]))
+                                MainPlayer.Play();
+                        }
+                    }
+                    else
+                    {
+                        PlayLists.Add(new PlayList(files[0]));
+                    }
+                }
+            }
         }
     }
 }

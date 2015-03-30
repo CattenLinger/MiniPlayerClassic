@@ -33,14 +33,26 @@ namespace MiniPlayerClassic
         Pen pen;
 
         SolidBrush brush;
-
+        public Font TextFont { get { return font_label; } set { font_label = value; } }
         Font font_label;
 
         Rectangle rect_pb, rect_fore;
 
         private StringBuilder bar_label;
 
-        public int pb_value, pb_maxvalue;
+        private int pb_value, pb_maxvalue;
+        public int Value
+        {
+            get { return pb_value; }
+            set
+            {
+                pb_value = value;
+                if (pb_value > pb_maxvalue) { pb_value = pb_maxvalue; }
+                if (pb_value <= 0) { pb_value = 0; }
+            }
+        }
+
+        public int MaxValue { get { return pb_maxvalue; } set { pb_maxvalue = value; } }
 
         private int label_x = 0;//标签的x坐标
 
@@ -98,11 +110,10 @@ namespace MiniPlayerClassic
         {
             int i = 0;
             //对进度条的值进行限定
-            if (pb_value >= pb_maxvalue) { pb_value = pb_maxvalue; }
-            if (pb_value <= 0) { pb_value = 0; }
+            
             //获得进度条的实际绘图区域长度
             pb_f_long = (int)((float)width * ((float)pb_value / (float)pb_maxvalue));
-
+            if (pb_f_long <= 1) pb_f_long = 1;
             rect_pb.Width = width; rect_pb.Height = height;
             rect_fore.Width = pb_f_long;
 

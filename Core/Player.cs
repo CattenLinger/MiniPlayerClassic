@@ -103,7 +103,18 @@ namespace MiniPlayerClassic
 
     }
 
-    public class BassNET_Player : IPlayer
+    public interface IVisualEffects
+    {
+        void GetWaveForm(int width, int height);
+        void getData(ref Single[] data);
+        void GetLevel(ref int Left, ref int Right);
+
+        Bitmap WaveForm { get; }
+
+        event EventHandler WaveFormFinished;
+    }
+
+    public class BassNET_Player : IPlayer, IVisualEffects
     {
         #region const
 
@@ -129,7 +140,8 @@ namespace MiniPlayerClassic
         public String DecoderInfo { get { return "Bass.NET"; } }
         public TrackStates TrackState { get { return playstate; } }
 
-        public Bitmap waveform = null;
+        public Bitmap WaveForm { get { return _waveform; } }
+        private Bitmap _waveform = null;
         public Un4seen.Bass.Misc.WaveForm wf1 = null;
         public string SupportStream { get { return Bass.SupportedStreamExtensions; } }
         
@@ -152,7 +164,7 @@ namespace MiniPlayerClassic
         */
         private void BassReg()
         {
-            //BassNet.Registration("your_email", "your_code");
+            //BassNet.Registration("email", "code");
         }
 
         //对象初始化 Object initialization
@@ -243,7 +255,7 @@ namespace MiniPlayerClassic
         
         public void GetWaveForm(int width, int height)
         {
-            wf1 = new Un4seen.Bass.Misc.WaveForm(filepath,new Un4seen.Bass.Misc.WAVEFORMPROC(waveformvcallback),null);
+            wf1 = new Un4seen.Bass.Misc.WaveForm(filepath,new Un4seen.Bass.Misc.WAVEFORMPROC(waveformcallback),null);
             wf1.ColorLeft = Color.WhiteSmoke;
             wf1.ColorRight = wf1.ColorLeft;
             wf1.ColorBackground = Color.White;
@@ -255,7 +267,7 @@ namespace MiniPlayerClassic
             _waveform_width = width;
         }
 
-        private void waveformvcallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
+        private void waveformcallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
         {
             if(finished)
             {
@@ -263,11 +275,11 @@ namespace MiniPlayerClassic
                 {
                     try
                     {
-                        (waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false)).MakeTransparent(Color.White);
+                        (_waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false)).MakeTransparent(Color.White);
                     }
                     catch(Exception)
                     {
-                        waveform = null;
+                        _waveform = null;
                     }
                     WaveFormFinished(this, new EventArgs());
                 }
