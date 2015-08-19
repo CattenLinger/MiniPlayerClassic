@@ -123,12 +123,14 @@ namespace MiniPlayerClassic
 
         private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
 
-        enum playbackHeadState { ByIndex, Single, Single_Cycling, List_Cycling, Shuffle }
-        private playbackHeadState playbackhead_state;
+        
+        /*private playbackHeadMode playbackhead_state;
         private PlayListItem playbackhead;
         private bool playback = false;
-        private bool buttonaction = false;
-        public bool _developMode = false;
+        private bool buttonaction = false;*/
+
+        public bool _developMode = true;/*
+        public bool _developMode = false;//*/
 
         //private Un4seen.Bass.BASSTimer ScuptrumTimer;
 
@@ -175,7 +177,6 @@ namespace MiniPlayerClassic
             to_Minisize(false);//迷你模式
             tb_Lists.TabPages.Clear();
             refreshInterface();
-            playbackhead_state = playbackHeadState.Single;
 
             load_file_list(args);
             //ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
@@ -260,7 +261,6 @@ namespace MiniPlayerClassic
         private void btnStop_Click(object sender, EventArgs e)
         {
             MainPlayer.Stop();
-            buttonaction = true;
         }
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
@@ -269,7 +269,6 @@ namespace MiniPlayerClassic
                 MainPlayer.Play();
             else
                 MainPlayer.Pause();
-            buttonaction = true;
         }
 
         private void playbackactions()
@@ -316,6 +315,7 @@ namespace MiniPlayerClassic
             else
                 btnPlay.Image = Properties.Resources.pause;
 
+            /*
             if (playback && !buttonaction && MainPlayer.TrackState != TrackStates.Playing)
             {
                 if (PlayLists.Count == 0)
@@ -325,6 +325,9 @@ namespace MiniPlayerClassic
             }
             buttonaction = false;
             System.GC.Collect();
+            */
+
+            Console.WriteLine(e.Message.ToString());
         }
 
         void MainPlayer_FileChange(object sender, TrackFileChange e)
@@ -368,7 +371,6 @@ namespace MiniPlayerClassic
                 tbtnModeChange.Enabled = false;
                 tbtnModeChange.ToolTipText = "切换界面模式\n（请先新建列表）";
                 tmAddList.Enabled = false;
-                playback = false;
                 btnNext.Enabled = false;
                 btnPrev.Enabled = false;
             }
@@ -386,7 +388,6 @@ namespace MiniPlayerClassic
                 tbtnModeChange.Enabled = true;
                 tbtnModeChange.ToolTipText = "切换界面模式";
                 tmAddList.Enabled = true;
-                playback = true;
                 btnNext.Enabled = true;
                 btnPrev.Enabled = true;
             }
@@ -398,7 +399,6 @@ namespace MiniPlayerClassic
         private void pb_Progress_MouseDown(object sender, MouseEventArgs e) 
         {
             _progressbar_draw = false;
-            buttonaction = false;
             int temp;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
@@ -532,8 +532,7 @@ namespace MiniPlayerClassic
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            playbackhead = PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])]; //把对象从链表中读取出来
-            if (MainPlayer.LoadFile(playbackhead.FileAddress)) { MainPlayer.Play(); } //载入文件
+            if (MainPlayer.LoadFile(PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])].FileAddress)) { MainPlayer.Play(); } //载入文件
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
@@ -722,28 +721,24 @@ namespace MiniPlayerClassic
 
         private void tmPlaytheList_Click(object sender, EventArgs e)
         {
-            playbackhead_state = playbackHeadState.ByIndex;
             tbtnPlayMode.Text = tmPlaytheList.Text;
             tbtnPlayMode.Image = Properties.Resources.single_list;
         }
 
         private void tmListRepeat_Click(object sender, EventArgs e)
         {
-            playbackhead_state = playbackHeadState.List_Cycling;
             tbtnPlayMode.Text = tmListRepeat.Text;
             tbtnPlayMode.Image = Properties.Resources.repeat_list;
         }
 
         private void tmSingleRepeat_Click(object sender, EventArgs e)
         {
-            playbackhead_state = playbackHeadState.Single;
             tbtnPlayMode.Text = tmSingle.Text;
             tbtnPlayMode.Image = Properties.Resources.single;
         }
 
         private void tmSingle_Click(object sender, EventArgs e)
         {
-            playbackhead_state = playbackHeadState.Single_Cycling;
             tbtnPlayMode.Text = tmSingleRepeat.Text;
             tbtnPlayMode.Image = Properties.Resources.repeat_single;
         }
@@ -787,7 +782,6 @@ namespace MiniPlayerClassic
 
         private void tmSuffle_Click(object sender, EventArgs e)
         {
-            playbackhead_state = playbackHeadState.Shuffle;
             tbtnPlayMode.Text = tmShuffle.Text;
             tbtnPlayMode.Image = Properties.Resources.shuffle;
         }
@@ -800,12 +794,12 @@ namespace MiniPlayerClassic
                 tmNewList_Click(this, null);
             if (e.Control && e.KeyCode == Keys.C)
                 tmCloseList_Click(this, null);
-            else if (_developMode) MessageBox.Show(String.Format("Button {0} Down!", e.KeyValue));
+            else if (_developMode) Console.WriteLine(String.Format("Button {0} Down!", e.KeyValue));
         }
 
         private void MainFrom_ResizeEnd(object sender, EventArgs e)
         {
-            this.Text = this.Height.ToString();
+            if (_developMode) Console.WriteLine("Height set to "+this.Height.ToString());
             if (Latest_height < 193) Latest_height = 193;
             //Latest_height = this.Height;
         }

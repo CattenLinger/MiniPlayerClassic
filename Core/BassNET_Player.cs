@@ -68,7 +68,7 @@ namespace MiniPlayerClassic.Core
             tmrChecker.Enabled = true;
         }
 
-        //状态变化消息
+        /*/状态变化消息
         protected virtual void on_call_StateChanger(TrackStateChange e) //播放器状态改变消息构造函数
         {
             EventHandler<TrackStateChange> handler = TrackStateChanged;
@@ -79,7 +79,7 @@ namespace MiniPlayerClassic.Core
         {
             EventHandler<TrackFileChange> handler = TrackFileChanged;
             if (handler != null) { handler(this, e); }
-        }
+        }//*/
 
         //检查信息的时钟
         private void tmrChecker_Tick(object sender, EventArgs e) //检查播放状态的时钟的代码

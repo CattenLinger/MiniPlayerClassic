@@ -47,7 +47,7 @@ namespace MiniPlayerClassic
         bool rollflage = false;//上方文本的滚动标志
 
         Color clBackGround = Color.LightGray,
-              clFore = Color.FromArgb(200, Color.Yellow),
+              clFore = Color.FromArgb(150, Color.Yellow),
               clText = Color.Black,
               clFrame = Color.LightSlateGray,
               clThumb = Color.Yellow;

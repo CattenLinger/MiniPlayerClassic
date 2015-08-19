@@ -46,6 +46,8 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmAddList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.添加文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnRemove = new System.Windows.Forms.ToolStripSplitButton();
             this.tmDeleteItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tmEmptyList = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,8 +69,6 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
             this.tbtnSettings = new System.Windows.Forms.ToolStripButton();
-            this.添加文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -90,7 +90,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(459, 114);
+            this.panel1.Size = new System.Drawing.Size(462, 114);
             this.panel1.TabIndex = 6;
             // 
             // pb_Volume
@@ -112,7 +112,7 @@
             this.pb_Progress.Location = new System.Drawing.Point(1, 1);
             this.pb_Progress.Margin = new System.Windows.Forms.Padding(4);
             this.pb_Progress.Name = "pb_Progress";
-            this.pb_Progress.Size = new System.Drawing.Size(456, 60);
+            this.pb_Progress.Size = new System.Drawing.Size(461, 60);
             this.pb_Progress.TabIndex = 16;
             this.pb_Progress.TabStop = false;
             this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
@@ -122,7 +122,7 @@
             // btnStop
             // 
             this.btnStop.Image = global::MiniPlayerClassic.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(400, 61);
+            this.btnStop.Location = new System.Drawing.Point(402, 61);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(59, 54);
@@ -136,7 +136,7 @@
             this.btnNext.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnNext.Image = global::MiniPlayerClassic.Properties.Resources.next;
             this.btnNext.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnNext.Location = new System.Drawing.Point(343, 61);
+            this.btnNext.Location = new System.Drawing.Point(344, 61);
             this.btnNext.Margin = new System.Windows.Forms.Padding(4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(59, 54);
@@ -164,7 +164,7 @@
             this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPlay.Image = global::MiniPlayerClassic.Properties.Resources.play;
             this.btnPlay.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnPlay.Location = new System.Drawing.Point(285, 61);
+            this.btnPlay.Location = new System.Drawing.Point(286, 61);
             this.btnPlay.Margin = new System.Windows.Forms.Padding(4);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(59, 54);
@@ -188,7 +188,7 @@
             this.tb_Lists.Multiline = true;
             this.tb_Lists.Name = "tb_Lists";
             this.tb_Lists.SelectedIndex = 0;
-            this.tb_Lists.Size = new System.Drawing.Size(459, 673);
+            this.tb_Lists.Size = new System.Drawing.Size(462, 673);
             this.tb_Lists.TabIndex = 8;
             this.tb_Lists.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -199,7 +199,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(451, 644);
+            this.tabPage1.Size = new System.Drawing.Size(454, 644);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -216,7 +216,7 @@
             this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(443, 636);
+            this.listBox1.Size = new System.Drawing.Size(446, 636);
             this.listBox1.TabIndex = 8;
             this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainFrom_DragDrop);
             this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainFrom_DragEnter);
@@ -255,7 +255,7 @@
             this.toolStrip1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(459, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(462, 39);
             this.toolStrip1.TabIndex = 23;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -279,9 +279,21 @@
             // tmAddList
             // 
             this.tmAddList.Name = "tmAddList";
-            this.tmAddList.Size = new System.Drawing.Size(181, 26);
+            this.tmAddList.Size = new System.Drawing.Size(144, 26);
             this.tmAddList.Text = "追加列表";
             this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(141, 6);
+            // 
+            // 添加文件ToolStripMenuItem
+            // 
+            this.添加文件ToolStripMenuItem.Name = "添加文件ToolStripMenuItem";
+            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.添加文件ToolStripMenuItem.Text = "添加文件";
+            this.添加文件ToolStripMenuItem.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // tbtnRemove
             // 
@@ -305,33 +317,33 @@
             // tmDeleteItem
             // 
             this.tmDeleteItem.Name = "tmDeleteItem";
-            this.tmDeleteItem.Size = new System.Drawing.Size(181, 26);
+            this.tmDeleteItem.Size = new System.Drawing.Size(174, 26);
             this.tmDeleteItem.Text = "移除项目";
             this.tmDeleteItem.Click += new System.EventHandler(this.tbtnRemove_ButtonClick);
             // 
             // tmEmptyList
             // 
             this.tmEmptyList.Name = "tmEmptyList";
-            this.tmEmptyList.Size = new System.Drawing.Size(181, 26);
+            this.tmEmptyList.Size = new System.Drawing.Size(174, 26);
             this.tmEmptyList.Text = "清空列表";
             this.tmEmptyList.Click += new System.EventHandler(this.tmEmptyList_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(171, 6);
             // 
             // tmCloseList
             // 
             this.tmCloseList.Name = "tmCloseList";
-            this.tmCloseList.Size = new System.Drawing.Size(181, 26);
+            this.tmCloseList.Size = new System.Drawing.Size(174, 26);
             this.tmCloseList.Text = "关闭列表";
             this.tmCloseList.Click += new System.EventHandler(this.tmCloseList_Click);
             // 
             // tmDeleteListFile
             // 
             this.tmDeleteListFile.Name = "tmDeleteListFile";
-            this.tmDeleteListFile.Size = new System.Drawing.Size(181, 26);
+            this.tmDeleteListFile.Size = new System.Drawing.Size(174, 26);
             this.tmDeleteListFile.Text = "删除列表文件";
             this.tmDeleteListFile.Click += new System.EventHandler(this.tmDeleteListFile_Click);
             // 
@@ -361,26 +373,26 @@
             // tmSaveList
             // 
             this.tmSaveList.Name = "tmSaveList";
-            this.tmSaveList.Size = new System.Drawing.Size(181, 26);
+            this.tmSaveList.Size = new System.Drawing.Size(159, 26);
             this.tmSaveList.Text = "保存列表";
             this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
             // 
             // tmSaveAs
             // 
             this.tmSaveAs.Name = "tmSaveAs";
-            this.tmSaveAs.Size = new System.Drawing.Size(181, 26);
+            this.tmSaveAs.Size = new System.Drawing.Size(159, 26);
             this.tmSaveAs.Text = "列表另存为";
             this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(156, 6);
             // 
             // tmNewList
             // 
             this.tmNewList.Name = "tmNewList";
-            this.tmNewList.Size = new System.Drawing.Size(181, 26);
+            this.tmNewList.Size = new System.Drawing.Size(159, 26);
             this.tmNewList.Text = "新建列表";
             this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
             // 
@@ -463,24 +475,12 @@
             this.tbtnSettings.ToolTipText = "设置";
             this.tbtnSettings.Click += new System.EventHandler(this.tbtnSettings_Click);
             // 
-            // 添加文件ToolStripMenuItem
-            // 
-            this.添加文件ToolStripMenuItem.Name = "添加文件ToolStripMenuItem";
-            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.添加文件ToolStripMenuItem.Text = "添加文件";
-            this.添加文件ToolStripMenuItem.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
-            // 
             // MainFrom
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(459, 826);
+            this.ClientSize = new System.Drawing.Size(462, 826);
             this.Controls.Add(this.tb_Lists);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel1);

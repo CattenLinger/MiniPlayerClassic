@@ -10,7 +10,11 @@ namespace MiniPlayerClassic
     /// 播放器状态枚举
     /// </summary>
     public enum TrackStates { Playing, Paused, Stoped, Stalled }
-    
+
+    /// <summary>
+    /// 播放头轮播方式枚举
+    /// </summary>
+    public enum playbackHeadMode { ByIndex, Single, Single_Cycling, List_Cycling, Shuffle }
     /// <summary>
     /// 播放器状态改变消息
     /// </summary>

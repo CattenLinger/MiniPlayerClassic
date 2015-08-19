@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Core\BassNET_Player.cs" />
     <Compile Include="Core\ConfigManager.cs" />
+    <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\IListProcessor.cs" />
     <Compile Include="Core\IPlayer.cs" />
     <Compile Include="Core\IVisualEffect.cs" />

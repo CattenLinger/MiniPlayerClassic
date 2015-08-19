@@ -23,8 +23,13 @@ namespace MiniPlayerClassic
 
         private IListProcessor ListProcessor = null;//列表处理接口对象
 
-        public static int MaxValue { get { return Int16.MaxValue / 2 + 1; } }
+        //public static int MaxValue { get { return Int16.MaxValue / 2 + 1; } }
 
+        /// <summary>
+        /// 用于按照次序查找项目
+        /// </summary>
+        /// <param name="index">项目号</param>
+        /// <returns>一个链表里的项目</returns>
         private LinkedListNode<PlayListItem> indexor(int index)
         {
             LinkedListNode<PlayListItem> temp;
@@ -59,9 +64,21 @@ namespace MiniPlayerClassic
             return temp;
         }
 
+        /// <summary>
+        /// 直接按照顺序get一个LinkedListNode
+        /// </summary>
+        /// <param name="index">序号</param>
+        /// <returns>链表Node</returns>
+        public LinkedListNode<PlayListItem> get(int index)
+        {
+            return indexor(index);
+        }
+
         public PlayListItem this[int index]
         {
-            get { return indexor(index).Value; }
+            get {
+                return indexor(index).Value;
+            }
             set
             {
                 LinkedListNode<PlayListItem> temp = indexor(index);
@@ -69,6 +86,7 @@ namespace MiniPlayerClassic
                 Remove(temp);
             }
         }
+
         /// <summary>
         /// 预定文件名的播放列表对象构造函数
         /// </summary>
@@ -97,6 +115,18 @@ namespace MiniPlayerClassic
         /// 谁知道有啥用捏┑(￣Д ￣)┍(创建一个空列表)
         /// </summary>
         public PlayList() { }
+
+        public void Add(PlayListItem item)
+        {
+            AddLast(item);
+            _operationscount++;
+        }
+
+        public void RemoveAt(int i)
+        {
+            Remove(indexor(i));
+            _operationscount++;
+        }
 
         /// <summary>
         /// 从指定文件加载列表
