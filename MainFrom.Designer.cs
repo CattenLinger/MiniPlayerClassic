@@ -67,6 +67,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
             this.tbtnSettings = new System.Windows.Forms.ToolStripButton();
+            this.添加文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -86,16 +88,18 @@
             this.panel1.Controls.Add(this.btnPlay);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(344, 91);
+            this.panel1.Size = new System.Drawing.Size(459, 114);
             this.panel1.TabIndex = 6;
             // 
             // pb_Volume
             // 
             this.pb_Volume.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.pb_Volume.Location = new System.Drawing.Point(1, 50);
+            this.pb_Volume.Location = new System.Drawing.Point(1, 62);
+            this.pb_Volume.Margin = new System.Windows.Forms.Padding(4);
             this.pb_Volume.Name = "pb_Volume";
-            this.pb_Volume.Size = new System.Drawing.Size(170, 41);
+            this.pb_Volume.Size = new System.Drawing.Size(227, 51);
             this.pb_Volume.TabIndex = 17;
             this.pb_Volume.TabStop = false;
             this.pb_Volume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Volume_MouseDown);
@@ -106,8 +110,9 @@
             // 
             this.pb_Progress.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.pb_Progress.Location = new System.Drawing.Point(1, 1);
+            this.pb_Progress.Margin = new System.Windows.Forms.Padding(4);
             this.pb_Progress.Name = "pb_Progress";
-            this.pb_Progress.Size = new System.Drawing.Size(342, 48);
+            this.pb_Progress.Size = new System.Drawing.Size(456, 60);
             this.pb_Progress.TabIndex = 16;
             this.pb_Progress.TabStop = false;
             this.pb_Progress.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_Progress_MouseDown);
@@ -117,9 +122,10 @@
             // btnStop
             // 
             this.btnStop.Image = global::MiniPlayerClassic.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(300, 49);
+            this.btnStop.Location = new System.Drawing.Point(400, 61);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(44, 43);
+            this.btnStop.Size = new System.Drawing.Size(59, 54);
             this.btnStop.TabIndex = 23;
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
@@ -130,9 +136,10 @@
             this.btnNext.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnNext.Image = global::MiniPlayerClassic.Properties.Resources.next;
             this.btnNext.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnNext.Location = new System.Drawing.Point(257, 49);
+            this.btnNext.Location = new System.Drawing.Point(343, 61);
+            this.btnNext.Margin = new System.Windows.Forms.Padding(4);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(44, 43);
+            this.btnNext.Size = new System.Drawing.Size(59, 54);
             this.btnNext.TabIndex = 19;
             this.btnNext.UseVisualStyleBackColor = false;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
@@ -143,9 +150,10 @@
             this.btnPrev.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPrev.Image = global::MiniPlayerClassic.Properties.Resources.previous;
             this.btnPrev.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnPrev.Location = new System.Drawing.Point(171, 49);
+            this.btnPrev.Location = new System.Drawing.Point(228, 61);
+            this.btnPrev.Margin = new System.Windows.Forms.Padding(4);
             this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(44, 43);
+            this.btnPrev.Size = new System.Drawing.Size(59, 54);
             this.btnPrev.TabIndex = 18;
             this.btnPrev.UseVisualStyleBackColor = false;
             this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
@@ -156,9 +164,10 @@
             this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPlay.Image = global::MiniPlayerClassic.Properties.Resources.play;
             this.btnPlay.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnPlay.Location = new System.Drawing.Point(214, 49);
+            this.btnPlay.Location = new System.Drawing.Point(285, 61);
+            this.btnPlay.Margin = new System.Windows.Forms.Padding(4);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(44, 43);
+            this.btnPlay.Size = new System.Drawing.Size(59, 54);
             this.btnPlay.TabIndex = 7;
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
@@ -174,21 +183,23 @@
             this.tb_Lists.Controls.Add(this.tabPage1);
             this.tb_Lists.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tb_Lists.HotTrack = true;
-            this.tb_Lists.Location = new System.Drawing.Point(0, 130);
+            this.tb_Lists.Location = new System.Drawing.Point(0, 153);
+            this.tb_Lists.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Lists.Multiline = true;
             this.tb_Lists.Name = "tb_Lists";
             this.tb_Lists.SelectedIndex = 0;
-            this.tb_Lists.Size = new System.Drawing.Size(344, 531);
+            this.tb_Lists.Size = new System.Drawing.Size(459, 673);
             this.tb_Lists.TabIndex = 8;
             this.tb_Lists.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.listBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(336, 505);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Size = new System.Drawing.Size(451, 644);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -198,13 +209,14 @@
             this.listBox1.AllowDrop = true;
             this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F);
+            this.listBox1.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(3, 3);
+            this.listBox1.ItemHeight = 23;
+            this.listBox1.Location = new System.Drawing.Point(4, 4);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(330, 499);
+            this.listBox1.Size = new System.Drawing.Size(443, 636);
             this.listBox1.TabIndex = 8;
             this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainFrom_DragDrop);
             this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainFrom_DragEnter);
@@ -212,15 +224,16 @@
             // 
             // menu_FileOpen
             // 
+            this.menu_FileOpen.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menu_FileOpen.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mAddFile});
             this.menu_FileOpen.Name = "contextMenuStrip1";
-            this.menu_FileOpen.Size = new System.Drawing.Size(125, 26);
+            this.menu_FileOpen.Size = new System.Drawing.Size(145, 30);
             // 
             // mAddFile
             // 
             this.mAddFile.Name = "mAddFile";
-            this.mAddFile.Size = new System.Drawing.Size(124, 22);
+            this.mAddFile.Size = new System.Drawing.Size(144, 26);
             this.mAddFile.Text = "打开文件";
             // 
             // toolStrip1
@@ -238,11 +251,11 @@
             this.tbtnModeChange,
             this.tbtnSettings});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(0, 91);
-            this.toolStrip1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 114);
+            this.toolStrip1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(344, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(459, 39);
             this.toolStrip1.TabIndex = 23;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -251,7 +264,9 @@
             this.tbtnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tbtnAdd.DropDownButtonWidth = 10;
             this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tmAddList});
+            this.tmAddList,
+            this.toolStripMenuItem1,
+            this.添加文件ToolStripMenuItem});
             this.tbtnAdd.Image = ((System.Drawing.Image)(resources.GetObject("tbtnAdd.Image")));
             this.tbtnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbtnAdd.Name = "tbtnAdd";
@@ -264,7 +279,7 @@
             // tmAddList
             // 
             this.tmAddList.Name = "tmAddList";
-            this.tmAddList.Size = new System.Drawing.Size(124, 22);
+            this.tmAddList.Size = new System.Drawing.Size(181, 26);
             this.tmAddList.Text = "追加列表";
             this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
             // 
@@ -290,33 +305,33 @@
             // tmDeleteItem
             // 
             this.tmDeleteItem.Name = "tmDeleteItem";
-            this.tmDeleteItem.Size = new System.Drawing.Size(148, 22);
+            this.tmDeleteItem.Size = new System.Drawing.Size(181, 26);
             this.tmDeleteItem.Text = "移除项目";
             this.tmDeleteItem.Click += new System.EventHandler(this.tbtnRemove_ButtonClick);
             // 
             // tmEmptyList
             // 
             this.tmEmptyList.Name = "tmEmptyList";
-            this.tmEmptyList.Size = new System.Drawing.Size(148, 22);
+            this.tmEmptyList.Size = new System.Drawing.Size(181, 26);
             this.tmEmptyList.Text = "清空列表";
             this.tmEmptyList.Click += new System.EventHandler(this.tmEmptyList_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(145, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(178, 6);
             // 
             // tmCloseList
             // 
             this.tmCloseList.Name = "tmCloseList";
-            this.tmCloseList.Size = new System.Drawing.Size(148, 22);
+            this.tmCloseList.Size = new System.Drawing.Size(181, 26);
             this.tmCloseList.Text = "关闭列表";
             this.tmCloseList.Click += new System.EventHandler(this.tmCloseList_Click);
             // 
             // tmDeleteListFile
             // 
             this.tmDeleteListFile.Name = "tmDeleteListFile";
-            this.tmDeleteListFile.Size = new System.Drawing.Size(148, 22);
+            this.tmDeleteListFile.Size = new System.Drawing.Size(181, 26);
             this.tmDeleteListFile.Text = "删除列表文件";
             this.tmDeleteListFile.Click += new System.EventHandler(this.tmDeleteListFile_Click);
             // 
@@ -341,30 +356,31 @@
             this.tbtnList.Size = new System.Drawing.Size(47, 36);
             this.tbtnList.ToolTipText = "列表选项";
             this.tbtnList.Click += new System.EventHandler(this.tbtnList_Click);
+            this.tbtnList.MouseEnter += new System.EventHandler(this.tbtnList_MouseEnter);
             // 
             // tmSaveList
             // 
             this.tmSaveList.Name = "tmSaveList";
-            this.tmSaveList.Size = new System.Drawing.Size(136, 22);
+            this.tmSaveList.Size = new System.Drawing.Size(181, 26);
             this.tmSaveList.Text = "保存列表";
             this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
             // 
             // tmSaveAs
             // 
             this.tmSaveAs.Name = "tmSaveAs";
-            this.tmSaveAs.Size = new System.Drawing.Size(136, 22);
+            this.tmSaveAs.Size = new System.Drawing.Size(181, 26);
             this.tmSaveAs.Text = "列表另存为";
             this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(133, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
             // 
             // tmNewList
             // 
             this.tmNewList.Name = "tmNewList";
-            this.tmNewList.Size = new System.Drawing.Size(136, 22);
+            this.tmNewList.Size = new System.Drawing.Size(181, 26);
             this.tmNewList.Text = "新建列表";
             this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
             // 
@@ -381,42 +397,42 @@
             this.tbtnPlayMode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbtnPlayMode.Name = "tbtnPlayMode";
             this.tbtnPlayMode.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.tbtnPlayMode.Size = new System.Drawing.Size(103, 36);
+            this.tbtnPlayMode.Size = new System.Drawing.Size(116, 36);
             this.tbtnPlayMode.Text = "单曲播放";
             this.tbtnPlayMode.Click += new System.EventHandler(this.tbtnPlayMode_ButtonClick);
             // 
             // tmPlaytheList
             // 
             this.tmPlaytheList.Name = "tmPlaytheList";
-            this.tmPlaytheList.Size = new System.Drawing.Size(124, 22);
+            this.tmPlaytheList.Size = new System.Drawing.Size(144, 26);
             this.tmPlaytheList.Text = "顺序播放";
             this.tmPlaytheList.Click += new System.EventHandler(this.tmPlaytheList_Click);
             // 
             // tmListRepeat
             // 
             this.tmListRepeat.Name = "tmListRepeat";
-            this.tmListRepeat.Size = new System.Drawing.Size(124, 22);
+            this.tmListRepeat.Size = new System.Drawing.Size(144, 26);
             this.tmListRepeat.Text = "列表循环";
             this.tmListRepeat.Click += new System.EventHandler(this.tmListRepeat_Click);
             // 
             // tmSingleRepeat
             // 
             this.tmSingleRepeat.Name = "tmSingleRepeat";
-            this.tmSingleRepeat.Size = new System.Drawing.Size(124, 22);
+            this.tmSingleRepeat.Size = new System.Drawing.Size(144, 26);
             this.tmSingleRepeat.Text = "单曲循环";
             this.tmSingleRepeat.Click += new System.EventHandler(this.tmSingleRepeat_Click);
             // 
             // tmSingle
             // 
             this.tmSingle.Name = "tmSingle";
-            this.tmSingle.Size = new System.Drawing.Size(124, 22);
+            this.tmSingle.Size = new System.Drawing.Size(144, 26);
             this.tmSingle.Text = "单曲播放";
             this.tmSingle.Click += new System.EventHandler(this.tmSingle_Click);
             // 
             // tmShuffle
             // 
             this.tmShuffle.Name = "tmShuffle";
-            this.tmShuffle.Size = new System.Drawing.Size(124, 22);
+            this.tmShuffle.Size = new System.Drawing.Size(144, 26);
             this.tmShuffle.Text = "随机播放";
             this.tmShuffle.Click += new System.EventHandler(this.tmSuffle_Click);
             // 
@@ -447,18 +463,31 @@
             this.tbtnSettings.ToolTipText = "设置";
             this.tbtnSettings.Click += new System.EventHandler(this.tbtnSettings_Click);
             // 
+            // 添加文件ToolStripMenuItem
+            // 
+            this.添加文件ToolStripMenuItem.Name = "添加文件ToolStripMenuItem";
+            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.添加文件ToolStripMenuItem.Text = "添加文件";
+            this.添加文件ToolStripMenuItem.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
+            // 
             // MainFrom
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 661);
+            this.ClientSize = new System.Drawing.Size(459, 826);
             this.Controls.Add(this.tb_Lists);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainFrom";
             this.Text = " ";
@@ -520,7 +549,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tbtnModeChange;
         private System.Windows.Forms.ToolStripButton tbtnSettings;
-
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 添加文件ToolStripMenuItem;
     }
 }
 

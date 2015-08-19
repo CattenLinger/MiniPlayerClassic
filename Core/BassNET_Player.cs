@@ -1,119 +1,10 @@
 ﻿using System;
-using System.Text;
-using Un4seen.Bass;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Collections.Generic;
+using System.Windows.Forms;
+using Un4seen.Bass;
 
-
-namespace MiniPlayerClassic
+namespace MiniPlayerClassic.Core
 {
-    /// <summary>
-    /// 播放器状态枚举
-    /// </summary>
-    public enum TrackStates { Playing, Paused, Stoped, Stalled }
-    
-    /// <summary>
-    /// 播放器状态改变消息
-    /// </summary>
-    public class TrackStateChange : EventArgs
-    {
-        private TrackStates msg;
-        public TrackStates Message { get { return msg; } set { msg = value; } }
-
-        public TrackStateChange(TrackStates message) { msg = message; }
-    }
-
-    /// <summary>
-    /// 播放器文件改变消息
-    /// </summary>
-    public class TrackFileChange : EventArgs
-    {
-        private string msg;
-        public string Message { get { return msg; } set { msg = value; } }
-
-        public TrackFileChange(string filename) { msg = filename; }
-    }
-
-    /// <summary>
-    /// 播放器接口
-    /// </summary>
-    public interface IPlayer
-    {
-        /// <summary>
-        /// 解码器信息
-        /// </summary>
-        string DecoderInfo { get; }
-        /// <summary>
-        /// 文件路径
-        /// </summary>
-        string FilePath { get; }
-        /// <summary>
-        /// 音量信息
-        /// </summary>
-        float Volume { get; set; }
-        /// <summary>
-        /// 当前播放进度
-        /// </summary>
-        double TrackPosition { get; set; }
-        /// <summary>
-        /// 音轨长度
-        /// </summary>
-        double TrackLength { get; }
-        /// <summary>
-        /// 播放状态
-        /// </summary>
-        TrackStates TrackState { get; }
-        /// <summary>
-        /// 支持的文件的扩展名
-        /// </summary>
-        string SupportStream { get; }
-
-        /// <summary>
-        /// 载入文件
-        /// </summary>
-        /// <param name="TrackName">文件路径</param>
-        /// <returns>若成功返回true</returns>
-        bool LoadFile(string TrackName);
-
-        /// <summary>
-        /// 播放
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Play();
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Pause();
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Stop();
-
-        /// <summary>
-        /// 播放状态改变消息
-        /// </summary>
-        event EventHandler<TrackStateChange> TrackStateChanged;
-        /// <summary>
-        /// 文件改变消息
-        /// </summary>
-        event EventHandler<TrackFileChange> TrackFileChanged;
-
-    }
-
-    public interface IVisualEffects
-    {
-        void GetWaveForm(int width, int height);
-        void getData(ref Single[] data);
-        void GetLevel(ref int Left, ref int Right);
-
-        Bitmap WaveForm { get; }
-
-        event EventHandler WaveFormFinished;
-    }
-
     public class BassNET_Player : IPlayer, IVisualEffects
     {
         #region const
@@ -124,7 +15,7 @@ namespace MiniPlayerClassic
         #endregion
 
         #region values
-        private String filepath = ""; //保存文件路径
+        private string filepath = ""; //保存文件路径
         private int errorcode = 1; //记录播放器在启动过程中的错误
         private TrackStates playstate = TrackStates.Stoped; //存储播放器状态
         private float _volume = 1;//音量
@@ -137,14 +28,14 @@ namespace MiniPlayerClassic
         int _waveform_height = 0;
         //private values end
         public string FilePath { get { return filepath; } }
-        public String DecoderInfo { get { return "Bass.NET"; } }
+        public string DecoderInfo { get { return "Bass.NET"; } }
         public TrackStates TrackState { get { return playstate; } }
 
         public Bitmap WaveForm { get { return _waveform; } }
         private Bitmap _waveform = null;
         public Un4seen.Bass.Misc.WaveForm wf1 = null;
         public string SupportStream { get { return Bass.SupportedStreamExtensions; } }
-        
+
         //public values end
 
         #endregion
@@ -176,7 +67,7 @@ namespace MiniPlayerClassic
             tmrChecker.Tick += tmrChecker_Tick;
             tmrChecker.Enabled = true;
         }
-        
+
         //状态变化消息
         protected virtual void on_call_StateChanger(TrackStateChange e) //播放器状态改变消息构造函数
         {
@@ -218,7 +109,7 @@ namespace MiniPlayerClassic
                         TrackStateChanged(this, new TrackStateChange(TrackStates.Stoped));
                     }
                     break;
-                case BASSActive.BASS_ACTIVE_STALLED: 
+                case BASSActive.BASS_ACTIVE_STALLED:
                     if (playstate != TrackStates.Stalled)
                     {
                         playstate = TrackStates.Stalled;
@@ -244,18 +135,18 @@ namespace MiniPlayerClassic
         public BassNET_Player(int device, int rate, IntPtr win)//播放器初始化函数
         {
             BassReg();
-            
-            if ( Bass.BASS_Init(device,rate, BASSInit.BASS_DEVICE_LATENCY , win) ) //Bass initialization
+
+            if (Bass.BASS_Init(device, rate, BASSInit.BASS_DEVICE_LATENCY, win)) //Bass initialization
             {
                 BassInfo = new BASS_INFO();
                 errorcode = 0;
             }
             init();
         }
-        
+
         public void GetWaveForm(int width, int height)
         {
-            wf1 = new Un4seen.Bass.Misc.WaveForm(filepath,new Un4seen.Bass.Misc.WAVEFORMPROC(waveformcallback),null);
+            wf1 = new Un4seen.Bass.Misc.WaveForm(filepath, new Un4seen.Bass.Misc.WAVEFORMPROC(waveformcallback), null);
             wf1.ColorLeft = Color.WhiteSmoke;
             wf1.ColorRight = wf1.ColorLeft;
             wf1.ColorBackground = Color.White;
@@ -269,15 +160,15 @@ namespace MiniPlayerClassic
 
         private void waveformcallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
         {
-            if(finished)
+            if (finished)
             {
-                if(wf1 != null)
+                if (wf1 != null)
                 {
                     try
                     {
                         (_waveform = wf1.CreateBitmap(_waveform_width, _waveform_height, -1, -1, false)).MakeTransparent(Color.White);
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         _waveform = null;
                     }
@@ -288,10 +179,10 @@ namespace MiniPlayerClassic
         }
 
         //读取文件
-        public Boolean LoadFile(string Filename) 
+        public Boolean LoadFile(string Filename)
         {
             Bass.BASS_StreamFree(theStream); //free the stream
-            theStream = Bass.BASS_StreamCreateFile(Filename,0L,0L,BASSFlag.BASS_DEFAULT);
+            theStream = Bass.BASS_StreamCreateFile(Filename, 0L, 0L, BASSFlag.BASS_DEFAULT);
             if (theStream == 0) { return false; } else { Volume = _volume; }
             filepath = Filename;
             TrackFileChanged(this, new TrackFileChange(Filename));
@@ -315,7 +206,7 @@ namespace MiniPlayerClassic
         //停止（并释放文件）
         public Boolean Stop()
         {
-            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) {  return true; }
+            if (Bass.BASS_ChannelStop(theStream) && Bass.BASS_StreamFree(theStream)) { return true; }
             return false;
         }
 
@@ -323,12 +214,13 @@ namespace MiniPlayerClassic
         public float Volume
         {
             get
-            { 
+            {
                 float vol = 0;
                 if (Bass.BASS_ChannelGetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, ref vol))
-                { return vol; } else { return 0; } 
+                { return vol; }
+                else { return 0; }
             }
-            set 
+            set
             {
                 _volume = value;
                 Bass.BASS_ChannelSetAttribute(theStream, BASSAttribute.BASS_ATTRIB_VOL, _volume);
@@ -336,7 +228,7 @@ namespace MiniPlayerClassic
         }
 
         //获取左右声道的当前响度
-        public void GetLevel(ref int Left,ref int Right)
+        public void GetLevel(ref int Left, ref int Right)
         {
             Int32 temp = Bass.BASS_ChannelGetLevel(theStream);
             if (temp == -1) { Left = 0; Right = 0; return; }
@@ -381,5 +273,4 @@ namespace MiniPlayerClassic
         }
 
     }
-
 }

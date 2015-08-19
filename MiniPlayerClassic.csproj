@@ -107,7 +107,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BassNET_Player.cs" />
     <Compile Include="Core\ConfigManager.cs" />
+    <Compile Include="Core\IListProcessor.cs" />
+    <Compile Include="Core\IPlayer.cs" />
+    <Compile Include="Core\IVisualEffect.cs" />
+    <Compile Include="Core\PlayListItem.cs" />
+    <Compile Include="Core\SimpleListProcessor.cs" />
     <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,7 +127,7 @@
     <Compile Include="MainFrom.Designer.cs">
       <DependentUpon>MainFrom.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Events.cs" />
     <Compile Include="Core\PlayList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Resources;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MiniPlayerClassic.Core;
 
 namespace MiniPlayerClassic
 {
@@ -606,7 +607,10 @@ namespace MiniPlayerClassic
 
         private void tbtnList_Click(object sender, EventArgs e)
         {
-            tbtnList.ShowDropDown();
+            if(tb_Lists.TabCount == 0)
+            {
+                tmNewList_Click(this,null);
+            }else tbtnList.ShowDropDown();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -801,14 +805,23 @@ namespace MiniPlayerClassic
 
         private void MainFrom_ResizeEnd(object sender, EventArgs e)
         {
-            if (Latest_height < 450) return;
-            Latest_height = this.Height;
+            this.Text = this.Height.ToString();
+            if (Latest_height < 193) Latest_height = 193;
+            //Latest_height = this.Height;
         }
 
         private void tbtnSettings_Click(object sender, EventArgs e)
         {
             frmSettings SettingFrom = new frmSettings();
             SettingFrom.Show();
+        }
+
+        private void tbtnList_MouseEnter(object sender, EventArgs e)
+        {
+            if (PlayLists.Count == 0)
+                tbtnList.ToolTipText = "没有播放列表，点击新建播放列表";
+            else
+                tbtnList.ToolTipText = "列表选项";
         }
 
         private void MainFrom_DragEnter(object sender, DragEventArgs e)
