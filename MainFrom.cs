@@ -109,6 +109,8 @@ namespace MiniPlayerClassic
         public BassNET_Player BassNET_Player; //播放器对象
         public c_ProgressBar cProgressBar; //进度条对象
         public c_VolumeBar cVolumeBar; //音量条对象
+        public Controller controller = Controller.getController();
+        public IBasicPlayControl PlayBackControl = Controller.getController();
 
         public string LabelText; //标签文字
         private Graphics pb_g_enter;//画布
@@ -123,16 +125,9 @@ namespace MiniPlayerClassic
 
         private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
 
-        
-        /*private playbackHeadMode playbackhead_state;
-        private PlayListItem playbackhead;
-        private bool playback = false;
-        private bool buttonaction = false;*/
 
         public bool _developMode = true;/*
         public bool _developMode = false;//*/
-
-        //private Un4seen.Bass.BASSTimer ScuptrumTimer;
 
         //一些东西的初始化
         public MainFrom(string[] args)
@@ -154,6 +149,7 @@ namespace MiniPlayerClassic
 
             BassNET_Player = new BassNET_Player(this.Handle); //初始化播放器对象
             MainPlayer = BassNET_Player;
+            controller.setPlayer(MainPlayer);
             VisualEffectHelper = BassNET_Player;
             MainPlayer.TrackStateChanged += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.TrackFileChanged += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
@@ -179,18 +175,16 @@ namespace MiniPlayerClassic
             refreshInterface();
 
             load_file_list(args);
-            //ScuptrumTimer = new Un4seen.Bass.BASSTimer(17);
-            //ScuptrumTimer.Tick += ScuptrumTimer_Tick;
-            //ScuptrumTimer.Start();
         }
 
         void MainPlayer_WaveFormFinished(object sender, EventArgs e)
         {
             cProgressBar.UpdateWaveForm(VisualEffectHelper.WaveForm);
         }
+
         #region 私有处理过程
         /// <summary>
-        /// 从一个字符串列表里读取文件
+        /// 从一个字符串列表里读取文件，字符列表里仅有一个文件的时候，它只会直接播放文件
         /// </summary>
         /// <param name="args">储存文件路径的字符串列表</param>
         public void load_file_list(string[] args)
@@ -247,6 +241,7 @@ namespace MiniPlayerClassic
             }
         }
         #endregion
+
         //init
         private void MainFrom_Load(object sender, EventArgs e)
         {
@@ -257,56 +252,22 @@ namespace MiniPlayerClassic
         //BassNet.Registration("your_email","your_code");
             
         }
+
         //Stop Button
         private void btnStop_Click(object sender, EventArgs e)
         {
-            MainPlayer.Stop();
+            PlayBackControl.Stop();
         }
+
         //Play/Pause button
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (MainPlayer.TrackState != TrackStates.Playing)
-                MainPlayer.Play();
+                PlayBackControl.Play();
             else
-                MainPlayer.Pause();
+                PlayBackControl.Pause();
         }
 
-        private void playbackactions()
-        {/*
-            switch (playbackhead_state)
-            {
-                case playbackHeadState.ByIndex:
-                    playbackhead = ;
-                    if (playbackhead != null) 
-                    {
-                        if (MainPlayer.LoadFile(playbackhead.Value.FileAddress))
-                            MainPlayer.Play();
-                    }
-                    else { playback = false; }
-                    break;
-
-                case playbackHeadState.List_Cycling:
-                    if (playbackhead.Next == null)
-                    {
-                        if (playbackhead.List.First == null)
-                        {
-                            playback = false;
-                            break;
-                        }
-                        playbackhead = playbackhead.List.First;
-                    }
-                    else { playbackhead = playbackhead.Next; }
-                    if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) MainPlayer.Play();
-                    break;
-
-                case playbackHeadState.Single:
-                    break;
-
-                case playbackHeadState.Single_Cycling:
-                    MainPlayer.Play();
-                    break;
-            }//*/
-        }
 //--------Events Checker--------------------------------------------------------------------------
         void MainPlayer_StateChange(object sender, TrackStateChange e) //响应播放状态改变的消息的函数
         {
@@ -314,18 +275,6 @@ namespace MiniPlayerClassic
                 btnPlay.Image = Properties.Resources.play;
             else
                 btnPlay.Image = Properties.Resources.pause;
-
-            /*
-            if (playback && !buttonaction && MainPlayer.TrackState != TrackStates.Playing)
-            {
-                if (PlayLists.Count == 0)
-                    playback = false;
-                else
-                    playbackactions();
-            }
-            buttonaction = false;
-            System.GC.Collect();
-            */
 
             Console.WriteLine(e.Message.ToString());
         }
@@ -500,7 +449,8 @@ namespace MiniPlayerClassic
             }
             else load_file_list(dlg1.FileNames);
 
-            System.GC.Collect();
+            GC.Collect();
+            RefreshPlayList();
         }
 
         private void tbtnRemove_ButtonClick(object sender, EventArgs e) //“删除选项”按钮
@@ -532,7 +482,9 @@ namespace MiniPlayerClassic
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            if (MainPlayer.LoadFile(PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])].FileAddress)) { MainPlayer.Play(); } //载入文件
+            //if (MainPlayer.LoadFile(PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])].FileAddress)) { MainPlayer.Play(); } //载入文件
+            controller.setPlayList(PlayLists[tb_Lists.SelectedIndex]);
+            controller.PlayItem(controller.List.get(listBox1.Items.IndexOf(listBox1.SelectedItems[0])));
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
@@ -552,10 +504,10 @@ namespace MiniPlayerClassic
             { 
                 switch(MessageBox.Show("列表已修改，保存？", "列表", MessageBoxButtons.YesNoCancel))
                 {
-                    case System.Windows.Forms.DialogResult.Cancel:
+                    case DialogResult.Cancel:
                         return;
 
-                    case System.Windows.Forms.DialogResult.Yes:
+                    case DialogResult.Yes:
                         tmSaveList_Click(sender, e);
                         break;
                 }
@@ -723,50 +675,43 @@ namespace MiniPlayerClassic
         {
             tbtnPlayMode.Text = tmPlaytheList.Text;
             tbtnPlayMode.Image = Properties.Resources.single_list;
+            controller.PlayBackMode = playbackHeadMode.ByIndex;
         }
 
         private void tmListRepeat_Click(object sender, EventArgs e)
         {
             tbtnPlayMode.Text = tmListRepeat.Text;
             tbtnPlayMode.Image = Properties.Resources.repeat_list;
+            controller.PlayBackMode = playbackHeadMode.List_Cycling;
         }
 
         private void tmSingleRepeat_Click(object sender, EventArgs e)
         {
             tbtnPlayMode.Text = tmSingle.Text;
             tbtnPlayMode.Image = Properties.Resources.single;
+            controller.PlayBackMode = playbackHeadMode.Single_Cycling;
         }
 
         private void tmSingle_Click(object sender, EventArgs e)
         {
             tbtnPlayMode.Text = tmSingleRepeat.Text;
             tbtnPlayMode.Image = Properties.Resources.repeat_single;
+            controller.PlayBackMode = playbackHeadMode.Single;
         }
 
         private void btnNext_Click(object sender, EventArgs e)
-        {/*
-            if (playbackhead.Next == null) return;
-            playbackhead = playbackhead.Next;
-            if (playbackhead != null)
-            {
-                buttonaction = true;
-                if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
-            }//*/
+        {
+            controller.NextSong();
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
-        {/*
-            if (playbackhead.Previous == null) return;
-            playbackhead = playbackhead.Previous;
-            if (playbackhead != null)
-            {
-                buttonaction = true;
-                if (MainPlayer.LoadFile(playbackhead.Value.FileAddress)) { MainPlayer.Play(); }
-            }//*/
+        {
+            controller.PrevSong();
         }
 
         private void tbtnPlayMode_ButtonClick(object sender, EventArgs e)
         {
+            //按顺序切换播放模式
             if (tbtnPlayMode.Text == tmPlaytheList.Text)
                 tmListRepeat_Click(this, null);
             else if (tbtnPlayMode.Text == tmListRepeat.Text)
@@ -784,6 +729,7 @@ namespace MiniPlayerClassic
         {
             tbtnPlayMode.Text = tmShuffle.Text;
             tbtnPlayMode.Image = Properties.Resources.shuffle;
+            controller.PlayBackMode = playbackHeadMode.Shuffle;
         }
 
         private void MainFrom_KeyUp(object sender, KeyEventArgs e)

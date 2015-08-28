@@ -6,7 +6,7 @@ namespace MiniPlayerClassic.Core
     /// <summary>
     /// 播放器接口
     /// </summary>
-    public interface IPlayer
+    public interface IPlayer : IBasicPlayControl
     {
         /// <summary>
         /// 解码器信息
@@ -43,22 +43,6 @@ namespace MiniPlayerClassic.Core
         /// <param name="TrackName">文件路径</param>
         /// <returns>若成功返回true</returns>
         bool LoadFile(string TrackName);
-
-        /// <summary>
-        /// 播放
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Play();
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Pause();
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        /// <returns>成功则返回true</returns>
-        bool Stop();
 
         /// <summary>
         /// 播放状态改变消息
