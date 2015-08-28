@@ -24,7 +24,8 @@ namespace MiniPlayerClassic
         private void label1_Click_1(object sender, EventArgs e)
         {
             MessageBox.Show("启动一些开发的时候会用到的功能\n可能会影响正常使用\n不建议正常使用时开启。\n\n这些功能有:\n"+
-                            "显示键盘按键值");
+                            "在终端显示键盘按键值"+
+                            "在终端显示窗体高度");
         }
 
         private void btnOK_Click(object sender, EventArgs e)

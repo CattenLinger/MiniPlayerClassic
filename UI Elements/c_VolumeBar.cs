@@ -18,13 +18,13 @@ namespace MiniPlayerClassic
 
         #endregion
         //颜色
-        Color clFrame = Color.LightSlateGray,
-              clThumb = Color.SkyBlue,
-              clForce = Color.FromArgb(150, Color.SkyBlue),
-              clBackGround = Color.LightGray,
-              clText = Color.Black,
-              clFFT = Color.MediumSeaGreen,
-              clBackgroundLevel = Color.DeepSkyBlue;
+        Color clFrame = Color.LightSlateGray,   //框架的颜色
+              clThumb = Color.SkyBlue,          //拖动头的颜色
+              clForce = Color.FromArgb(150, Color.SkyBlue),//前景色
+              clBackGround = Color.LightGray,//背景色
+              clText = Color.Black,             //文本颜色
+              clFFT = Color.Azure,     //频谱颜色
+              clBackgroundLevel = Color.DeepSkyBlue;//实时音量条颜色
 
         private Bitmap buffer, canvas;
 

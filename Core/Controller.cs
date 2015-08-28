@@ -7,6 +7,9 @@ using MiniPlayerClassic.Core;
 
 namespace MiniPlayerClassic.Core
 {
+    /// <summary>
+    /// 协调播放器、播放列表和界面的中介类
+    /// </summary>
     class Controller
     {
         public static Controller contorller = new Controller();
