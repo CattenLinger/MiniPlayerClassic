@@ -10,7 +10,7 @@ namespace MiniPlayerClassic.Core
     /// <summary>
     /// 协调播放器、播放列表和界面的中介类
     /// </summary>
-    class Controller
+    public class Controller : IBasicPlayControl
     {
         public static Controller contorller = new Controller();
 
@@ -102,8 +102,17 @@ namespace MiniPlayerClassic.Core
             playHead = playHead.Next;
             if(playHead == null)
             {
-                playbackFlag = false;
-                player.Stop();
+                if(playBackMode == playbackHeadMode.List_Cycling)
+                {
+                    playHead = List.First;
+                }
+                else
+                {
+
+                    playbackFlag = false;
+                    player.Stop();
+                    return false;
+                }
             }
             return PlayItem(playHead);
         }
@@ -118,10 +127,33 @@ namespace MiniPlayerClassic.Core
             playHead = playHead.Previous;
             if(playHead == null)
             {
-                playbackFlag = false;
-                player.Stop();
+                if(playBackMode == playbackHeadMode.List_Cycling)
+                {
+                    playHead = List.Last;
+                }
+                else
+                {
+                    playbackFlag = false;
+                    player.Stop();
+                    return false;
+                }
             }
             return PlayItem(playHead);
+        }
+
+        public bool Play()
+        {
+            return player.Play();
+        }
+
+        public bool Pause()
+        {
+            return player.Pause();
+        }
+
+        public bool Stop()
+        {
+            return player.Stop();
         }
 
         private bool playbackFlag = false;

@@ -75,10 +75,10 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(16, 151);
+            this.btnOK.Location = new System.Drawing.Point(16, 156);
             this.btnOK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(239, 44);
+            this.btnOK.Size = new System.Drawing.Size(293, 44);
             this.btnOK.TabIndex = 3;
             this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -86,10 +86,10 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(266, 152);
+            this.btnReset.Location = new System.Drawing.Point(317, 157);
             this.btnReset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(147, 43);
+            this.btnReset.Size = new System.Drawing.Size(104, 43);
             this.btnReset.TabIndex = 4;
             this.btnReset.Text = "重置";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -120,7 +120,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 85);
+            this.label2.Location = new System.Drawing.Point(12, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(154, 24);
             this.label2.TabIndex = 7;
@@ -128,16 +128,16 @@
             // 
             // tbListFolder
             // 
-            this.tbListFolder.Location = new System.Drawing.Point(16, 112);
+            this.tbListFolder.Location = new System.Drawing.Point(16, 117);
             this.tbListFolder.Name = "tbListFolder";
             this.tbListFolder.Size = new System.Drawing.Size(344, 31);
             this.tbListFolder.TabIndex = 8;
             // 
             // btnSelectFolder
             // 
-            this.btnSelectFolder.Location = new System.Drawing.Point(379, 111);
+            this.btnSelectFolder.Location = new System.Drawing.Point(366, 116);
             this.btnSelectFolder.Name = "btnSelectFolder";
-            this.btnSelectFolder.Size = new System.Drawing.Size(34, 31);
+            this.btnSelectFolder.Size = new System.Drawing.Size(55, 31);
             this.btnSelectFolder.TabIndex = 9;
             this.btnSelectFolder.Text = "...";
             this.btnSelectFolder.UseVisualStyleBackColor = true;
