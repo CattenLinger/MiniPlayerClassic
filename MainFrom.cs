@@ -184,7 +184,7 @@ namespace MiniPlayerClassic
 
         #region 私有处理过程
         /// <summary>
-        /// 从一个字符串列表里读取文件
+        /// 从一个字符串列表里读取文件，字符列表里仅有一个文件的时候，它只会直接播放文件
         /// </summary>
         /// <param name="args">储存文件路径的字符串列表</param>
         public void load_file_list(string[] args)
@@ -449,7 +449,7 @@ namespace MiniPlayerClassic
             }
             else load_file_list(dlg1.FileNames);
 
-            System.GC.Collect();
+            GC.Collect();
             RefreshPlayList();
         }
 
@@ -504,10 +504,10 @@ namespace MiniPlayerClassic
             { 
                 switch(MessageBox.Show("列表已修改，保存？", "列表", MessageBoxButtons.YesNoCancel))
                 {
-                    case System.Windows.Forms.DialogResult.Cancel:
+                    case DialogResult.Cancel:
                         return;
 
-                    case System.Windows.Forms.DialogResult.Yes:
+                    case DialogResult.Yes:
                         tmSaveList_Click(sender, e);
                         break;
                 }
