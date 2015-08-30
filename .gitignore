@@ -44,6 +44,6 @@ bin
 obj
 
 # Visual Studio
-*.cs
 .vs
 *.suo
+*.cd
