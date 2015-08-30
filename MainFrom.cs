@@ -150,6 +150,7 @@ namespace MiniPlayerClassic
             BassNET_Player = new BassNET_Player(this.Handle); //初始化播放器对象
             MainPlayer = BassNET_Player;
             controller.setPlayer(MainPlayer);
+            controller.PlayBackMode = playbackHeadMode.Single;
             VisualEffectHelper = BassNET_Player;
             MainPlayer.TrackStateChanged += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.TrackFileChanged += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
@@ -174,7 +175,11 @@ namespace MiniPlayerClassic
             tb_Lists.TabPages.Clear();
             refreshInterface();
 
-            load_file_list(args);
+            if(load_file_list(args) > 1)
+            {
+                refreshPlayList();
+                refreshInterface();
+            }
         }
 
         void MainPlayer_WaveFormFinished(object sender, EventArgs e)
@@ -187,7 +192,7 @@ namespace MiniPlayerClassic
         /// 从一个字符串列表里读取文件，字符列表里仅有一个文件的时候，它只会直接播放文件
         /// </summary>
         /// <param name="args">储存文件路径的字符串列表</param>
-        public void load_file_list(string[] args)
+        public int load_file_list(string[] args)
         {
             if (args.Length != 0)
             {
@@ -197,7 +202,7 @@ namespace MiniPlayerClassic
                     {
                         PlayLists.Add(new PlayList(args[0]));
                         tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(args[0]));
-                        RefreshPlayList();
+                        refreshPlayList();
                         refreshInterface();
                     }
                     else
@@ -231,26 +236,26 @@ namespace MiniPlayerClassic
                                                 + "\nMiniPlayer只为简单的日常使用设计，不适合专业用户。",
                                                 "程序稳定性警告",
                                                 MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-                                return;
+                                return args.Length;
                         PlayLists.Add(new PlayList(filename));
                         tb_Lists.TabPages.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
                     }
-                    RefreshPlayList();
-                    refreshInterface();
                 }
             }
+
+            return args.Length;
         }
         #endregion
 
         //init
         private void MainFrom_Load(object sender, EventArgs e)
         {
-        /* If you want to close the splash of Bass.Net you need to regist at 
-         * www.un4seen.com and input the registration code.
-         * (At the initialization of Player too.
-         */ 
-        //BassNet.Registration("your_email","your_code");
-            
+            /* If you want to close the splash of Bass.Net you need to regist at 
+             * www.un4seen.com and input the registration code.
+             * (At the initialization of Player too.
+             * BassNet.Registration("your_email","your_code");
+             * PS:At Class BassNET_Player
+             */
         }
 
         //Stop Button
@@ -435,8 +440,19 @@ namespace MiniPlayerClassic
         private void tbtnAdd_ButtonClick(object sender, EventArgs e) //“添加文件”按钮
         {
             OpenFileDialog dlg1 = new OpenFileDialog(); //创建一个文件打开窗口对象
-            dlg1.Filter = "Supported files|" + MainPlayer.SupportStream + ";*.spl";
-            dlg1.Filter += "|Simple List File|*.spl";
+            if(sender.Equals(tmOpenFile))
+            {
+                dlg1.Filter = "Supported files|" + MainPlayer.SupportStream + ";*.spl";
+            }
+            else if (sender.Equals(tmOpenList))
+            {
+                dlg1.Filter += "Simple List File|*.spl";
+            }
+            else if (sender.Equals(tbtnAdd))
+            {
+                dlg1.Filter = "Supported files|" + MainPlayer.SupportStream + ";*.spl";
+                dlg1.Filter += "|Simple List File|*.spl";
+            }
             dlg1.Filter += "|All Files|*.*";
             
             dlg1.Multiselect = true; //允许文件打开窗口多选
@@ -450,7 +466,7 @@ namespace MiniPlayerClassic
             else load_file_list(dlg1.FileNames);
 
             GC.Collect();
-            RefreshPlayList();
+            refreshPlayList();
         }
 
         private void tbtnRemove_ButtonClick(object sender, EventArgs e) //“删除选项”按钮
@@ -465,10 +481,10 @@ namespace MiniPlayerClassic
                 PlayLists[tb_Lists.SelectedIndex].RemoveAt(i);
             }
             
-            RefreshPlayList();
+            refreshPlayList();
         }
 
-        private void RefreshPlayList()//刷新播放列表过程
+        private void refreshPlayList()//刷新播放列表过程
         {
             listBox1.Items.Clear();//清空列表控件
             if (PlayLists.Count != 0)
@@ -482,16 +498,17 @@ namespace MiniPlayerClassic
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            //if (MainPlayer.LoadFile(PlayLists[tb_Lists.SelectedIndex][listBox1.Items.IndexOf(listBox1.SelectedItems[0])].FileAddress)) { MainPlayer.Play(); } //载入文件
-            controller.setPlayList(PlayLists[tb_Lists.SelectedIndex]);
-            controller.PlayItem(controller.List.get(listBox1.Items.IndexOf(listBox1.SelectedItems[0])));
+            if(listBox1.SelectedItems.Count > 0)
+            {
+                controller.PlayItem(PlayLists[tb_Lists.SelectedIndex].get(listBox1.SelectedIndex));
+            }
         }
 
         private void tmEmptyList_Click(object sender, EventArgs e)
         {
             if (listBox1.Items.Count == 0) { return; }//如果列表没有选中项就返回
             if (MessageBox.Show("要清空列表？\n此操作不可恢复哦。",
-                "清空列表？",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No) { return; };
+                "清空列表？",MessageBoxButtons.YesNo) == DialogResult.No) { return; };
 
             PlayLists[tb_Lists.SelectedIndex].Clear();
             listBox1.Items.Clear();
@@ -514,7 +531,7 @@ namespace MiniPlayerClassic
             }
 
             PlayLists.RemoveAt(tb_Lists.SelectedIndex);
-            RefreshPlayList();
+            refreshPlayList();
             tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
             refreshInterface();
         }
@@ -526,7 +543,7 @@ namespace MiniPlayerClassic
                                   + "继续增加会影响程序稳定性，真的要继续添加吗？"
                                   + "\nMiniPlayer只为简单的日常使用设计，不适合专业用户。", 
                                     "程序稳定性警告", 
-                                    MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                                    MessageBoxButtons.YesNo) == DialogResult.No)
                     return;
 
             PlayLists.Add(new PlayList());//创建一个播放列表
@@ -544,7 +561,7 @@ namespace MiniPlayerClassic
             if (PlayLists[tb_Lists.SelectedIndex].FilePath != "")
             {
                 if (MessageBox.Show("删除列表文件吗？\n此操作不可恢复哦！", "删除列表",
-                MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                MessageBoxButtons.YesNo) == DialogResult.No)
                     return;
 
                 if (System.IO.File.Exists(PlayLists[tb_Lists.SelectedIndex].FilePath))
@@ -552,22 +569,14 @@ namespace MiniPlayerClassic
             }
             PlayLists.RemoveAt(tb_Lists.SelectedIndex);
             tb_Lists.TabPages.Remove(tb_Lists.SelectedTab);
-            RefreshPlayList();
+            refreshPlayList();
 
-        }
-
-        private void tbtnList_Click(object sender, EventArgs e)
-        {
-            if(tb_Lists.TabCount == 0)
-            {
-                tmNewList_Click(this,null);
-            }else tbtnList.ShowDropDown();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             listBox1.Parent = tb_Lists.SelectedTab;
-            RefreshPlayList();
+            refreshPlayList();
             refreshInterface();
         }
 
@@ -585,11 +594,6 @@ namespace MiniPlayerClassic
             }  
         }
 
-        private void tmOpenList_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void tmAddList_Click(object sender, EventArgs e)
         {
             if(PlayLists.Count != 0)
@@ -601,7 +605,7 @@ namespace MiniPlayerClassic
                 if(tmp1 != "")
                 {
                     PlayLists[tb_Lists.SelectedIndex].AddFromFile(tmp1);
-                    RefreshPlayList();
+                    refreshPlayList();
                 }
             }
         }
@@ -658,17 +662,14 @@ namespace MiniPlayerClassic
                     if(PlayLists[i].OperationCount != 0)
                     {
                         if (MessageBox.Show("有列表内容曾经更改。\n是否退出？", "正要退出", 
-                            MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                            MessageBoxButtons.YesNo) == DialogResult.No)
                         {
                             e.Cancel = true;
-                            break;
                         }
+                        break;
                     }
                 }
             }
-
-            //ScuptrumTimer.Stop();
-            //ScuptrumTimer.Dispose();
         }
 
         private void tmPlaytheList_Click(object sender, EventArgs e)
@@ -722,7 +723,6 @@ namespace MiniPlayerClassic
                 tmSuffle_Click(this, null);
             else if (tbtnPlayMode.Text == tmShuffle.Text)
                 tmPlaytheList_Click(this, null);
-
         }
 
         private void tmSuffle_Click(object sender, EventArgs e)
@@ -764,6 +764,15 @@ namespace MiniPlayerClassic
                 tbtnList.ToolTipText = "列表选项";
         }
 
+        private void tbtnList_ButtonClick(object sender, EventArgs e)
+        {
+            if (tb_Lists.TabCount == 0)
+            {
+                tmNewList_Click(this, null);
+            }
+            else tbtnList.ShowDropDown();
+        }
+
         private void MainFrom_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -786,6 +795,7 @@ namespace MiniPlayerClassic
                 {
                     if (PlayLists.Count == 0) tmAddList_Click(this, null);
                     load_file_list(files);
+                    refreshPlayList();
                     refreshInterface();
                 }
                 else
@@ -794,7 +804,7 @@ namespace MiniPlayerClassic
                         if (PlayLists.Count != 0)
                         {
                             PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(files[0], ""));
-                            RefreshPlayList();
+                            refreshPlayList();
                         }
                         else
                         {

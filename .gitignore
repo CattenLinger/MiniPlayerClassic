@@ -42,3 +42,8 @@ Icon
 # Debug folder and Bin folder
 bin
 obj
+
+# Visual Studio
+*.cs
+.vs
+*.suo

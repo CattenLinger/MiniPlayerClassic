@@ -18,9 +18,20 @@ namespace MiniPlayerClassic.Core
         {
             return contorller;
         }
-
+        /// <summary>
+        /// 设置播放器
+        /// </summary>
+        /// <param name="value">播放器</param>
         public void setPlayer(IPlayer value)
         {
+            try
+            {
+                player.TrackStateChanged -= Player_TrackStateChanged;
+            }
+            catch
+            {
+                Console.WriteLine("Controller: Event “Player_TrackStateChanged” isn't at the Player.");
+            }
             player = value;
             player.TrackStateChanged += Player_TrackStateChanged;
         }
@@ -33,7 +44,11 @@ namespace MiniPlayerClassic.Core
                 return player;
             }
         }
-
+        /// <summary>
+        /// 播放状态改变事件
+        /// </summary>
+        /// <param name="sender">发送消息的对象</param>
+        /// <param name="e">消息内容</param>
         private void Player_TrackStateChanged(object sender, TrackStateChange e)
         {
             if(PlayBackActived)
@@ -65,25 +80,25 @@ namespace MiniPlayerClassic.Core
                 }
             }
         }
-
+        /// <summary>
+        /// 播放一个链表内的项目
+        /// </summary>
+        /// <param name="item">链表项目</param>
+        /// <returns>播放成功为true否则false</returns>
         public bool PlayItem(LinkedListNode<PlayListItem> item)
         {
             if(player == null)
             {
                 throw new Exception("No Player");
             }
-            if (playHead == null) playHead = item;
+            playHead = item;
+            playList = (PlayList)playHead.List;//强行转换成子类。即便返回的是父类，也还是会保留子类的信息。
             return player.LoadFile(item.Value.FileAddress) && player.Play();
         }
 
+        //private LinkedList<PlayListItem> playList = null;
         private PlayList playList = null;
         private LinkedListNode<PlayListItem> playHead = null;
-
-        public void setPlayList(PlayList list)
-        {
-            playList = list;
-        }
-
         public PlayList List
         {
             get
@@ -91,14 +106,17 @@ namespace MiniPlayerClassic.Core
                 return playList;
             }
         }
-
+        /// <summary>
+        /// 让播放器播放下一首歌
+        /// </summary>
+        /// <returns></returns>
         public bool NextSong()
         {
-            if(playList == null)
+            if(playHead == null)
             {
                 return false;
             }
-
+            LinkedList<PlayListItem> List = playHead.List;
             playHead = playHead.Next;
             if(playHead == null)
             {
@@ -116,14 +134,18 @@ namespace MiniPlayerClassic.Core
             }
             return PlayItem(playHead);
         }
-
+        /// <summary>
+        /// 让播放器播放上一首歌
+        /// </summary>
+        /// <returns></returns>
         public bool PrevSong()
         {
-            if (playList == null)
+            if (playHead == null)
             {
                 return false;
             }
 
+            LinkedList<PlayListItem> List = playHead.List;
             playHead = playHead.Previous;
             if(playHead == null)
             {
@@ -141,6 +163,7 @@ namespace MiniPlayerClassic.Core
             return PlayItem(playHead);
         }
 
+        #region IBasicPlayControl接口实现，用于代理播放器的基本播放操作
         public bool Play()
         {
             return player.Play();
@@ -155,6 +178,7 @@ namespace MiniPlayerClassic.Core
         {
             return player.Stop();
         }
+        #endregion
 
         private bool playbackFlag = false;
         public bool PlayBackActived
@@ -166,7 +190,7 @@ namespace MiniPlayerClassic.Core
 
             set
             {
-                playbackFlag = value;
+                if(playList != null) playbackFlag = value;
             }
         }
 

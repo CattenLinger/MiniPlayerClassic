@@ -47,7 +47,7 @@
             this.tbtnAdd = new System.Windows.Forms.ToolStripSplitButton();
             this.tmAddList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.添加文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tbtnRemove = new System.Windows.Forms.ToolStripSplitButton();
             this.tmDeleteItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tmEmptyList = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +69,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
             this.tbtnSettings = new System.Windows.Forms.ToolStripButton();
+            this.tmOpenList = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -265,8 +266,9 @@
             this.tbtnAdd.DropDownButtonWidth = 10;
             this.tbtnAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tmAddList,
+            this.tmOpenList,
             this.toolStripMenuItem1,
-            this.添加文件ToolStripMenuItem});
+            this.tmOpenFile});
             this.tbtnAdd.Image = ((System.Drawing.Image)(resources.GetObject("tbtnAdd.Image")));
             this.tbtnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbtnAdd.Name = "tbtnAdd";
@@ -279,21 +281,21 @@
             // tmAddList
             // 
             this.tmAddList.Name = "tmAddList";
-            this.tmAddList.Size = new System.Drawing.Size(144, 26);
+            this.tmAddList.Size = new System.Drawing.Size(181, 26);
             this.tmAddList.Text = "追加列表";
             this.tmAddList.Click += new System.EventHandler(this.tmAddList_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(141, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
             // 
-            // 添加文件ToolStripMenuItem
+            // tmOpenFile
             // 
-            this.添加文件ToolStripMenuItem.Name = "添加文件ToolStripMenuItem";
-            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.添加文件ToolStripMenuItem.Text = "添加文件";
-            this.添加文件ToolStripMenuItem.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
+            this.tmOpenFile.Name = "tmOpenFile";
+            this.tmOpenFile.Size = new System.Drawing.Size(181, 26);
+            this.tmOpenFile.Text = "添加文件";
+            this.tmOpenFile.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // tbtnRemove
             // 
@@ -367,32 +369,32 @@
             this.tbtnList.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.tbtnList.Size = new System.Drawing.Size(47, 36);
             this.tbtnList.ToolTipText = "列表选项";
-            this.tbtnList.Click += new System.EventHandler(this.tbtnList_Click);
+            this.tbtnList.ButtonClick += new System.EventHandler(this.tbtnList_ButtonClick);
             this.tbtnList.MouseEnter += new System.EventHandler(this.tbtnList_MouseEnter);
             // 
             // tmSaveList
             // 
             this.tmSaveList.Name = "tmSaveList";
-            this.tmSaveList.Size = new System.Drawing.Size(159, 26);
+            this.tmSaveList.Size = new System.Drawing.Size(181, 26);
             this.tmSaveList.Text = "保存列表";
             this.tmSaveList.Click += new System.EventHandler(this.tmSaveList_Click);
             // 
             // tmSaveAs
             // 
             this.tmSaveAs.Name = "tmSaveAs";
-            this.tmSaveAs.Size = new System.Drawing.Size(159, 26);
+            this.tmSaveAs.Size = new System.Drawing.Size(181, 26);
             this.tmSaveAs.Text = "列表另存为";
             this.tmSaveAs.Click += new System.EventHandler(this.tmSaveAs_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(156, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
             // 
             // tmNewList
             // 
             this.tmNewList.Name = "tmNewList";
-            this.tmNewList.Size = new System.Drawing.Size(159, 26);
+            this.tmNewList.Size = new System.Drawing.Size(181, 26);
             this.tmNewList.Text = "新建列表";
             this.tmNewList.Click += new System.EventHandler(this.tmNewList_Click);
             // 
@@ -411,40 +413,40 @@
             this.tbtnPlayMode.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.tbtnPlayMode.Size = new System.Drawing.Size(116, 36);
             this.tbtnPlayMode.Text = "单曲播放";
-            this.tbtnPlayMode.Click += new System.EventHandler(this.tbtnPlayMode_ButtonClick);
+            this.tbtnPlayMode.ButtonClick += new System.EventHandler(this.tbtnPlayMode_ButtonClick);
             // 
             // tmPlaytheList
             // 
             this.tmPlaytheList.Name = "tmPlaytheList";
-            this.tmPlaytheList.Size = new System.Drawing.Size(144, 26);
+            this.tmPlaytheList.Size = new System.Drawing.Size(181, 26);
             this.tmPlaytheList.Text = "顺序播放";
             this.tmPlaytheList.Click += new System.EventHandler(this.tmPlaytheList_Click);
             // 
             // tmListRepeat
             // 
             this.tmListRepeat.Name = "tmListRepeat";
-            this.tmListRepeat.Size = new System.Drawing.Size(144, 26);
+            this.tmListRepeat.Size = new System.Drawing.Size(181, 26);
             this.tmListRepeat.Text = "列表循环";
             this.tmListRepeat.Click += new System.EventHandler(this.tmListRepeat_Click);
             // 
             // tmSingleRepeat
             // 
             this.tmSingleRepeat.Name = "tmSingleRepeat";
-            this.tmSingleRepeat.Size = new System.Drawing.Size(144, 26);
+            this.tmSingleRepeat.Size = new System.Drawing.Size(181, 26);
             this.tmSingleRepeat.Text = "单曲循环";
             this.tmSingleRepeat.Click += new System.EventHandler(this.tmSingleRepeat_Click);
             // 
             // tmSingle
             // 
             this.tmSingle.Name = "tmSingle";
-            this.tmSingle.Size = new System.Drawing.Size(144, 26);
+            this.tmSingle.Size = new System.Drawing.Size(181, 26);
             this.tmSingle.Text = "单曲播放";
             this.tmSingle.Click += new System.EventHandler(this.tmSingle_Click);
             // 
             // tmShuffle
             // 
             this.tmShuffle.Name = "tmShuffle";
-            this.tmShuffle.Size = new System.Drawing.Size(144, 26);
+            this.tmShuffle.Size = new System.Drawing.Size(181, 26);
             this.tmShuffle.Text = "随机播放";
             this.tmShuffle.Click += new System.EventHandler(this.tmSuffle_Click);
             // 
@@ -474,6 +476,13 @@
             this.tbtnSettings.Size = new System.Drawing.Size(36, 36);
             this.tbtnSettings.ToolTipText = "设置";
             this.tbtnSettings.Click += new System.EventHandler(this.tbtnSettings_Click);
+            // 
+            // tmOpenList
+            // 
+            this.tmOpenList.Name = "tmOpenList";
+            this.tmOpenList.Size = new System.Drawing.Size(181, 26);
+            this.tmOpenList.Text = "打开列表";
+            this.tmOpenList.Click += new System.EventHandler(this.tbtnAdd_ButtonClick);
             // 
             // MainFrom
             // 
@@ -550,7 +559,8 @@
         private System.Windows.Forms.ToolStripButton tbtnModeChange;
         private System.Windows.Forms.ToolStripButton tbtnSettings;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem 添加文件ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
+        private System.Windows.Forms.ToolStripMenuItem tmOpenList;
     }
 }
 
