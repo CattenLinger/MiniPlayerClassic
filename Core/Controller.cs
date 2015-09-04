@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using MiniPlayerClassic.Core;
 
 namespace MiniPlayerClassic.Core
 {
@@ -44,6 +40,7 @@ namespace MiniPlayerClassic.Core
                 return player;
             }
         }
+
         /// <summary>
         /// 播放状态改变事件
         /// </summary>
@@ -51,7 +48,7 @@ namespace MiniPlayerClassic.Core
         /// <param name="e">消息内容</param>
         private void Player_TrackStateChanged(object sender, TrackStateChange e)
         {
-            if(PlayBackActived)
+            if(PlayBackActived && e.Message == TrackStates.Stoped)
             {
                 switch (playBackMode)
                 {
@@ -112,7 +109,7 @@ namespace MiniPlayerClassic.Core
         /// <returns></returns>
         public bool NextSong()
         {
-            if(playHead == null)
+            if(playList == null)
             {
                 return false;
             }
@@ -140,7 +137,7 @@ namespace MiniPlayerClassic.Core
         /// <returns></returns>
         public bool PrevSong()
         {
-            if (playHead == null)
+            if (playList == null)
             {
                 return false;
             }
@@ -190,7 +187,7 @@ namespace MiniPlayerClassic.Core
 
             set
             {
-                if(playList != null) playbackFlag = value;
+                if(playHead != null) playbackFlag = value;
             }
         }
 

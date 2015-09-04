@@ -196,8 +196,14 @@ namespace MiniPlayerClassic
                 ListProcessor = _create_listprocessor(ext);
 
             if (ListProcessor.SaveListFile(this, Filename))
+            {
+                _operationscount = 0;
+                _filepath = Filename;
+                Console.WriteLine(string.Format("Saved File to {0}", Filename));
                 return true;
+            }
 
+            Console.WriteLine("Saving was Failed.");
             return false;
         }
 
