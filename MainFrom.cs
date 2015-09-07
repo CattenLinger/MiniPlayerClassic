@@ -119,9 +119,11 @@ namespace MiniPlayerClassic
         private int Latest_height = 500;
         private bool is_Minisize;//界面是否在迷你模式
 
+        NotifyIcon notifyIcon;
 
         private int newlists = 0;//新建列表名字的计数器，用于计算新建了多少列表方面命名
 
+        public ConfigManager configManager;
 
         public bool _developMode = true;/*
         public bool _developMode = false;//*/
@@ -152,6 +154,11 @@ namespace MiniPlayerClassic
             MainPlayer.TrackStateChanged += MainPlayer_StateChange;  //注册播放器改变播放状态的事件的响应函数
             MainPlayer.TrackFileChanged += MainPlayer_FileChange; //注册播放器改变文件的事件的响应函数
 
+            notifyIcon = new NotifyIcon();
+            notifyIcon.Icon = Icon;
+            notifyIcon.MouseDoubleClick += notiyIcon_Click;
+            notifyIcon.Visible = true;
+
             VisualEffectHelper.WaveFormFinished += MainPlayer_WaveFormFinished;
 
             PlayLists = new List<PlayList>(10);
@@ -172,7 +179,20 @@ namespace MiniPlayerClassic
             tb_Lists.TabPages.Clear();
             refreshInterface();
 
-            if(load_file_list(args) > 1)
+            try
+            {
+                if (!System.IO.Directory.Exists(@"./Config"))
+                {
+                    System.IO.Directory.CreateDirectory(@"./Config");
+                }
+                configManager = new ConfigManager(@"./Config/Config.xml");
+            }
+            catch
+            {
+                MessageBox.Show("无法创建或获得配置文件，将使用默认配置。");
+            }
+
+            if (load_file_list(args) > 1)
             {
                 refreshPlayList();
                 refreshInterface();
@@ -300,6 +320,11 @@ namespace MiniPlayerClassic
             System.GC.Collect();
         }
 //------Window interface change-------------------------------------------------------------------
+        public void notiyIcon_Click(object sender,EventArgs e)
+        {
+            WindowState = FormWindowState.Normal;
+        }
+
         public void to_Minisize(bool animate)//迷你尺寸
         {
             int temp = Latest_height;
@@ -682,6 +707,8 @@ namespace MiniPlayerClassic
                     }
                 }
             }
+            notifyIcon.Visible = false;
+            notifyIcon.Dispose();
         }
 
         private void tmPlaytheList_Click(object sender, EventArgs e)
@@ -767,7 +794,11 @@ namespace MiniPlayerClassic
 
         private void tbtnSettings_Click(object sender, EventArgs e)
         {
-            frmSettings SettingFrom = new frmSettings();
+            if(configManager == null)
+            {
+                MessageBox.Show("设置不可修改，因为无法操作配置文件");
+            }
+            frmSettings SettingFrom = new frmSettings(configManager);
             SettingFrom.Show();
         }
 

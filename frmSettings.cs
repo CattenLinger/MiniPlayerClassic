@@ -6,19 +6,23 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MiniPlayerClassic.Core;
 
 namespace MiniPlayerClassic
 {
     public partial class frmSettings : Form
     {
-        public frmSettings()
+        ConfigManager conmgr;
+
+        public frmSettings(ConfigManager configManager)
         {
             InitializeComponent();
+            this.conmgr = configManager;
         }
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void label1_Click_1(object sender, EventArgs e)
@@ -30,7 +34,8 @@ namespace MiniPlayerClassic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            MessageBox.Show(conmgr.Save().ToString());
+            Dispose();
         }
     }
 }

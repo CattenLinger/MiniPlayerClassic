@@ -46,7 +46,7 @@
             this.chkForceWindow.Location = new System.Drawing.Point(16, 14);
             this.chkForceWindow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkForceWindow.Name = "chkForceWindow";
-            this.chkForceWindow.Size = new System.Drawing.Size(104, 28);
+            this.chkForceWindow.Size = new System.Drawing.Size(122, 32);
             this.chkForceWindow.TabIndex = 0;
             this.chkForceWindow.Text = "窗体前置";
             this.chkForceWindow.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@
             this.chkRemeberLast.Location = new System.Drawing.Point(16, 52);
             this.chkRemeberLast.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkRemeberLast.Name = "chkRemeberLast";
-            this.chkRemeberLast.Size = new System.Drawing.Size(158, 28);
+            this.chkRemeberLast.Size = new System.Drawing.Size(185, 32);
             this.chkRemeberLast.TabIndex = 1;
             this.chkRemeberLast.Text = "记住上次的列表";
             this.chkRemeberLast.UseVisualStyleBackColor = true;
@@ -65,10 +65,10 @@
             // chkCreateWhenOpen
             // 
             this.chkCreateWhenOpen.AutoSize = true;
-            this.chkCreateWhenOpen.Location = new System.Drawing.Point(184, 52);
+            this.chkCreateWhenOpen.Location = new System.Drawing.Point(198, 52);
             this.chkCreateWhenOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkCreateWhenOpen.Name = "chkCreateWhenOpen";
-            this.chkCreateWhenOpen.Size = new System.Drawing.Size(176, 28);
+            this.chkCreateWhenOpen.Size = new System.Drawing.Size(206, 32);
             this.chkCreateWhenOpen.TabIndex = 2;
             this.chkCreateWhenOpen.Text = "默认新建一个列表";
             this.chkCreateWhenOpen.UseVisualStyleBackColor = true;
@@ -97,12 +97,12 @@
             // chkDevelopMode
             // 
             this.chkDevelopMode.AutoSize = true;
-            this.chkDevelopMode.Location = new System.Drawing.Point(184, 14);
+            this.chkDevelopMode.Location = new System.Drawing.Point(198, 14);
             this.chkDevelopMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkDevelopMode.Name = "chkDevelopMode";
-            this.chkDevelopMode.Size = new System.Drawing.Size(122, 28);
+            this.chkDevelopMode.Size = new System.Drawing.Size(143, 32);
             this.chkDevelopMode.TabIndex = 5;
-            this.chkDevelopMode.Text = "多功能模式";
+            this.chkDevelopMode.Text = "开发者模式";
             this.chkDevelopMode.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -110,9 +110,9 @@
             this.label1.AutoSize = true;
             this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(313, 16);
+            this.label1.Location = new System.Drawing.Point(334, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 24);
+            this.label1.Size = new System.Drawing.Size(117, 28);
             this.label1.TabIndex = 6;
             this.label1.Text = "这是什么？";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
@@ -122,7 +122,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 90);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(154, 24);
+            this.label2.Size = new System.Drawing.Size(180, 28);
             this.label2.TabIndex = 7;
             this.label2.Text = "默认列表存储位置";
             // 
@@ -130,23 +130,23 @@
             // 
             this.tbListFolder.Location = new System.Drawing.Point(16, 117);
             this.tbListFolder.Name = "tbListFolder";
-            this.tbListFolder.Size = new System.Drawing.Size(344, 31);
+            this.tbListFolder.Size = new System.Drawing.Size(344, 35);
             this.tbListFolder.TabIndex = 8;
             // 
             // btnSelectFolder
             // 
             this.btnSelectFolder.Location = new System.Drawing.Point(366, 116);
             this.btnSelectFolder.Name = "btnSelectFolder";
-            this.btnSelectFolder.Size = new System.Drawing.Size(55, 31);
+            this.btnSelectFolder.Size = new System.Drawing.Size(55, 36);
             this.btnSelectFolder.TabIndex = 9;
             this.btnSelectFolder.Text = "...";
             this.btnSelectFolder.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 23F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 206);
+            this.ClientSize = new System.Drawing.Size(443, 206);
             this.Controls.Add(this.btnSelectFolder);
             this.Controls.Add(this.tbListFolder);
             this.Controls.Add(this.label2);

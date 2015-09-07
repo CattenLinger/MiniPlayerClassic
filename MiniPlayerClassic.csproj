@@ -107,15 +107,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\BassNET_Player.cs" />
+    <Compile Include="Core\Player\BassNET_Player.cs" />
     <Compile Include="Core\ConfigManager.cs" />
     <Compile Include="Core\Controller.cs" />
-    <Compile Include="Core\IBasicPlayControl.cs" />
-    <Compile Include="Core\IListProcessor.cs" />
-    <Compile Include="Core\IPlayer.cs" />
-    <Compile Include="Core\IVisualEffect.cs" />
-    <Compile Include="Core\PlayListItem.cs" />
-    <Compile Include="Core\SimpleListProcessor.cs" />
+    <Compile Include="Core\Player\IBasicPlayControl.cs" />
+    <Compile Include="Core\ListManagement\IListProcessor.cs" />
+    <Compile Include="Core\Player\IPlayer.cs" />
+    <Compile Include="Core\Player\IVisualEffect.cs" />
+    <Compile Include="Core\ListManagement\PlayListItem.cs" />
+    <Compile Include="Core\ListManagement\SimpleListProcessor.cs" />
     <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,7 +130,7 @@
       <DependentUpon>MainFrom.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Events.cs" />
-    <Compile Include="Core\PlayList.cs" />
+    <Compile Include="Core\ListManagement\PlayList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI Elements\c_VolumeBar.cs" />
@@ -154,8 +154,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
     <None Include="MiniPlayerClassic_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">

@@ -70,6 +70,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbtnModeChange = new System.Windows.Forms.ToolStripButton();
             this.tbtnSettings = new System.Windows.Forms.ToolStripButton();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Volume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Progress)).BeginInit();
@@ -477,13 +478,18 @@
             // tbtnSettings
             // 
             this.tbtnSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbtnSettings.Enabled = false;
             this.tbtnSettings.Image = global::MiniPlayerClassic.Properties.Resources.settings;
             this.tbtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbtnSettings.Name = "tbtnSettings";
             this.tbtnSettings.Size = new System.Drawing.Size(36, 36);
             this.tbtnSettings.ToolTipText = "设置（还没完工）";
             this.tbtnSettings.Click += new System.EventHandler(this.tbtnSettings_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(74, 4);
             // 
             // MainFrom
             // 
@@ -562,6 +568,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem tmOpenFile;
         private System.Windows.Forms.ToolStripMenuItem tmOpenList;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
 
