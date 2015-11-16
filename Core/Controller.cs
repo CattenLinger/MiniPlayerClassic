@@ -22,12 +22,15 @@ namespace MiniPlayerClassic.Core
         {
             try
             {
+                //尝试删除旧的播放器事件
                 player.TrackStateChanged -= Player_TrackStateChanged;
             }
             catch
             {
+                //如果事件不存在，在控制台报告一下
                 Console.WriteLine("Controller: Event “Player_TrackStateChanged” isn't at the Player.");
             }
+            //获取播放器对象并设置好事件
             player = value;
             player.TrackStateChanged += Player_TrackStateChanged;
         }
@@ -48,14 +51,15 @@ namespace MiniPlayerClassic.Core
         /// <param name="e">消息内容</param>
         private void Player_TrackStateChanged(object sender, TrackStateChange e)
         {
+            //列表回放的控制程序
             if(PlayBackActived && e.Message == TrackStates.Stoped)
             {
                 switch (playBackMode)
                 {
-                    case playbackHeadMode.ByIndex:
+                    case playbackHeadMode.ByIndex://顺序播放
                         NextSong();
                         break;
-                    case playbackHeadMode.List_Cycling:
+                    case playbackHeadMode.List_Cycling://列表循环
                         if(playHead.Next == null)
                         {
                             playHead = playHead.List.First;
@@ -66,12 +70,12 @@ namespace MiniPlayerClassic.Core
                             NextSong();
                         }
                         break;
-                    case playbackHeadMode.Shuffle:
+                    case playbackHeadMode.Shuffle://TODO 随机
                         break;
                     case playbackHeadMode.Single: //单曲播放一次跟关掉playback有什么区别_(:3」∠)_
                         PlayBackActived = false;
                         break;
-                    case playbackHeadMode.Single_Cycling:
+                    case playbackHeadMode.Single_Cycling://单曲循环
                         PlayItem(playHead);
                         break;
                 }
@@ -92,8 +96,7 @@ namespace MiniPlayerClassic.Core
             playList = (PlayList)playHead.List;//强行转换成子类。即便返回的是父类，也还是会保留子类的信息。
             return player.LoadFile(item.Value.FileAddress) && player.Play();
         }
-
-        //private LinkedList<PlayListItem> playList = null;
+        //播放列表
         private PlayList playList = null;
         private LinkedListNode<PlayListItem> playHead = null;
         public PlayList List
@@ -176,7 +179,7 @@ namespace MiniPlayerClassic.Core
             return player.Stop();
         }
         #endregion
-
+        //回放标志位
         private bool playbackFlag = false;
         public bool PlayBackActived
         {
@@ -190,7 +193,7 @@ namespace MiniPlayerClassic.Core
                 if(playHead != null) playbackFlag = value;
             }
         }
-
+        //回放模式
         playbackHeadMode playBackMode = playbackHeadMode.ByIndex;
         public playbackHeadMode PlayBackMode
         {
@@ -204,7 +207,7 @@ namespace MiniPlayerClassic.Core
                 playBackMode = value;
             }
         }
-
+        //单实例模式需要，不能在外部访问这个构造器
         private Controller()
         {
 

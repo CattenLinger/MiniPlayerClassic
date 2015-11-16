@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 
@@ -8,8 +10,7 @@ namespace MiniPlayerClassic.Core
 {
     public class ConfigManager
     {
-
-        private string configFile = "";
+        private string configFile = "";//配置文件默认空
         public string ConfigFilePath
         {
             get
@@ -17,23 +18,29 @@ namespace MiniPlayerClassic.Core
                 return configFile;
             }
         }
+
+        private Dictionary<string, Object> configBuffer = new Dictionary<string, object>();
         public ConfigManager(string ConfigFile)
         {
             configFile = ConfigFile;
+            if (!System.IO.File.Exists(ConfigFile))
+            {
+                Save();
+            }
         }
 
         public bool Save()
         {
+            XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.Unicode);
             try
             {
-                XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.Unicode);
-
-                writer.WriteStartElement("MiniplayerSetting");
-                writer.WriteElementString("AlwaysAtTop", windowAlwaysTop.ToString());
-                writer.WriteElementString("DeveloperMode", developermode.ToString());
-                writer.WriteElementString("RememberLists", rememberLists.ToString());
-                writer.WriteElementString("NewListAtLaunch", newListAtLaunch.ToString());
-                writer.WriteElementString("DefaultListPath", listFilesPath);
+                writer.WriteStartDocument();
+                writer.WriteStartElement("Settings");
+                writer.WriteElementString("AlwaysAtTop", WindowAlwaysTop.ToString());
+                writer.WriteElementString("DeveloperMode", IsDeveloperMode.ToString());
+                writer.WriteElementString("RememberLists", RememberLists.ToString());
+                writer.WriteElementString("NewListAtLaunch", NewListAtLaunch.ToString());
+                writer.WriteElementString("DefaultListPath", ListFilesPath);
                 writer.WriteEndElement();
                 writer.Close();
                 return true;
@@ -42,101 +49,67 @@ namespace MiniPlayerClassic.Core
             {
                 return false;
             }
+            finally
+            {
+                writer.Close();
+            }
         }
 
-        public bool Read()
+        public bool Read()//TODO
         {
             try
             {
-                XmlTextReader reader = new XmlTextReader(configFile);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(configFile);
+                XmlNodeReader nodeReader = new XmlNodeReader(doc);
+                configBuffer.Clear();
 
-                
-                return true;
+                string nodeName = null;
+                string currentOption = null;
+
+                while (nodeReader.Read())
+                {
+                    switch (nodeReader.Depth)
+                    {
+                        case 0:
+                            nodeName = nodeReader.Name;
+                            break;
+                        case 1:
+                            currentOption = nodeReader.Name;
+                            break;
+                        case 2:
+                            configBuffer.Add(currentOption, nodeReader.ReadContentAsString());
+                            break;
+                    }
+                }
+
+                IsDeveloperMode = bool.Parse((string)configBuffer["DeveloperMode"]);
+                WindowAlwaysTop = bool.Parse((string)configBuffer["WindowAlwaysTop"]);
+                NewListAtLaunch = bool.Parse((string)configBuffer["NewListAtLaunch"]);
+                RememberLists = bool.Parse((string)configBuffer["RememberLists"]);
+                ListFilesPath = (string)configBuffer["ListFilesPath"];
             }
             catch
             {
                 return false;
             }
-            
+            return true;
+
         }
 
         public void SetDefault()
         {
-            developermode = false;
-            windowAlwaysTop = false;
-            newListAtLaunch = false;
-            rememberLists = false;
-            listFilesPath = @"./List";
+            IsDeveloperMode = false;
+            WindowAlwaysTop = false;
+            NewListAtLaunch = false;
+            RememberLists = false;
+            ListFilesPath = "./List/";
         }
 
-        private bool developermode = false;
-        public bool IsDeveloperMode
-        {
-            get
-            {
-                return developermode;
-            }
-
-            set
-            {
-                developermode = value;
-            }
-        }
-
-        private bool windowAlwaysTop = false;
-        public bool WindowAlwaysTop
-        {
-            get
-            {
-                return windowAlwaysTop;
-            }
-
-            set
-            {
-                windowAlwaysTop = value;
-            }
-        }
-
-        private bool newListAtLaunch = false;
-        public bool NewListAtLaunch
-        {
-            get
-            {
-                return newListAtLaunch;
-            }
-
-            set
-            {
-                newListAtLaunch = value;
-            }
-        }
-
-        private bool rememberLists = false;
-        public bool RememberLists
-        {
-            get
-            {
-                return rememberLists;
-            }
-
-            set
-            {
-                rememberLists = value;
-            }
-        }
-
-        private string listFilesPath = "";
-        public string ListFilesPath
-        {
-            get
-            {
-                return listFilesPath;
-            }
-
-            set
-            {
-                listFilesPath = value;
-            }
-        }
+        public bool IsDeveloperMode = false;
+        public bool WindowAlwaysTop = false;
+        public bool NewListAtLaunch = false;
+        public bool RememberLists = false;
+        public string ListFilesPath = "./List/";
     }
 }

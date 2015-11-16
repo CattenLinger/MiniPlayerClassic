@@ -22,7 +22,27 @@ namespace MiniPlayerClassic
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
-            
+            if (!conmgr.Read())
+            {
+                conmgr.SetDefault();
+                if (!conmgr.Save())
+                {
+                    MessageBox.Show("配置文件读取出错。");
+                    Dispose();
+                    return;
+                }
+            }
+
+            refreshInterface();
+        }
+
+        private void refreshInterface()
+        {
+            chkDevelopMode.Checked = conmgr.IsDeveloperMode;
+            chkCreateWhenOpen.Checked = conmgr.NewListAtLaunch;
+            chkForceWindow.Checked = conmgr.WindowAlwaysTop;
+            chkRemeberLast.Checked = conmgr.RememberLists;
+            tbListFolder.Text = conmgr.ListFilesPath;
         }
 
         private void label1_Click_1(object sender, EventArgs e)
@@ -34,8 +54,19 @@ namespace MiniPlayerClassic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(conmgr.Save().ToString());
+            conmgr.IsDeveloperMode = chkDevelopMode.Checked;
+            conmgr.NewListAtLaunch = chkCreateWhenOpen.Checked;
+            conmgr.WindowAlwaysTop = chkForceWindow.Checked;
+            conmgr.RememberLists = chkRemeberLast.Checked;
+            conmgr.ListFilesPath = tbListFolder.Text;
+            if(!conmgr.Save()) MessageBox.Show("保存失败");
             Dispose();
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            conmgr.SetDefault();
+            refreshInterface();
         }
     }
 }

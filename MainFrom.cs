@@ -488,7 +488,7 @@ namespace MiniPlayerClassic
             dlg1.ShowDialog(); //显示这个窗口
 
             if (dlg1.FileNames.Length <= 0) return; //如果没有选择文件就退出函数
-            else if (dlg1.FileNames.Length == 1 && (PlayLists.Count != 0))
+            else if (dlg1.FileNames.Length == 1 && (PlayLists.Count != 0) && !System.IO.Path.GetExtension(dlg1.FileName).Equals(".spl"))
             {
                 PlayLists[tb_Lists.SelectedIndex].Add(new PlayListItem(dlg1.FileNames[0], ""));
             }
@@ -521,7 +521,7 @@ namespace MiniPlayerClassic
             listBox1.Items.Clear();//清空列表控件
             if (PlayLists.Count != 0)
             {
-                for (int i = 0; i < PlayLists[tb_Lists.SelectedIndex].Count; i++)
+                for (int i = 0; i < PlayLists[tb_Lists.SelectedIndex].Count - 1; i++)
                 {
                     listBox1.Items.Add(System.IO.Path.GetFileName(PlayLists[tb_Lists.SelectedIndex][i].FileAddress));
                 }
