@@ -68,5 +68,21 @@ namespace MiniPlayerClassic
             conmgr.SetDefault();
             refreshInterface();
         }
+
+        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
+        }
+
+        private void btnSelectFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowDialog(this);
+            if(fbd.SelectedPath != "")
+            {
+                conmgr.ListFilesPath = fbd.SelectedPath;
+                tbListFolder.Text = fbd.SelectedPath;
+            }
+        }
     }
 }

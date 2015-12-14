@@ -27,6 +27,7 @@ namespace MiniPlayerClassic.Core
             {
                 Save();
             }
+            Read();
         }
 
         public bool Save()
@@ -57,9 +58,9 @@ namespace MiniPlayerClassic.Core
 
         public bool Read()//TODO
         {
+            XmlDocument doc = new XmlDocument();
             try
             {
-                XmlDocument doc = new XmlDocument();
                 doc.Load(configFile);
                 XmlNodeReader nodeReader = new XmlNodeReader(doc);
                 configBuffer.Clear();
@@ -84,10 +85,10 @@ namespace MiniPlayerClassic.Core
                 }
 
                 IsDeveloperMode = bool.Parse((string)configBuffer["DeveloperMode"]);
-                WindowAlwaysTop = bool.Parse((string)configBuffer["WindowAlwaysTop"]);
+                WindowAlwaysTop = bool.Parse((string)configBuffer["AlwaysAtTop"]);
                 NewListAtLaunch = bool.Parse((string)configBuffer["NewListAtLaunch"]);
                 RememberLists = bool.Parse((string)configBuffer["RememberLists"]);
-                ListFilesPath = (string)configBuffer["ListFilesPath"];
+                ListFilesPath = (string)configBuffer["DefaultListPath"];
             }
             catch
             {

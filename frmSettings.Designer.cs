@@ -46,7 +46,7 @@
             this.chkForceWindow.Location = new System.Drawing.Point(13, 11);
             this.chkForceWindow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkForceWindow.Name = "chkForceWindow";
-            this.chkForceWindow.Size = new System.Drawing.Size(84, 24);
+            this.chkForceWindow.Size = new System.Drawing.Size(141, 36);
             this.chkForceWindow.TabIndex = 0;
             this.chkForceWindow.Text = "窗体前置";
             this.chkForceWindow.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@
             this.chkRemeberLast.Location = new System.Drawing.Point(13, 45);
             this.chkRemeberLast.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkRemeberLast.Name = "chkRemeberLast";
-            this.chkRemeberLast.Size = new System.Drawing.Size(126, 24);
+            this.chkRemeberLast.Size = new System.Drawing.Size(216, 36);
             this.chkRemeberLast.TabIndex = 1;
             this.chkRemeberLast.Text = "记住上次的列表";
             this.chkRemeberLast.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@
             this.chkCreateWhenOpen.Location = new System.Drawing.Point(147, 45);
             this.chkCreateWhenOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkCreateWhenOpen.Name = "chkCreateWhenOpen";
-            this.chkCreateWhenOpen.Size = new System.Drawing.Size(140, 24);
+            this.chkCreateWhenOpen.Size = new System.Drawing.Size(241, 36);
             this.chkCreateWhenOpen.TabIndex = 2;
             this.chkCreateWhenOpen.Text = "默认新建一个列表";
             this.chkCreateWhenOpen.UseVisualStyleBackColor = true;
@@ -101,7 +101,7 @@
             this.chkDevelopMode.Location = new System.Drawing.Point(147, 11);
             this.chkDevelopMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkDevelopMode.Name = "chkDevelopMode";
-            this.chkDevelopMode.Size = new System.Drawing.Size(98, 24);
+            this.chkDevelopMode.Size = new System.Drawing.Size(166, 36);
             this.chkDevelopMode.TabIndex = 5;
             this.chkDevelopMode.Text = "开发者模式";
             this.chkDevelopMode.UseVisualStyleBackColor = true;
@@ -113,7 +113,7 @@
             this.label1.ForeColor = System.Drawing.Color.Blue;
             this.label1.Location = new System.Drawing.Point(252, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 20);
+            this.label1.Size = new System.Drawing.Size(140, 32);
             this.label1.TabIndex = 6;
             this.label1.Text = "这是什么？";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
@@ -123,7 +123,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 74);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(121, 20);
+            this.label2.Size = new System.Drawing.Size(215, 32);
             this.label2.TabIndex = 7;
             this.label2.Text = "默认列表存储位置";
             // 
@@ -131,7 +131,7 @@
             // 
             this.tbListFolder.Location = new System.Drawing.Point(16, 97);
             this.tbListFolder.Name = "tbListFolder";
-            this.tbListFolder.Size = new System.Drawing.Size(229, 26);
+            this.tbListFolder.Size = new System.Drawing.Size(229, 40);
             this.tbListFolder.TabIndex = 8;
             // 
             // btnSelectFolder
@@ -142,10 +142,11 @@
             this.btnSelectFolder.TabIndex = 9;
             this.btnSelectFolder.Text = "...";
             this.btnSelectFolder.UseVisualStyleBackColor = true;
+            this.btnSelectFolder.Click += new System.EventHandler(this.btnSelectFolder_Click);
             // 
             // frmSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(342, 188);
             this.Controls.Add(this.btnSelectFolder);
@@ -165,6 +166,7 @@
             this.MinimizeBox = false;
             this.Name = "frmSettings";
             this.Text = "设置";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
