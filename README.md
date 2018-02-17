@@ -1,4 +1,4 @@
-#MiniPlayerClassic
+# MiniPlayerClassic
 ---
 MiniPlayer现在正在用C#重制中。感谢这个播放器给我一段美好的回忆。
 
@@ -11,14 +11,7 @@ MiniPlayer现在正在用C#重制中。感谢这个播放器给我一段美好�
 MiniPlayer 就像它的名字那样，提供一个简单的音频文件播放方案。
 
 
-##主要结构：
+## 主要结构：
 
-- 界面层(Normal MS-Style UI)
-    - 自绘控件
-- 中间层
-    - 播放器(Player)
-    - 播放列表(PlayList)
-- 解码器(Bass24)
+往下删掉了，~~程序员都喜欢打死以前的自己。~~
 
----
-因为换了Macbook所以变得更少碰C#了_(:з」∠)_暂缓开发。。。

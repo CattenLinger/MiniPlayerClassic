@@ -812,11 +812,22 @@ namespace MiniPlayerClassic
 
         private void tbtnList_ButtonClick(object sender, EventArgs e)
         {
-            if (tb_Lists.TabCount == 0)
-            {
-                tmNewList_Click(this, null);
-            }
-            else tbtnList.ShowDropDown();
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void MainFrom_DragEnter(object sender, DragEventArgs e)
